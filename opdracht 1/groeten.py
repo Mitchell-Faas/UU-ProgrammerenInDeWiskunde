@@ -1,5 +1,6 @@
+number = input()
+name = input()
 
-number = input('Geef een nummer ')
-name = input('Geef je naam ')
-print(number + ' x Hallo, ' + name + ' !' )
+output = number + ' x Hallo, ' + name + ' !'
 
+print(output)
