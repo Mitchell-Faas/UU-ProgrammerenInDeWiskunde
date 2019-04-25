@@ -1,49 +1,64 @@
 import random
 from collections import Counter
+import numpy as np
 
-dictall = {}
-dictstart = {}
+textFilePath = "navysealcopypasta.txt"
 
-with open('navysealcopypasta.txt','r') as file:
+def dictFromFile(textFilePath):
+    # Define output dictionary
+    dictall = {}
 
-    for line in file:
-        wordlist = line.split(' ')
-        # Als er laatste regel een woord geskipt is, voeg hem hier alsnog toe in de dictionary
-        if lastword:
-            dictall.setdefault(lastword, Counter())
-            dictall[lastword][wordlist[0]] += 1
-        # Voeg alle woorden van deze line toe aan de dictionary
-        for idx, word in enumerate(wordlist):
-            dictall.setdefault(word, Counter())
-            if idx < wordlist.__len__():
-                # Next word exists so just do normal stuff
-                dictall[word][wordlist[idx+1]] += 1
-            else:
-                # End of line; oh oh
-                lastword = word
+    with open(textFilePath, 'r') as file:
+        for line in file:
+            wordlist = line.split(' ')
+
+            # Als er laatste regel een woord geskipt is, voeg hem hier alsnog toe in de dictionary
+            try:
+                dictall.setdefault(lastword, Counter())
+                dictall[lastword][wordlist[0]] += 1
+            except (NameError or IndexError):
+                pass
+
+            # Voeg alle woorden van deze line toe aan de dictionary
+            for idx, word in enumerate(wordlist):
+                dictall.setdefault(word, Counter())
+                try:
+                    # Next word exists so just do normal stuff
+                    dictall[word][wordlist[idx+1]] += 1
+                except IndexError:
+                    # End of line; oh oh
+                    lastword = word
+
+    return dictall
+
+wordDict = dictFromFile(textFilePath)
+
+for key in wordDict:
+    wordDict[key] = wordDict[key].most_common()
 
 
+startWord = "What"
+maxLength = 60
+sentenceWords = []
 
+currentWord = startWord
+writing = True
+for _ in range(maxLength):
+    sentenceWords.append(currentWord)
 
-
-#wordlist = text.split(' ')
-
-
-dict = {}
-for x in range(len(wordlist)-1):
-    dict.setdefault(wordlist[x], [])
-    dict[wordlist[x]].append(wordlist[x+1])
-
-lastword = 'What'
-markovsentence = lastword
-maxlength = 60
-
-for i in range(maxlength):
-    lastword = random.choice(dict[lastword])
-    markovsentence += ' ' + lastword
-    if '?' in markovsentence or '.' in markovsentence:
+    if '?' in currentWord or '.' in currentWord:
         break
 
-    i += 1
+    wordarr, occurencearr = zip(*wordDict[currentWord])
+    occurencearr = np.array(occurencearr)
 
-print(markovsentence)
+    # Get normalizer number
+    total = np.sum(occurencearr)
+    # Array of probabilities
+    parr = occurencearr/total
+
+    currentWord = np.random.choice(wordarr, p=parr)
+
+sentence = " ".join(sentenceWords)
+
+print(sentence)
