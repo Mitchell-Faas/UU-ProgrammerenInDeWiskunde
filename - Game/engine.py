@@ -1,4 +1,5 @@
 import tcod
+import tcod.console
 import inputHandlers
 
 def main():
@@ -16,12 +17,11 @@ def main():
     # Initialise the console with some hardcoded data
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(w=screenWidth, h=screenHeight, title='Esc to exit')
-    console = tcod.console_new(w=screenWidth, h=screenHeight)
+    console = tcod.console.Console(width=screenWidth, height=screenHeight)
 
     # Start the game loop
     while True:
         # Write current state to console
-        tcod.console_set_default_foreground(console, col=tcod.white)
         tcod.console_put_char(console, playerX, playerY, '@', tcod.BKGND_NONE)
         tcod.console_blit(console, x=0, y=0, w=screenWidth, h=screenHeight, dst=0, xdst=0, ydst=0)
         tcod.console_flush()
