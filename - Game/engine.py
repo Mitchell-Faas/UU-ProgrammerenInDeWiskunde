@@ -24,10 +24,9 @@ def main():
         # Write current state to console
         tcod.console_put_char(console, playerX, playerY, '@', tcod.BKGND_NONE)
         tcod.console_blit(console, x=0, y=0, w=screenWidth, h=screenHeight, dst=0, xdst=0, ydst=0)
-        tcod.console_flush()
-
         # Remove previous player position
-        tcod.console_put_char(console, x=playerX, y=playerY, c=' ',flag=tcod.BKGND_NONE)
+        tcod.console_put_char(console, x=playerX, y=playerY, c=' ', flag=tcod.BKGND_NONE)
+        tcod.console_flush()
 
         #####################
         ## Key-press logic ##
@@ -41,7 +40,7 @@ def main():
         # dict.get returns None if key doesn't exist
         move = action.get('move')
         exit = action.get('exit')
-        fullscreen = action.get('fellscreen')
+        fullscreen = action.get('fullscreen')
 
         if move:
             # move is a (dx, dy) tuple
