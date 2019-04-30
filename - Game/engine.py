@@ -2,10 +2,18 @@ import tcod
 import tcod.console
 import inputHandlers
 from entity import Entity
+import renderFunctions as render
+from map_objects.game_map import GameMap
 
 def main():
     screenWidth = 80
     screenHeight = 50
+    map_width = 80
+    map_height =45
+
+    colours = {
+               'dark_wall': tcod.Color(0,0,100),
+               'dark_ground': tcod.Color(50,50,150)}
 
     # Create variables to store player location
     player = Entity(
@@ -21,6 +29,8 @@ def main():
 
     entities = [npc, player]
 
+    game_map = GameMap(map_width, map_height)
+
     # Define Key and Mouse objects
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -33,11 +43,15 @@ def main():
     # Start the game loop
     while True:
         # Write current state to console
-        tcod.console_put_char(console, player.x, player.y, '@', tcod.BKGND_NONE)
-        tcod.console_blit(console, x=0, y=0, w=screenWidth, h=screenHeight, dst=0, xdst=0, ydst=0)
-        # Remove previous player position
-        tcod.console_put_char(console, x=player.x, y=player.y, c=' ', flag=tcod.BKGND_NONE)
+        render.render_all(console=console,
+                          entities=entities,
+                          game_map = game_map,
+                          screen_width=screenWidth,
+                          screen_height=screenHeight,
+                          colours=colours)
         tcod.console_flush()
+        # Remove all entities so we can update
+        render.clear_all(console=console, entities=entities)
 
         #####################
         ## Key-press logic ##
@@ -54,8 +68,9 @@ def main():
         fullscreen = action.get('fullscreen')
 
         if move:
-            # move is a (dx, dy) tuple
-            player.move(*move)
+            if not game_map.is_blocked(player.x + move[0], player.y + move[1]):
+                # move is a (dx, dy) tuple
+                player.move(*move)
         if exit:
             return True
         if fullscreen:
