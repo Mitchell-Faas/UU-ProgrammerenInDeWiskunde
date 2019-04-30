@@ -44,6 +44,4 @@ for i in range(maxlength):
     if '?' in markovsentence or '.' in markovsentence:
         break
 
-    i += 1
-
 print(markovsentence)
