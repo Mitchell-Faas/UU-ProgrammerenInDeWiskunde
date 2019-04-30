@@ -1,14 +1,25 @@
 import tcod
 import tcod.console
 import inputHandlers
+from entity import Entity
 
 def main():
     screenWidth = 80
     screenHeight = 50
 
     # Create variables to store player location
-    playerX = int(screenWidth / 2)
-    playerY = int(screenHeight / 2)
+    player = Entity(
+                    x=int(screenWidth / 2),
+                    y=int(screenHeight / 2),
+                    char='@',
+                    colour=tcod.white)
+    npc = Entity(
+                 x=int(screenWidth / 2 - 5),
+                 y=int(screenHeight / 2),
+                 char='@',
+                 colour=tcod.yellow)
+
+    entities = [npc, player]
 
     # Define Key and Mouse objects
     key = tcod.Key()
@@ -22,10 +33,10 @@ def main():
     # Start the game loop
     while True:
         # Write current state to console
-        tcod.console_put_char(console, playerX, playerY, '@', tcod.BKGND_NONE)
+        tcod.console_put_char(console, player.x, player.y, '@', tcod.BKGND_NONE)
         tcod.console_blit(console, x=0, y=0, w=screenWidth, h=screenHeight, dst=0, xdst=0, ydst=0)
         # Remove previous player position
-        tcod.console_put_char(console, x=playerX, y=playerY, c=' ', flag=tcod.BKGND_NONE)
+        tcod.console_put_char(console, x=player.x, y=player.y, c=' ', flag=tcod.BKGND_NONE)
         tcod.console_flush()
 
         #####################
@@ -44,9 +55,7 @@ def main():
 
         if move:
             # move is a (dx, dy) tuple
-            dx, dy = move
-            playerX += dx
-            playerY += dy
+            player.move(*move)
         if exit:
             return True
         if fullscreen:
