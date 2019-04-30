@@ -1,5 +1,5 @@
-import numpy as np
+import module
 
-arr = np.array([x.__len__() for x in input().split(sep=' ')])
+print("main:", __name__)
 
-print(np.sum(arr), np.product(arr))
+module.func()
