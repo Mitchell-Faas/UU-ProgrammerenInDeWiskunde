@@ -24,6 +24,14 @@ def render_all(console, entities, game_map, screen_width, screen_height, colours
                       xdst=0, ydst=0)
 
 def clear_all(console, entities):
+    """Removes all given entities from screen.
+    params
+    -------------
+    console: console object
+    entities: list of entity objects
+    returns
+    -------------
+    None"""
     for entity in entities:
         clear_entity(console, entity)
 
@@ -41,4 +49,4 @@ def clear_entity(console, entity):
     tcod.console_put_char(con=console,
                           x=entity.x, y=entity.y,
                           c=' ',
-                          flag=tcod.BKGND_NONE)
+flag=tcod.BKGND_NONE)
