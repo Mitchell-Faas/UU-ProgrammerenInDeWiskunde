@@ -11,7 +11,7 @@ class Rect:
         center_y = (self.y1 + self.y2) // 2
         return center_x, center_y
 
-    def intersect(self, other):
+    def intersects_with(self, other):
         # returns true if this rectangle intersects with "other"
         intersect_bool = self.x1 <= other.x2 and \
                          self.x2 >= other.x1 and \

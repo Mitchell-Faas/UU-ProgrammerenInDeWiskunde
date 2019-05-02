@@ -1,5 +1,4 @@
 from random import randint
-
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
 
@@ -11,27 +10,26 @@ class GameMap:
         self.tiles = self.initialize_tiles()
 
     def initialize_tiles(self):
-        tiles = [[Tile(True) for y in range(self.height)] for x in range(self.width)]
-
-
+        tiles = [[Tile(blocked=True) for y in range(self.height)]
+                 for x in range(self.width)]
         return tiles
 
-    def create_map(self,max_rooms, room_min_size, room_max_size, map_width, map_height, player):
+    def create_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player):
         rooms = []
         num_rooms = 0
 
         for r in range(max_rooms):
             # random width and height
-            w = randint(room_min_size, room_max_size)
-            h = randint(room_min_size, room_max_size)
+            width = randint(room_min_size, room_max_size)
+            height = randint(room_min_size, room_max_size)
             # random position without going out of the boundaries of the map
-            x = randint(0, map_width - w - 1)
-            y = randint(0, map_height - h - 1)
+            x = randint(0, map_width - width - 1)
+            y = randint(0, map_height - height - 1)
 
-            new_room = Rect(x=x,y=y,w=w,h=h)
+            new_room = Rect(x=x, y=y, width=width, height=height)
             # Check if the new room intersects any previous ones
             for other_room in rooms:
-                if new_room.intersect(other_room):
+                if new_room.intersects_with(other_room):
                     # They intersect; don't add this room
                     break
             else:
