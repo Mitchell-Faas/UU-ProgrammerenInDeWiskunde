@@ -8,21 +8,20 @@ from map_objects.game_map import GameMap
 def main():
     screenWidth = 80
     screenHeight = 50
-    map_width = 80
-    map_height =45
+    map_width = screenWidth
+    map_height = screenHeight # -5 to fill add room at the bottom
 
     room_max_size = 10
     room_min_size = 6
     max_rooms = 30
 
-    colours = {
-               'dark_wall': tcod.Color(0,0,100),
+    colours = {'dark_wall': tcod.Color(0,0,100),
                'dark_ground': tcod.Color(50,50,150)}
 
     # Create variables to store player location
     player = Entity(
-                    x=int(screenWidth / 2),
-                    y=int(screenHeight / 2),
+                    x=screenWidth // 2,
+                    y=screenHeight // 2,
                     char='@',
                     colour=tcod.white)
     npc = Entity(
@@ -33,8 +32,13 @@ def main():
 
     entities = [npc, player]
 
-    game_map = GameMap(map_width, map_height)
-    game_map.create_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
+    game_map = GameMap(width=map_width, height=map_height)
+    game_map.create_map(max_rooms=max_rooms,
+                        room_min_size=room_min_size,
+                        room_max_size=room_max_size,
+                        width=map_width,
+                        height=map_height,
+                        player=player)
 
     # Define Key and Mouse objects
     key = tcod.Key()
@@ -62,7 +66,7 @@ def main():
         ## Key-press logic ##
         #####################
         # Check input from keyboard or mouse
-        tcod.sys_check_for_event(tcod.EVENT_KEY_PRESS, key, mouse)
+        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS, k=key, m=mouse)
 
         # Translate keypress in to action
         action = inputHandlers.handleKeys(key)
@@ -73,7 +77,8 @@ def main():
         fullscreen = action.get('fullscreen')
 
         if move:
-            if not game_map.is_blocked(player.x + move[0], player.y + move[1]):
+            if not game_map.is_blocked(x=player.x + move[0],
+                                       y=player.y + move[1]):
                 # move is a (dx, dy) tuple
                 player.move(*move)
         if exit:

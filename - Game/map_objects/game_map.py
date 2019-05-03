@@ -14,19 +14,19 @@ class GameMap:
                  for x in range(self.width)]
         return tiles
 
-    def create_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player):
+    def create_map(self, max_rooms, room_min_size, room_max_size, width, height, player):
         rooms = []
         num_rooms = 0
 
         for r in range(max_rooms):
-            # random width and height
-            width = randint(room_min_size, room_max_size)
-            height = randint(room_min_size, room_max_size)
+            # random room_width and room_height
+            room_width = randint(room_min_size, room_max_size)
+            room_height = randint(room_min_size, room_max_size)
             # random position without going out of the boundaries of the map
-            x = randint(0, map_width - width - 1)
-            y = randint(0, map_height - height - 1)
+            x = randint(0, width - room_width - 1)
+            y = randint(0, height - room_height - 1)
 
-            new_room = Rect(x=x, y=y, width=width, height=height)
+            new_room = Rect(x=x, y=y, width=room_width, height=room_height)
             # Check if the new room intersects any previous ones
             for other_room in rooms:
                 if new_room.intersects_with(other_room):
