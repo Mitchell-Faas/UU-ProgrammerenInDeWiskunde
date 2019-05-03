@@ -1,6 +1,5 @@
 import tcod
 
-
 def render_all(console, entities, game_map, screen_width, screen_height, colours):
     """Renders all given entities on the screen.
 
@@ -22,9 +21,14 @@ def render_all(console, entities, game_map, screen_width, screen_height, colours
             wall = game_map.tiles[x][y].block_sight
 
             if wall:
-                tcod.console_set_char_background(console, x, y, colours.get('dark_wall'), tcod.BKGND_SET)
+                colour = colours.get('dark_wall')
             else:
-                tcod.console_set_char_background(console, x, y, colours.get('dark_ground'), tcod.BKGND_SET)
+                colour = colours.get('dark_ground')
+
+            tcod.console_set_char_background(con=console,
+                                             x=x, y=y,
+                                             col=colour,
+                                             flag=tcod.BKGND_SET)
 
     # Draw all entities in the list
     for entity in entities:
@@ -86,4 +90,4 @@ def clear_entity(console, entity):
     tcod.console_put_char(con=console,
                           x=entity.x, y=entity.y,
                           c=' ',
-flag=tcod.BKGND_NONE)
+                          flag=tcod.BKGND_NONE)
