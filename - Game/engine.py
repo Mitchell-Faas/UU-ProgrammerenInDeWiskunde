@@ -4,6 +4,7 @@ import inputHandlers
 from entity import Entity
 import renderFunctions as render
 from map_objects.game_map import GameMap
+from fov_functions import initialize_fov, recompute_fov
 
 def main():
     screenWidth = 80
@@ -15,8 +16,15 @@ def main():
     room_min_size = 6
     max_rooms = 30
 
+    fov_algorithm = 0
+    fov_light_walls = True
+    fov_radius = 10
+
     colours = {'dark_wall': tcod.Color(0,0,100),
-               'dark_ground': tcod.Color(50,50,150)}
+               'dark_ground': tcod.Color(50,50,150),
+               'light_wall': tcod.Color(130, 110, 50),
+               'light_ground': tcod.Color(200, 180, 50),
+               'black': tcod.Color(0,0,0)}
 
     # Create variables to store player location
     player = Entity(
@@ -40,6 +48,9 @@ def main():
                         height=map_height,
                         player=player)
 
+    fov_recompute = True
+    fov_map = initialize_fov(game_map)
+
     # Define Key and Mouse objects
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -51,22 +62,29 @@ def main():
 
     # Start the game loop
     while True:
-        # Write current state to console
-        render.render_all(console=console,
-                          entities=entities,
-                          game_map = game_map,
-                          screen_width=screenWidth,
-                          screen_height=screenHeight,
-                          colours=colours)
-        tcod.console_flush()
-        # Remove all entities so we can update
-        render.clear_all(console=console, entities=entities)
-
         #####################
         ## Key-press logic ##
         #####################
         # Check input from keyboard or mouse
         tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS, k=key, m=mouse)
+
+        # Compute fov if needed
+        if fov_recompute:
+            recompute_fov(fov_map, player.x, player.y)
+
+        # Write current state to console
+        render.render_all(console=console,
+                          entities=entities,
+                          game_map=game_map,
+                          fov_map=fov_map,
+                          fov_recompute=fov_recompute,
+                          screen_width=screenWidth,
+                          screen_height=screenHeight,
+                          colours=colours)
+        fov_recompute = False # Keep on false until we move again
+        tcod.console_flush()
+        # Remove all entities so we can update
+        render.clear_all(console=console, entities=entities)
 
         # Translate keypress in to action
         action = inputHandlers.handleKeys(key)
@@ -81,6 +99,8 @@ def main():
                                        y=player.y + move[1]):
                 # move is a (dx, dy) tuple
                 player.move(*move)
+
+                fov_recompute = True
         if exit:
             return True
         if fullscreen:

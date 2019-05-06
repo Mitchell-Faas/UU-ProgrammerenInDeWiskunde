@@ -1,6 +1,7 @@
 import tcod
 
-def render_all(console, entities, game_map, screen_width, screen_height, colours):
+def render_all(console, entities, game_map, fov_map, fov_recompute,
+               screen_width, screen_height, colours):
     """Renders all given entities on the screen.
 
     params
@@ -15,24 +16,39 @@ def render_all(console, entities, game_map, screen_width, screen_height, colours
     -------------
     None
     """
-    # Draw the tiles in game_map
-    for y in range(game_map.height):
-        for x in range(game_map.width):
-            wall = game_map.tiles[x][y].block_sight
+    if fov_recompute:
+        # Draw the tiles in game_map
+        for y in range(game_map.height):
+            for x in range(game_map.width):
+                visible = tcod.map_is_in_fov(fov_map, x, y)
+                wall = game_map.tiles[x][y].block_sight
 
-            if wall:
-                colour = colours.get('dark_wall')
-            else:
-                colour = colours.get('dark_ground')
+                if visible:
+                    if wall:
+                        colour = colours.get('light_wall')
+                    else:
+                        colour = colours.get('light_ground')
 
-            tcod.console_set_char_background(con=console,
-                                             x=x, y=y,
-                                             col=colour,
-                                             flag=tcod.BKGND_SET)
+                    # We've now explored this tile
+                    game_map.tiles[x][y].explored = True
+                elif game_map.tiles[x][y].explored:
+                    # Only render walls and ground that's explored
+                    if wall:
+                        colour = colours.get('dark_wall')
+                    else:
+                        colour = colours.get('dark_ground')
+                else: # If unexplored, colour the area black
+                    colour = colours.get('black')
+
+                tcod.console_set_char_background(con=console,
+                                                 x=x, y=y,
+                                                 col=colour,
+                                                 flag=tcod.BKGND_SET)
+
 
     # Draw all entities in the list
     for entity in entities:
-        draw_entity(console, entity)
+        draw_entity(console, entity, fov_map)
 
     tcod.console_blit(src=console,
                       x=0, y=0,
@@ -54,7 +70,7 @@ def clear_all(console, entities):
         clear_entity(console, entity)
 
 
-def draw_entity(console, entity):
+def draw_entity(console, entity, fov_map):
     """Renders a given entity on the screen.
 
     params
@@ -66,12 +82,12 @@ def draw_entity(console, entity):
     -------------
     None
     """
-
-    tcod.console_set_default_foreground(con=console, col=entity.colour)
-    tcod.console_put_char(con=console,
-                          x=entity.x, y=entity.y,
-                          c=entity.char,
-                          flag=tcod.BKGND_NONE)
+    if tcod.map_is_in_fov(fov_map, entity.x, entity.y):
+        tcod.console_set_default_foreground(con=console, col=entity.colour)
+        tcod.console_put_char(con=console,
+                              x=entity.x, y=entity.y,
+                              c=entity.char,
+                              flag=tcod.BKGND_NONE)
 
 
 def clear_entity(console, entity):
