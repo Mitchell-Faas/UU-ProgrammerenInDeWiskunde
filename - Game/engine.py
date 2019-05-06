@@ -1,7 +1,7 @@
 import tcod
 import tcod.console
 import inputHandlers
-from entity import Entity
+from entity import Entity, get_blocking_entities_at
 import renderFunctions as render
 from map_objects.game_map import GameMap
 from fov_functions import initialize_fov, recompute_fov
@@ -20,6 +20,8 @@ def main():
     fov_light_walls = True
     fov_radius = 10
 
+    max_monsters_per_room = 3
+
     colours = {'dark_wall': tcod.Color(0,0,100),
                'dark_ground': tcod.Color(50,50,150),
                'light_wall': tcod.Color(130, 110, 50),
@@ -27,18 +29,8 @@ def main():
                'black': tcod.Color(0,0,0)}
 
     # Create variables to store player location
-    player = Entity(
-                    x=screenWidth // 2,
-                    y=screenHeight // 2,
-                    char='@',
-                    colour=tcod.white)
-    npc = Entity(
-                 x=int(screenWidth / 2 - 5),
-                 y=int(screenHeight / 2),
-                 char='@',
-                 colour=tcod.yellow)
-
-    entities = [npc, player]
+    player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player', blocks=True)
+    entities = [player]
 
     game_map = GameMap(width=map_width, height=map_height)
     game_map.create_map(max_rooms=max_rooms,
@@ -46,7 +38,9 @@ def main():
                         room_max_size=room_max_size,
                         width=map_width,
                         height=map_height,
-                        player=player)
+                        player=player,
+                        entities=entities,
+                        max_monsters_per_room=max_monsters_per_room)
 
     fov_recompute = True
     fov_map = initialize_fov(game_map)
@@ -95,12 +89,19 @@ def main():
         fullscreen = action.get('fullscreen')
 
         if move:
-            if not game_map.is_blocked(x=player.x + move[0],
-                                       y=player.y + move[1]):
-                # move is a (dx, dy) tuple
-                player.move(*move)
+            dx, dy = move
+            dest_x = player.x + dx
+            dest_y = player.y + dy
+            if not game_map.is_blocked(x=dest_x, y=dest_y):
+                enemy = get_blocking_entities_at(dest_x, dest_y, entity_list=entities)
+                if enemy:
+                    print('You make weird faces to the ' + enemy.name + '.\n',
+                          'It stares blankly at you, then makes one back')
+                else:
+                    # move is a (dx, dy) tuple
+                    player.move(*move)
+                    fov_recompute = True
 
-                fov_recompute = True
         if exit:
             return True
         if fullscreen:

@@ -1,6 +1,8 @@
+import tcod
 from random import randint
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
+from entity import Entity
 
 
 class GameMap:
@@ -14,7 +16,8 @@ class GameMap:
                  for x in range(self.width)]
         return tiles
 
-    def create_map(self, max_rooms, room_min_size, room_max_size, width, height, player):
+    def create_map(self, max_rooms, room_min_size, room_max_size, width, height,
+                   player, entities, max_monsters_per_room):
         rooms = []
         num_rooms = 0
 
@@ -60,6 +63,9 @@ class GameMap:
                         self.create_v_tunnel(prev_center_y, new_center_y, prev_center_x)
                         self.create_h_tunnel(prev_center_x, new_center_x, new_center_y)
 
+                # Place some monsters
+                self.place_entities(new_room, entities, max_monsters_per_room)
+
                 # Add the succesfully placed room to the list of rooms
                 rooms.append(new_room)
                 num_rooms += 1
@@ -81,6 +87,25 @@ class GameMap:
         for y in range (min(y1,y2),max(y1,y2)+1):
             self.tiles[x][y].blocked = False
             self.tiles[x][y].block_sight = False
+
+    def place_entities(self, room, entities, max_monsters_per_room):
+        # Get a random number of monsters
+        number_of_monsters = randint(0,max_monsters_per_room)
+
+        for i in range(number_of_monsters):
+            # Choose a random location in the room
+            x = randint(room.x1+1, room.x2-1)
+            y = randint(room.y1+1, room.y2-1)
+
+            # One-liner to say: If there's not already an entity at this location
+            if not any([entity for entity in entities if entity.x == x and entity.y == y]):
+                # Add some variety in monsters
+                if randint(0,100) < 80:
+                    monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True)
+                else:
+                    monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True)
+
+                entities.append(monster)
 
     def is_blocked(self, x, y):
         if self.tiles[x][y].blocked:
