@@ -10,7 +10,5 @@ def pascal(i, j):
     return pascal_ij
 
 if __name__ == '__main__':
-    while True:
-        k, n = [int(x) for x in input().split()]
-
-        print(pascal(n-1, k-1))
+    k, n = [int(x) for x in input().split()]
+    print(pascal(n-1, k-1))
