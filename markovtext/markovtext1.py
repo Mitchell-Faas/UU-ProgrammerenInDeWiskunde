@@ -7,6 +7,8 @@ textFilePath = "navysealcopypasta.txt"
 def dictFromFile(textFilePath):
     # Define output dictionary
     dictall = {}
+    startwordlist = []
+    endsentence = False
 
     with open(textFilePath, 'r') as file:
         for line in file:
@@ -28,16 +30,23 @@ def dictFromFile(textFilePath):
                 except IndexError:
                     # End of line; oh oh
                     lastword = word
+                # If the previous word was the end of a sentence, add the word after it to startwordlist
+                if endsentence == True:
+                    startwordlist.append(word)
+                    endsentence = False
+                # Check whether the word is the end of a sentence
+                if '?' in word or '.' in word:
+                    endsentence = True
 
-    return dictall
+    return [dictall,startwordlist]
 
-wordDict = dictFromFile(textFilePath)
+wordDict, startwordlist = dictFromFile(textFilePath)
 
 for key in wordDict:
     wordDict[key] = wordDict[key].most_common()
 
 
-startWord = "What"
+startWord = random.choice(startwordlist)
 maxLength = 60
 sentenceWords = []
 
@@ -49,7 +58,6 @@ for _ in range(maxLength):
     if '?' in currentWord or '.' in currentWord:
         break
 
-print(markovsentence)
     wordarr, occurencearr = zip(*wordDict[currentWord])
     occurencearr = np.array(occurencearr)
 
