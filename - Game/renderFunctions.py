@@ -1,5 +1,6 @@
 import tcod
 
+
 def render_all(console, entities, game_map, fov_map, fov_recompute,
                screen_width, screen_height, colours):
     """Renders all given entities on the screen.
@@ -37,14 +38,13 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                         colour = colours.get('dark_wall')
                     else:
                         colour = colours.get('dark_ground')
-                else: # If unexplored, colour the area black
+                else:  # If unexplored, colour the area black
                     colour = colours.get('black')
 
                 tcod.console_set_char_background(con=console,
                                                  x=x, y=y,
                                                  col=colour,
                                                  flag=tcod.BKGND_SET)
-
 
     # Draw all entities in the list
     for entity in entities:
@@ -56,6 +56,7 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                       h=screen_height,
                       dst=0,
                       xdst=0, ydst=0)
+
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

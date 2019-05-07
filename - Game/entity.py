@@ -13,6 +13,7 @@ class Entity:
         self.x += dx
         self.y += dy
 
+
 def get_blocking_entities_at(x, y, entity_list):
     for entity in entity_list:
         if entity.blocks and entity.x == x and entity.y == y:

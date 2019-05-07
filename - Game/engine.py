@@ -1,16 +1,18 @@
+import inputHandlers
+import renderFunctions as render
 import tcod
 import tcod.console
-import inputHandlers
 from entity import Entity, get_blocking_entities_at
-import renderFunctions as render
-from map_objects.game_map import GameMap
 from fov_functions import initialize_fov, recompute_fov
+from game_states import GameStates
+from map_objects.game_map import GameMap
+
 
 def main():
     screenWidth = 80
     screenHeight = 50
     map_width = screenWidth
-    map_height = screenHeight # -5 to fill add room at the bottom
+    map_height = screenHeight  # -5 to fill add room at the bottom
 
     room_max_size = 10
     room_min_size = 6
@@ -22,11 +24,11 @@ def main():
 
     max_monsters_per_room = 3
 
-    colours = {'dark_wall': tcod.Color(0,0,100),
-               'dark_ground': tcod.Color(50,50,150),
+    colours = {'dark_wall': tcod.Color(0, 0, 100),
+               'dark_ground': tcod.Color(50, 50, 150),
                'light_wall': tcod.Color(130, 110, 50),
                'light_ground': tcod.Color(200, 180, 50),
-               'black': tcod.Color(0,0,0)}
+               'black': tcod.Color(0, 0, 0)}
 
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player', blocks=True)
@@ -48,6 +50,8 @@ def main():
     # Define Key and Mouse objects
     key = tcod.Key()
     mouse = tcod.Mouse()
+
+    game_state = GameStates.PLAYERS_TURN
 
     # Initialise the console with some hardcoded data
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
@@ -75,7 +79,7 @@ def main():
                           screen_width=screenWidth,
                           screen_height=screenHeight,
                           colours=colours)
-        fov_recompute = False # Keep on false until we move again
+        fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
         # Remove all entities so we can update
         render.clear_all(console=console, entities=entities)
@@ -88,7 +92,7 @@ def main():
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
 
-        if move:
+        if move and game_state == GameStates.PLAYERS_TURN:
             dx, dy = move
             dest_x = player.x + dx
             dest_y = player.y + dy
@@ -102,10 +106,19 @@ def main():
                     player.move(*move)
                     fov_recompute = True
 
+            game_state = GameStates.ENEMIES_TURN
+
         if exit:
             return True
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+        if game_state == GameStates.ENEMIES_TURN:
+            for entity in entities:
+                if entity != player:
+                    print('The', entity.name, 'ponders what it means to be.')
+
+                game_state = GameStates.PLAYERS_TURN
+
 
 if __name__ == '__main__':
     main()
