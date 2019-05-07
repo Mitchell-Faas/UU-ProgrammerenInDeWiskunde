@@ -2,7 +2,10 @@ import random
 from collections import Counter
 import numpy as np
 
-textFilePath = "navysealcopypasta.txt"
+textFilePath = "trumpspeeches_edit.txt"
+# The textfile containing Trump's speeches was provided by ryanmcdermott at \
+# https://github.com/ryanmcdermott/trump-speeches
+
 
 def dictFromFile(textFilePath):
     # Define output dictionary
