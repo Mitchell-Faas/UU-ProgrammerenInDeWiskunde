@@ -18,58 +18,72 @@ class GameMap:
         return tiles
 
     def create_map(self, max_rooms, room_min_size, room_max_size, width, height,
-                   player, entities, max_monsters_per_room):
-        rooms = []
-        num_rooms = 0
+                   player, entities, max_monsters_per_room, map_type='regular'):
+        if map_type == 'regular':
+            rooms = []
+            num_rooms = 0
 
-        for r in range(max_rooms):
-            # random room_width and room_height
-            room_width = randint(room_min_size, room_max_size)
-            room_height = randint(room_min_size, room_max_size)
-            # random position without going out of the boundaries of the map
-            x = randint(0, width - room_width - 1)
-            y = randint(0, height - room_height - 1)
+            for r in range(max_rooms):
+                # random room_width and room_height
+                room_width = randint(room_min_size, room_max_size)
+                room_height = randint(room_min_size, room_max_size)
+                # random position without going out of the boundaries of the map
+                x = randint(0, width - room_width - 1)
+                y = randint(0, height - room_height - 1)
 
-            new_room = Rect(x=x, y=y, width=room_width, height=room_height)
-            # Check if the new room intersects any previous ones
-            for other_room in rooms:
-                if new_room.intersects_with(other_room):
-                    # They intersect; don't add this room
-                    break
-            else:
-                # There are no intersections with other rooms, it is valid
-
-                # Carve out this room on the map
-                self.create_room(new_room)
-
-                # center coordinates of new room, will be useful later
-                (new_center_x, new_center_y) = new_room.center()
-
-                if num_rooms == 0:
-                    # This is the first room, where the player starts at
-                    player.x = new_center_x
-                    player.y = new_center_y
+                new_room = Rect(x=x, y=y, width=room_width, height=room_height)
+                # Check if the new room intersects any previous ones
+                for other_room in rooms:
+                    if new_room.intersects_with(other_room):
+                        # They intersect; don't add this room
+                        break
                 else:
-                    # This is not the first room. That means we need to connect it to the previous one using tunnels.
+                    # There are no intersections with other rooms, it is valid
 
-                    # Take the center coordinates of the previous room
-                    (prev_center_x, prev_center_y) = rooms[num_rooms - 1].center()
+                    # Carve out this room on the map
+                    self.create_room(new_room)
 
-                    # Choose randomly whether to first dig vertically then horizontally, or vice versa
-                    if randint(0, 1) == 1:
-                        self.create_h_tunnel(prev_center_x, new_center_x, prev_center_y)
-                        self.create_v_tunnel(prev_center_y, new_center_y, new_center_x)
+                    # center coordinates of new room, will be useful later
+                    (new_center_x, new_center_y) = new_room.center()
+
+                    if num_rooms == 0:
+                        # This is the first room, where the player starts at
+                        player.x = new_center_x
+                        player.y = new_center_y
                     else:
-                        # first move vertically, then horizontally
-                        self.create_v_tunnel(prev_center_y, new_center_y, prev_center_x)
-                        self.create_h_tunnel(prev_center_x, new_center_x, new_center_y)
+                        # This is not the first room. That means we need to connect it to the previous one using tunnels.
 
-                # Place some monsters
-                self.place_entities(new_room, entities, max_monsters_per_room)
+                        # Take the center coordinates of the previous room
+                        (prev_center_x, prev_center_y) = rooms[num_rooms - 1].center()
 
-                # Add the succesfully placed room to the list of rooms
-                rooms.append(new_room)
-                num_rooms += 1
+                        # Choose randomly whether to first dig vertically then horizontally, or vice versa
+                        if randint(0, 1) == 1:
+                            self.create_h_tunnel(prev_center_x, new_center_x, prev_center_y)
+                            self.create_v_tunnel(prev_center_y, new_center_y, new_center_x)
+                        else:
+                            # first move vertically, then horizontally
+                            self.create_v_tunnel(prev_center_y, new_center_y, prev_center_x)
+                            self.create_h_tunnel(prev_center_x, new_center_x, new_center_y)
+
+                    # Place some monsters
+                    self.place_entities(new_room, entities, max_monsters_per_room)
+
+                    # Add the succesfully placed room to the list of rooms
+                    rooms.append(new_room)
+                    num_rooms += 1
+
+        if map_type == 'boss1':
+            entry_room = Rect(x=10, y=21, width=6, height=6)
+            self.create_room(entry_room)
+            (player.x, player.y) = entry_room.center()
+            boss_hall = Rect(x=20, y=9, width=40, height=30)
+            self.create_room(boss_hall)
+            self.create_h_tunnel(5, player.x, player.y)
+            self.create_v_tunnel(player.y - 8, player.y + 8, 5)
+            self.create_h_tunnel(5, 30, player.y + 8)
+            self.create_h_tunnel(5, 30, player.y - 8)
+
+
 
     def create_room(self, room):
         # Go through each tile in the rectangle and make it passable

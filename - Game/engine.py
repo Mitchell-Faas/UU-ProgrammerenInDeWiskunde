@@ -42,7 +42,8 @@ def main():
                         height=map_height,
                         player=player,
                         entities=entities,
-                        max_monsters_per_room=max_monsters_per_room)
+                        max_monsters_per_room=max_monsters_per_room,
+                        map_type='boss1')
 
     fov_recompute = True
     fov_map = initialize_fov(game_map)
