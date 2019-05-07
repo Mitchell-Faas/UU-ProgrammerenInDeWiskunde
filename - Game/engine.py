@@ -31,7 +31,7 @@ def main():
                'light_ground': tcod.Color(200, 180, 50),
                'black': tcod.Color(0, 0, 0)}
 
-    fighter_component = Fighter()
+    fighter_component = Fighter(10,0,-1)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
                     blocks=True, fighter=fighter_component)
@@ -119,7 +119,7 @@ def main():
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
-                    entity.ai.take_turn(player, fov_map, game_map)
+                    entity.ai.take_turn(player, fov_map, game_map,entities)
                 game_state = GameStates.PLAYERS_TURN
 
 

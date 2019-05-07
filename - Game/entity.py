@@ -1,4 +1,5 @@
 import math
+import tcod
 
 class Entity:
     """"An object representing entities"""
@@ -32,7 +33,7 @@ class Entity:
         dy = int(round(dy / distance))
 
         if not (game_map.is_blocked(self.x+dx, self.y+dy) or
-                get_blocking_entities_at(entities, self.x + dx, self.y + dy)):
+                get_blocking_entities_at(self.x + dx, self.y + dy, entities)):
             self.move(dx, dy)
 
     def distance_to(self, other):
