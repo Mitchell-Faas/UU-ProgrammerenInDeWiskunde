@@ -7,6 +7,10 @@ def handleKeys(key):
         tcod.KEY_DOWN: {'move': (0, 1)},
         tcod.KEY_LEFT: {'move': (-1, 0)},
         tcod.KEY_RIGHT: {'move': (1, 0)},
+        'y': {'move': (-1, -1)},
+        'u': {'move': (1, -1)},
+        'b': {'move': (-1, 1)},
+        'n': {'move': (1, 1)},
         tcod.KEY_ESCAPE: {'exit': True}
     }
 

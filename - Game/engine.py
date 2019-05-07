@@ -6,6 +6,7 @@ from entity import Entity, get_blocking_entities_at
 from fov_functions import initialize_fov, recompute_fov
 from game_states import GameStates
 from map_objects.game_map import GameMap
+from components.fighter import Fighter
 
 
 def main():
@@ -30,8 +31,10 @@ def main():
                'light_ground': tcod.Color(200, 180, 50),
                'black': tcod.Color(0, 0, 0)}
 
+    fighter_component = Fighter()
     # Create variables to store player location
-    player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player', blocks=True)
+    player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
+                    blocks=True, fighter=fighter_component)
     entities = [player]
 
     game_map = GameMap(width=map_width, height=map_height)
@@ -114,9 +117,8 @@ def main():
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
-                if entity != player:
-                    print('The', entity.name, 'ponders what it means to be.')
-
+                if entity.ai:
+                    entity.ai.take_turn(player, fov_map, game_map)
                 game_state = GameStates.PLAYERS_TURN
 
 

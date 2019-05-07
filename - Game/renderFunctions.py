@@ -29,7 +29,6 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                         colour = colours.get('light_wall')
                     else:
                         colour = colours.get('light_ground')
-
                     # We've now explored this tile
                     game_map.tiles[x][y].explored = True
                 elif game_map.tiles[x][y].explored:

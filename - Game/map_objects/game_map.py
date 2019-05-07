@@ -1,5 +1,8 @@
 from random import randint
 
+from components.ai import BasicMonster
+from components.fighter import Fighter
+
 import tcod
 from entity import Entity
 from map_objects.rectangle import Rect
@@ -101,9 +104,15 @@ class GameMap:
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
                 # Add some variety in monsters
                 if randint(0, 100) < 80:
-                    monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True)
+                    fighter_component = Fighter(hp=10, defense=0, power=3)
+                    ai_component = BasicMonster()
+                    monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True,
+                                     fighter=fighter_component, ai=ai_component)
                 else:
-                    monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True)
+                    fighter_component = Fighter(hp=16, defense=1, power=4)
+                    ai_component = BasicMonster()
+                    monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True,
+                                     fighter=fighter_component, ai=ai_component)
 
                 entities.append(monster)
 
