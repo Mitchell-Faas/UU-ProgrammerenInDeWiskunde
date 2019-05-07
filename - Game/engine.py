@@ -43,7 +43,7 @@ def main():
                         player=player,
                         entities=entities,
                         max_monsters_per_room=max_monsters_per_room,
-                        map_type='boss1')
+                        map_type='regular')
 
     fov_recompute = True
     fov_map = initialize_fov(game_map)
