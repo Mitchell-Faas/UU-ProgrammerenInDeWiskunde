@@ -2,4 +2,6 @@
 /Test opgaven/*
 /- Game/__pycache__/*
 /- Game/map_objects/__pycache__/*
-/MTCS-Go/GameFiles/*
+/MTCS-Go/GameFiles/sgf-files/*
+/MTCS-Go/GameFiles/.idea/*
+/MTCS-Go/GameFiles/__pycache__/*
