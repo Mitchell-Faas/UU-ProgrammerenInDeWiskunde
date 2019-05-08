@@ -11,6 +11,10 @@ from death_functions import kill_player, kill_monster
 
 # To do: fix: player moving into a wall skips their turn, allowing enemies to move
 
+"""
+Created by Mitchell Faas and Pim te Rietmole
+Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.com/tutorials/tcod/
+"""
 
 def main():
     screenWidth = 80
@@ -34,7 +38,7 @@ def main():
                'light_ground': tcod.Color(200, 180, 50),
                'black': tcod.Color(0, 0, 0)}
 
-    fighter_component = Fighter(10,0,2)
+    fighter_component = Fighter(15,0,3)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
                     blocks=True, fighter=fighter_component)
