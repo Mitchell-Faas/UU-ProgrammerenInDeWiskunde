@@ -8,6 +8,8 @@ from game_states import GameStates
 from map_objects.game_map import GameMap
 from components.fighter import Fighter
 
+# To do: fix: player moving into a wall skips their turn, allowing enemies to move
+
 
 def main():
     screenWidth = 80
