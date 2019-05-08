@@ -7,6 +7,7 @@ from fov_functions import initialize_fov, recompute_fov
 from game_states import GameStates
 from map_objects.game_map import GameMap
 from components.fighter import Fighter
+from death_functions import kill_player, kill_monster
 
 # To do: fix: player moving into a wall skips their turn, allowing enemies to move
 
@@ -33,7 +34,7 @@ def main():
                'light_ground': tcod.Color(200, 180, 50),
                'black': tcod.Color(0, 0, 0)}
 
-    fighter_component = Fighter(10,0,-1)
+    fighter_component = Fighter(10,0,2)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
                     blocks=True, fighter=fighter_component)
@@ -98,6 +99,8 @@ def main():
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
 
+        player_turn_results = []
+
         if move and game_state == GameStates.PLAYERS_TURN:
             dx, dy = move
             dest_x = player.x + dx
@@ -105,8 +108,8 @@ def main():
             if not game_map.is_blocked(x=dest_x, y=dest_y):
                 enemy = get_blocking_entities_at(dest_x, dest_y, entity_list=entities)
                 if enemy:
-                    print('You make weird faces to the ' + enemy.name + '.\n',
-                          'It stares blankly at you, then makes one back')
+                    attack_results = player.fighter.attack(enemy)
+                    player_turn_results.extend(attack_results)
                 else:
                     # move is a (dx, dy) tuple
                     player.move(*move)
@@ -118,10 +121,47 @@ def main():
             return True
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
+        # Look at the results of the player's turn and print the appropriate messages
+        for player_turn_result in player_turn_results:
+            message = player_turn_result.get('message')
+            dead_entity = player_turn_result.get('dead')
+
+            if message:
+                print(message)
+
+            if dead_entity:
+                if dead_entity == player:
+                    message, game_state = kill_player(dead_entity)
+                else:
+                    message = kill_monster(dead_entity)
+
+                print(message)
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
-                    entity.ai.take_turn(player, fov_map, game_map,entities)
+                    enemy_turn_results = entity.ai.take_turn(player, fov_map, game_map, entities)
+                    if enemy_turn_results:
+                        for enemy_turn_result in enemy_turn_results:
+                            message = enemy_turn_result.get('message')
+                            dead_entity = enemy_turn_result.get('dead')
+
+                            if message:
+                                print(message)
+
+                            if dead_entity:
+                                if dead_entity == player:
+                                    message, game_state = kill_player(dead_entity)
+                                else:
+                                    message = kill_monster(dead_entity)
+
+                                print(message)
+
+                                if game_state == GameStates.PLAYER_DEAD:
+                                    break # Ignore further results of this enemy's turn
+                        if game_state == GameStates.PLAYER_DEAD:
+                            break # Skip other enemies' turns
+
+            else: # If the for-loop was broken, dont give player their turn back
                 game_state = GameStates.PLAYERS_TURN
 
 
