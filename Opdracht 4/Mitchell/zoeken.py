@@ -6,7 +6,7 @@ def bisectie_rec(list, target, left = 0, right = -1):
         right = len(list) - 1
 
 
-    idx = rround((right+left) / 2)
+    idx = round((right+left) / 2)
 
     # Check middle
     if list[idx] == target:
@@ -14,9 +14,9 @@ def bisectie_rec(list, target, left = 0, right = -1):
     elif left == right: # We're on the same number, and it's not target, so doesn't exist.
         return -1
     elif list[idx] > target:
-        output = bisectie_rec(list, target, left=left, right=idx)
+        output = bisectie_rec(list, target, left=left, right=idx-1)
     else: # list[idx] < target:
-        output = bisectie_rec(list, target, left=idx, right=right)
+        output = bisectie_rec(list, target, left=idx+1, right=right)
 
     # We need the left most idx, so we'll walk left until we're done
     try:
@@ -39,7 +39,7 @@ def bisectie_it(list, target):
 
 
     while True:
-        idx = rround((right+left) / 2)
+        idx = round((right+left) / 2)
 
         # Check middle
         if list[idx] == target:
@@ -48,9 +48,9 @@ def bisectie_it(list, target):
         elif left == right: # We're on the same number, and it's not target, so doesn't exist.
             return -1
         elif list[idx] > target:
-            right = idx
+            right = idx-1
         else: # list[idx] < target:
-            left = idx
+            left = idx+1
 
     # We need the left most idx, so we'll walk left until we're done
     try:
@@ -64,12 +64,6 @@ def bisectie_it(list, target):
 
     return output
 
-def rround(x):
-    if (x%1 == 0.5):
-        return round(x) + 1
-    else:
-        return round(x)
-
 
 if __name__ == '__main__':
-    print(bisectie_it([1, 1] , 4))
+    print(bisectie_it([], 1))
