@@ -118,12 +118,12 @@ class GameMap:
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
                 # Add some variety in monsters
                 if randint(0, 100) < 80:
-                    fighter_component = Fighter(hp=10, defense=0, power=3)
+                    fighter_component = Fighter(hp=5, defense=0, power=1)
                     ai_component = BasicMonster()
                     monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True,
                                      fighter=fighter_component, ai=ai_component)
                 else:
-                    fighter_component = Fighter(hp=16, defense=1, power=4)
+                    fighter_component = Fighter(hp=10, defense=1, power=1)
                     ai_component = BasicMonster()
                     monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True,
                                      fighter=fighter_component, ai=ai_component)
