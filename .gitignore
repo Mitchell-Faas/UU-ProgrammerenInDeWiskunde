@@ -5,3 +5,4 @@
 /MTCS-Go/GameFiles/sgf-files/*
 /MTCS-Go/GameFiles/.idea/*
 /MTCS-Go/GameFiles/__pycache__/*
+*/__pycache__/*
