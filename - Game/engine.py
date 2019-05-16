@@ -42,7 +42,7 @@ def main():
     fighter_component = Fighter(15,0,3)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
-                    blocks=True, fighter=fighter_component)
+                    blocks=True, fighter=fighter_component, render_order=render.RenderOrder.actor)
     entities = [player]
 
     game_map = GameMap(width=map_width, height=map_height)
@@ -85,6 +85,7 @@ def main():
         # Write current state to console
         render.render_all(console=console,
                           entities=entities,
+                          player=player,
                           game_map=game_map,
                           fov_map=fov_map,
                           fov_recompute=fov_recompute,
@@ -119,8 +120,9 @@ def main():
                     # move is a (dx, dy) tuple
                     player.move(*move)
                     fov_recompute = True
-
-            game_state = GameStates.ENEMIES_TURN
+                game_state = GameStates.ENEMIES_TURN
+            else:
+                player_turn_results.extend([{'message':'The wall says "boink!"'}])
 
         if exit:
             return True

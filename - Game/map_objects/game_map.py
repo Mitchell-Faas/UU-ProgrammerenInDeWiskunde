@@ -2,6 +2,7 @@ from random import randint
 
 from components.ai import BasicMonster
 from components.fighter import Fighter
+from renderFunctions import RenderOrder
 
 import tcod
 from entity import Entity
@@ -121,12 +122,12 @@ class GameMap:
                     fighter_component = Fighter(hp=5, defense=0, power=1)
                     ai_component = BasicMonster()
                     monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True,
-                                     fighter=fighter_component, ai=ai_component)
+                                     fighter=fighter_component, ai=ai_component, render_order=RenderOrder.actor)
                 else:
                     fighter_component = Fighter(hp=10, defense=1, power=1)
                     ai_component = BasicMonster()
                     monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True,
-                                     fighter=fighter_component, ai=ai_component)
+                                     fighter=fighter_component, ai=ai_component, render_order=RenderOrder.actor)
 
                 entities.append(monster)
 
