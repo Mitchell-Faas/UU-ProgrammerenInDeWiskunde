@@ -1,17 +1,20 @@
 import math
 import tcod
 
+from renderFunctions import RenderOrder
+
 class Entity:
     """"An object representing entities"""
 
     def __init__(self, x, y, char, colour, name, blocks=False,
-                 fighter=None, ai=None):
+                 fighter=None, ai=None, render_order=RenderOrder.corpse):
         self.x = x
         self.y = y
         self.char = char
         self.colour = colour
         self.name = name
         self.blocks = blocks
+        self.render_order = render_order
         self.fighter = fighter
         self.ai = ai
 

@@ -1,7 +1,12 @@
 import tcod
+from enum import Enum
 
+class RenderOrder(Enum):
+    corpse = 1
+    item = 2
+    actor = 3
 
-def render_all(console, entities, game_map, fov_map, fov_recompute,
+def render_all(console, entities, player, game_map, fov_map, fov_recompute,
                screen_width, screen_height, colours):
     """Renders all given entities on the screen.
 
@@ -45,9 +50,15 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                                                  col=colour,
                                                  flag=tcod.BKGND_SET)
 
+    entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
+
     # Draw all entities in the list
-    for entity in entities:
+    for entity in entities_in_render_order:
         draw_entity(console, entity, fov_map)
+
+    tcod.console_set_default_foreground(console, tcod.white)
+    tcod.console_print_ex(console, x=1, y=screen_height-2, flag=tcod.BKGND_NONE, alignment=tcod.LEFT,
+                          fmt='HP {0:02}/{1:02}'.format(player.fighter.hp, player.fighter.max_hp))
 
     tcod.console_blit(src=console,
                       x=0, y=0,
