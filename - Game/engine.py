@@ -20,7 +20,7 @@ def main():
     screenWidth = 80
     screenHeight = 50
     map_width = screenWidth
-    map_height = screenHeight  # -5 to fill add room at the bottom
+    map_height = screenHeight -5
 
     room_max_size = 10
     room_min_size = 6
