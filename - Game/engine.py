@@ -9,7 +9,8 @@ from map_objects.game_map import GameMap
 from components.fighter import Fighter
 from death_functions import kill_player, kill_monster
 
-# To do: fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Add: pressing '5' should skip player turn
 
 """
 Created by Mitchell Faas and Pim te Rietmole
