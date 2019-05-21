@@ -6,8 +6,22 @@ class RenderOrder(Enum):
     item = 2
     actor = 3
 
-def render_all(console, entities, player, game_map, fov_map, fov_recompute,
-               screen_width, screen_height, colours):
+def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
+    barWidth = int(float(value) / maximum * total_width)
+
+    tcod.console_set_default_background(panel, back_color)
+    tcod.console_rect(panel, x, y, total_width, 1, False, tcod.BKGND_SCREEN)
+
+    tcod.console_set_default_background(panel, bar_color)
+    if barWidth > 0:
+        tcod.console_rect(panel, x, y, barWidth, 1, False, tcod.BKGND_SCREEN)
+
+    tcod.console_set_default_foreground(panel, tcod.white)
+    tcod.console_print_ex(panel, int(x + total_width / 2), y, tcod.BKGND_NONE, tcod.CENTER,
+                             '{0}: {1}/{2}'.format(name, value, maximum))
+
+def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute,
+               screen_width, screen_height, barWidth, panelHeight, panelY, colours):
     """Renders all given entities on the screen.
 
     params
@@ -56,9 +70,6 @@ def render_all(console, entities, player, game_map, fov_map, fov_recompute,
     for entity in entities_in_render_order:
         draw_entity(console, entity, fov_map)
 
-    tcod.console_set_default_foreground(console, tcod.white)
-    tcod.console_print_ex(console, x=1, y=screen_height-2, flag=tcod.BKGND_NONE, alignment=tcod.LEFT,
-                          fmt='HP {0:02}/{1:02}'.format(player.fighter.hp, player.fighter.max_hp))
 
     tcod.console_blit(src=console,
                       x=0, y=0,
@@ -66,7 +77,13 @@ def render_all(console, entities, player, game_map, fov_map, fov_recompute,
                       h=screen_height,
                       dst=0,
                       xdst=0, ydst=0)
+    tcod.console_set_default_background(panel, tcod.black)
+    tcod.console_clear(panel)
 
+    render_bar(panel, 1, 1, barWidth, 'HP', player.fighter.hp, player.fighter.max_hp,
+               tcod.light_red, tcod.darker_red)
+
+    tcod.console_blit(panel, 0, 0, screen_width, panelHeight, 0, 0, panelY)
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

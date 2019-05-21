@@ -20,8 +20,17 @@ Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.co
 def main():
     screenWidth = 80
     screenHeight = 50
-    map_width = screenWidth
-    map_height = screenHeight  # -5 to fill add room at the bottom
+
+    barWidth = 20
+    panelHeight = 7
+    panelY = screenHeight-panelHeight
+
+    messageX = barWidth + 2
+    messageWidth = screenWidth - barWidth - 2
+    messageHeight = panelHeight - 1
+
+    map_width = 80
+    map_height = 43
 
     room_max_size = 10
     room_min_size = 6
@@ -69,6 +78,8 @@ def main():
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(w=screenWidth, h=screenHeight, title='Esc to exit')
     console = tcod.console.Console(width=screenWidth, height=screenHeight)
+    # UI at bottom of screen
+    panel = tcod.console.Console(screenWidth, panelHeight)
 
     # Start the game loop
     while True:
@@ -84,6 +95,7 @@ def main():
 
         # Write current state to console
         render.render_all(console=console,
+                          panel=panel,
                           entities=entities,
                           player=player,
                           game_map=game_map,
@@ -91,6 +103,9 @@ def main():
                           fov_recompute=fov_recompute,
                           screen_width=screenWidth,
                           screen_height=screenHeight,
+                          barWidth=barWidth,
+                          panelHeight=panelHeight,
+                          panelY=panelY,
                           colours=colours)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
