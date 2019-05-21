@@ -20,7 +20,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
     tcod.console_print_ex(panel, int(x + total_width / 2), y, tcod.BKGND_NONE, tcod.CENTER,
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
-def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute,
+def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute, messageLog,
                screen_width, screen_height, barWidth, panelHeight, panelY, colours):
     """Renders all given entities on the screen.
 
@@ -80,10 +80,22 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
     tcod.console_set_default_background(panel, tcod.black)
     tcod.console_clear(panel)
 
+    # Print the game messages, one line at a time
+    y = 1
+    for message in messageLog.messages:
+        tcod.console_set_default_foreground(panel, message.color)
+        tcod.console_print_ex(panel, messageLog.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
+        y += 1
+
     render_bar(panel, 1, 1, barWidth, 'HP', player.fighter.hp, player.fighter.max_hp,
                tcod.light_red, tcod.darker_red)
 
-    tcod.console_blit(panel, 0, 0, screen_width, panelHeight, 0, 0, panelY)
+    tcod.console_blit(src=panel,
+                      x=0, y=0,
+                      w=screen_width,
+                      h=panelHeight,
+                      dst=0,
+                      xdst=0, ydst=panelY)
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

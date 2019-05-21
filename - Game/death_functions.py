@@ -1,17 +1,18 @@
 import tcod
 from game_states import GameStates
 from renderFunctions import RenderOrder
+from gameMessages import Message
 
 
 def kill_player(player):
     player.char = '%'
     player.colour = tcod.dark_red
 
-    return 'You died!', GameStates.PLAYER_DEAD
+    return Message('You explode in a fountain of gore!', tcod.red), GameStates.PLAYER_DEAD
 
 
 def kill_monster(monster):
-    death_message = '{0} is dead!'.format(monster.name.capitalize())
+    death_message = Message('The {0} explodes in a fountain of gore!'.format(monster.name.capitalize()), tcod.orange)
 
     monster.char = '%'
     monster.colour = tcod.dark_red

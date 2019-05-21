@@ -8,6 +8,7 @@ from game_states import GameStates
 from map_objects.game_map import GameMap
 from components.fighter import Fighter
 from death_functions import kill_player, kill_monster
+from gameMessages import Message, MessageLog
 
 # To do: Fix: player moving into a wall skips their turn, allowing enemies to move
 # To do: Add: pressing '5' should skip player turn
@@ -68,6 +69,8 @@ def main():
     fov_recompute = True
     fov_map = initialize_fov(game_map)
 
+    messageLog = MessageLog(messageX, messageWidth, messageHeight)
+
     # Define Key and Mouse objects
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -101,6 +104,7 @@ def main():
                           game_map=game_map,
                           fov_map=fov_map,
                           fov_recompute=fov_recompute,
+                          messageLog=messageLog,
                           screen_width=screenWidth,
                           screen_height=screenHeight,
                           barWidth=barWidth,
@@ -137,7 +141,7 @@ def main():
                     fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
-                player_turn_results.extend([{'message':'The wall says "boink!"'}])
+                player_turn_results.extend([{'message': Message('The wall says "boink!"',tcod.blue)}])
 
         if exit:
             return True
@@ -149,7 +153,7 @@ def main():
             dead_entity = player_turn_result.get('dead')
 
             if message:
-                print(message)
+                messageLog.add_message(message)
 
             if dead_entity:
                 if dead_entity == player:
@@ -157,7 +161,7 @@ def main():
                 else:
                     message = kill_monster(dead_entity)
 
-                print(message)
+                messageLog.add_message(message)
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
@@ -168,7 +172,7 @@ def main():
                             dead_entity = enemy_turn_result.get('dead')
 
                             if message:
-                                print(message)
+                                messageLog.add_message(message)
 
                             if dead_entity:
                                 if dead_entity == player:
@@ -176,7 +180,7 @@ def main():
                                 else:
                                     message = kill_monster(dead_entity)
 
-                                print(message)
+                                messageLog.add_message(message)
 
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break # Ignore further results of this enemy's turn
