@@ -96,7 +96,7 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
         tcod.console_print_ex(panel, messageLog.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
         y += 1
 
-    render_bar(panel, 1, 1, barWidth, 'HP', player.fighter.hp, player.fighter.max_hp,
+    render_bar(panel, 1, 1, barWidth, 'BLOOD', player.fighter.hp, player.fighter.max_hp,
                tcod.light_red, tcod.darker_red)
 
     tcod.console_set_default_foreground(panel, tcod.light_gray)
