@@ -90,7 +90,7 @@ def main():
         ## Key-press logic ##
         #####################
         # Check input from keyboard or mouse
-        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS, k=key, m=mouse)
+        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS | tcod.EVENT_MOUSE, k=key, m=mouse)
 
         # Compute fov if needed
         if fov_recompute:
@@ -110,6 +110,7 @@ def main():
                           barWidth=barWidth,
                           panelHeight=panelHeight,
                           panelY=panelY,
+                          mouse=mouse,
                           colours=colours)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
@@ -141,7 +142,7 @@ def main():
                     fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
-                player_turn_results.extend([{'message': Message('The wall says "boink!"',tcod.blue)}])
+                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
 
         if exit:
             return True

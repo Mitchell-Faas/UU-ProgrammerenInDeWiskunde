@@ -6,6 +6,15 @@ class RenderOrder(Enum):
     item = 2
     actor = 3
 
+def get_names_under_mouse(mouse, entities, fov_map):
+    (x, y) = (mouse.cx, mouse.cy)
+
+    names = [entity.name for entity in entities
+             if entity.x == x and entity.y == y and tcod.map_is_in_fov(fov_map, entity.x, entity.y)]
+    names = ', '.join(names)
+
+    return names.capitalize()
+
 def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
     barWidth = int(float(value) / maximum * total_width)
 
@@ -21,7 +30,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute, messageLog,
-               screen_width, screen_height, barWidth, panelHeight, panelY, colours):
+               screen_width, screen_height, barWidth, panelHeight, panelY, mouse, colours):
     """Renders all given entities on the screen.
 
     params
@@ -89,6 +98,10 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
 
     render_bar(panel, 1, 1, barWidth, 'HP', player.fighter.hp, player.fighter.max_hp,
                tcod.light_red, tcod.darker_red)
+
+    tcod.console_set_default_foreground(panel, tcod.light_gray)
+    tcod.console_print_ex(panel, 1, 0, tcod.BKGND_NONE, tcod.LEFT,
+                             get_names_under_mouse(mouse, entities, fov_map))
 
     tcod.console_blit(src=panel,
                       x=0, y=0,
