@@ -1,8 +1,36 @@
 import tcod
+from enum import Enum
 
+class RenderOrder(Enum):
+    corpse = 1
+    item = 2
+    actor = 3
 
-def render_all(console, entities, game_map, fov_map, fov_recompute,
-               screen_width, screen_height, colours):
+def get_names_under_mouse(mouse, entities, fov_map):
+    (x, y) = (mouse.cx, mouse.cy)
+
+    names = [entity.name for entity in entities
+             if entity.x == x and entity.y == y and tcod.map_is_in_fov(fov_map, entity.x, entity.y)]
+    names = ', '.join(names)
+
+    return names.capitalize()
+
+def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
+    barWidth = int(float(value) / maximum * total_width)
+
+    tcod.console_set_default_background(panel, back_color)
+    tcod.console_rect(panel, x, y, total_width, 1, False, tcod.BKGND_SCREEN)
+
+    tcod.console_set_default_background(panel, bar_color)
+    if barWidth > 0:
+        tcod.console_rect(panel, x, y, barWidth, 1, False, tcod.BKGND_SCREEN)
+
+    tcod.console_set_default_foreground(panel, tcod.white)
+    tcod.console_print_ex(panel, int(x + total_width / 2), y, tcod.BKGND_NONE, tcod.CENTER,
+                             '{0}: {1}/{2}'.format(name, value, maximum))
+
+def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute, messageLog,
+               screen_width, screen_height, barWidth, panelHeight, panelY, mouse, colours):
     """Renders all given entities on the screen.
 
     params
@@ -45,9 +73,12 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                                                  col=colour,
                                                  flag=tcod.BKGND_SET)
 
+    entities_in_render_order = sorted(entities, key=lambda x: x.render_order.value)
+
     # Draw all entities in the list
-    for entity in entities:
+    for entity in entities_in_render_order:
         draw_entity(console, entity, fov_map)
+
 
     tcod.console_blit(src=console,
                       x=0, y=0,
@@ -55,7 +86,29 @@ def render_all(console, entities, game_map, fov_map, fov_recompute,
                       h=screen_height,
                       dst=0,
                       xdst=0, ydst=0)
+    tcod.console_set_default_background(panel, tcod.black)
+    tcod.console_clear(panel)
 
+    # Print the game messages, one line at a time
+    y = 1
+    for message in messageLog.messages:
+        tcod.console_set_default_foreground(panel, message.color)
+        tcod.console_print_ex(panel, messageLog.x, y, tcod.BKGND_NONE, tcod.LEFT, message.text)
+        y += 1
+
+    render_bar(panel, 1, 1, barWidth, 'BLOOD', player.fighter.hp, player.fighter.max_hp,
+               tcod.light_red, tcod.darker_red)
+
+    tcod.console_set_default_foreground(panel, tcod.light_gray)
+    tcod.console_print_ex(panel, 1, 0, tcod.BKGND_NONE, tcod.LEFT,
+                             get_names_under_mouse(mouse, entities, fov_map))
+
+    tcod.console_blit(src=panel,
+                      x=0, y=0,
+                      w=screen_width,
+                      h=panelHeight,
+                      dst=0,
+                      xdst=0, ydst=panelY)
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

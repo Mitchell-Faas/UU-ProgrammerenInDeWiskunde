@@ -7,9 +7,12 @@ from fov_functions import initialize_fov, recompute_fov
 from game_states import GameStates
 from map_objects.game_map import GameMap
 from components.fighter import Fighter
+from components.inventory import Inventory
 from death_functions import kill_player, kill_monster
+from gameMessages import Message, MessageLog
 
-# To do: fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Add: pressing '5' should skip player turn
 
 """
 Created by Mitchell Faas and Pim te Rietmole
@@ -19,8 +22,17 @@ Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.co
 def main():
     screenWidth = 80
     screenHeight = 50
-    map_width = screenWidth
-    map_height = screenHeight  # -5 to fill add room at the bottom
+
+    barWidth = 20
+    panelHeight = 7
+    panelY = screenHeight-panelHeight
+
+    messageX = barWidth + 2
+    messageWidth = screenWidth - barWidth - 2
+    messageHeight = panelHeight - 1
+
+    map_width = 80
+    map_height = 43
 
     room_max_size = 10
     room_min_size = 6
@@ -31,6 +43,7 @@ def main():
     fov_radius = 10
 
     max_monsters_per_room = 3
+    max_items_per_room = 2
 
     colours = {'dark_wall': tcod.Color(0, 0, 100),
                'dark_ground': tcod.Color(50, 50, 150),
@@ -39,9 +52,11 @@ def main():
                'black': tcod.Color(0, 0, 0)}
 
     fighter_component = Fighter(15,0,3)
+    inventory_component = Inventory(26)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
-                    blocks=True, fighter=fighter_component)
+                    blocks=True, fighter=fighter_component, render_order=render.RenderOrder.actor,
+                    inventory=inventory_component)
     entities = [player]
 
     game_map = GameMap(width=map_width, height=map_height)
@@ -53,10 +68,13 @@ def main():
                         player=player,
                         entities=entities,
                         max_monsters_per_room=max_monsters_per_room,
+                        max_items_per_room=max_items_per_room,
                         map_type='regular')
 
     fov_recompute = True
     fov_map = initialize_fov(game_map)
+
+    messageLog = MessageLog(messageX, messageWidth, messageHeight)
 
     # Define Key and Mouse objects
     key = tcod.Key()
@@ -68,6 +86,8 @@ def main():
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(w=screenWidth, h=screenHeight, title='Esc to exit')
     console = tcod.console.Console(width=screenWidth, height=screenHeight)
+    # UI at bottom of screen
+    panel = tcod.console.Console(screenWidth, panelHeight)
 
     # Start the game loop
     while True:
@@ -75,7 +95,7 @@ def main():
         ## Key-press logic ##
         #####################
         # Check input from keyboard or mouse
-        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS, k=key, m=mouse)
+        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS | tcod.EVENT_MOUSE, k=key, m=mouse)
 
         # Compute fov if needed
         if fov_recompute:
@@ -83,12 +103,19 @@ def main():
 
         # Write current state to console
         render.render_all(console=console,
+                          panel=panel,
                           entities=entities,
+                          player=player,
                           game_map=game_map,
                           fov_map=fov_map,
                           fov_recompute=fov_recompute,
+                          messageLog=messageLog,
                           screen_width=screenWidth,
                           screen_height=screenHeight,
+                          barWidth=barWidth,
+                          panelHeight=panelHeight,
+                          panelY=panelY,
+                          mouse=mouse,
                           colours=colours)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
@@ -101,6 +128,7 @@ def main():
         # dict.get returns None if key doesn't exist
         move = action.get('move')
         exit = action.get('exit')
+        pickup = action.get('pickup')
         fullscreen = action.get('fullscreen')
 
         player_turn_results = []
@@ -118,8 +146,17 @@ def main():
                     # move is a (dx, dy) tuple
                     player.move(*move)
                     fov_recompute = True
-
-            game_state = GameStates.ENEMIES_TURN
+                game_state = GameStates.ENEMIES_TURN
+            else:
+                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
+        if pickup and game_state == GameStates.PLAYERS_TURN:
+            for entity in entities:
+                if entity.item and entity.x == player.x and entity.y == player.y:
+                    pickup_results = player.inventory.add_item(entity)
+                    player_turn_result.extend(pickup_results)
+                    break
+                else:
+                    player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
 
         if exit:
             return True
@@ -129,9 +166,10 @@ def main():
         for player_turn_result in player_turn_results:
             message = player_turn_result.get('message')
             dead_entity = player_turn_result.get('dead')
+            item_added = player_turn_result.get('item_added')
 
             if message:
-                print(message)
+                messageLog.add_message(message)
 
             if dead_entity:
                 if dead_entity == player:
@@ -139,7 +177,13 @@ def main():
                 else:
                     message = kill_monster(dead_entity)
 
-                print(message)
+                messageLog.add_message(message)
+
+            if item_added:
+                entities.remove(item_added)
+
+                game_state = GameStates.ENEMIES_TURN
+
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
@@ -150,7 +194,7 @@ def main():
                             dead_entity = enemy_turn_result.get('dead')
 
                             if message:
-                                print(message)
+                                messageLog.add_message(message)
 
                             if dead_entity:
                                 if dead_entity == player:
@@ -158,7 +202,7 @@ def main():
                                 else:
                                     message = kill_monster(dead_entity)
 
-                                print(message)
+                                messageLog.add_message(message)
 
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break # Ignore further results of this enemy's turn

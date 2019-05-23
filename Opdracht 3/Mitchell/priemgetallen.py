@@ -348,7 +348,7 @@ def Comb(primesSieved: list, start: int, end: int):
 
 
 def priemzeef(n):
-    if __name__ == 'priemgetallen' or __name == '__main__':
+    if __name__ == 'priemgetallen' or __name__ == '__main__':
         #n = 10**4 #int(input("n="))
 
         recv_end, send_end = mp.Pipe(duplex=False)
@@ -357,6 +357,6 @@ def priemzeef(n):
         return recv_end.recv()
 
 if __name__ == '__main__':
-    a = priemzeef(100)
+    a = priemzeef(100000)
 
     print(a)
