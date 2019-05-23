@@ -23,6 +23,7 @@ def handleKeys(key):
         'u': {'move': (1, -1)},
         'b': {'move': (-1, 1)},
         'n': {'move': (1, 1)},
+        'g': {'pickup': True},
         tcod.KEY_ESCAPE: {'exit': True}
     }
 

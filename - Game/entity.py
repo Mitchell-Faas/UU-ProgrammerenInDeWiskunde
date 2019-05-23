@@ -7,7 +7,7 @@ class Entity:
     """"An object representing entities"""
 
     def __init__(self, x, y, char, colour, name, blocks=False,
-                 fighter=None, ai=None, render_order=RenderOrder.corpse):
+                 fighter=None, ai=None, render_order=RenderOrder.corpse, item=None, inventory=None):
         self.x = x
         self.y = y
         self.char = char
@@ -17,11 +17,17 @@ class Entity:
         self.render_order = render_order
         self.fighter = fighter
         self.ai = ai
+        self.item = item
+        self.inventory = inventory
 
         if self.fighter:
             self.fighter.owner = self
         if self.ai:
             self.ai.owner = self
+        if self.item:
+            self.item.owner = self
+        if self.inventory:
+            self.inventory.owner = self
 
     def move(self, dx, dy):
         self.x += dx
