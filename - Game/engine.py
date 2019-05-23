@@ -8,8 +8,10 @@ from game_states import GameStates
 from map_objects.game_map import GameMap
 from components.fighter import Fighter
 from death_functions import kill_player, kill_monster
+from gameMessages import Message, MessageLog
 
-# To do: fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Fix: player moving into a wall skips their turn, allowing enemies to move
+# To do: Add: pressing '5' should skip player turn
 
 """
 Created by Mitchell Faas and Pim te Rietmole
@@ -19,8 +21,17 @@ Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.co
 def main():
     screenWidth = 80
     screenHeight = 50
-    map_width = screenWidth
-    map_height = screenHeight -5
+
+    barWidth = 20
+    panelHeight = 7
+    panelY = screenHeight-panelHeight
+
+    messageX = barWidth + 2
+    messageWidth = screenWidth - barWidth - 2
+    messageHeight = panelHeight - 1
+
+    map_width = 80
+    map_height = 43
 
     room_max_size = 10
     room_min_size = 6
@@ -58,6 +69,8 @@ def main():
     fov_recompute = True
     fov_map = initialize_fov(game_map)
 
+    messageLog = MessageLog(messageX, messageWidth, messageHeight)
+
     # Define Key and Mouse objects
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -68,6 +81,8 @@ def main():
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(w=screenWidth, h=screenHeight, title='Esc to exit')
     console = tcod.console.Console(width=screenWidth, height=screenHeight)
+    # UI at bottom of screen
+    panel = tcod.console.Console(screenWidth, panelHeight)
 
     # Start the game loop
     while True:
@@ -75,7 +90,7 @@ def main():
         ## Key-press logic ##
         #####################
         # Check input from keyboard or mouse
-        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS, k=key, m=mouse)
+        tcod.sys_check_for_event(mask=tcod.EVENT_KEY_PRESS | tcod.EVENT_MOUSE, k=key, m=mouse)
 
         # Compute fov if needed
         if fov_recompute:
@@ -83,13 +98,19 @@ def main():
 
         # Write current state to console
         render.render_all(console=console,
+                          panel=panel,
                           entities=entities,
                           player=player,
                           game_map=game_map,
                           fov_map=fov_map,
                           fov_recompute=fov_recompute,
+                          messageLog=messageLog,
                           screen_width=screenWidth,
                           screen_height=screenHeight,
+                          barWidth=barWidth,
+                          panelHeight=panelHeight,
+                          panelY=panelY,
+                          mouse=mouse,
                           colours=colours)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
@@ -121,7 +142,7 @@ def main():
                     fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
-                player_turn_results.extend([{'message':'The wall says "boink!"'}])
+                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
 
         if exit:
             return True
@@ -133,7 +154,7 @@ def main():
             dead_entity = player_turn_result.get('dead')
 
             if message:
-                print(message)
+                messageLog.add_message(message)
 
             if dead_entity:
                 if dead_entity == player:
@@ -141,7 +162,7 @@ def main():
                 else:
                     message = kill_monster(dead_entity)
 
-                print(message)
+                messageLog.add_message(message)
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
@@ -152,7 +173,7 @@ def main():
                             dead_entity = enemy_turn_result.get('dead')
 
                             if message:
-                                print(message)
+                                messageLog.add_message(message)
 
                             if dead_entity:
                                 if dead_entity == player:
@@ -160,7 +181,7 @@ def main():
                                 else:
                                     message = kill_monster(dead_entity)
 
-                                print(message)
+                                messageLog.add_message(message)
 
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break # Ignore further results of this enemy's turn
