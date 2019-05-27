@@ -1,68 +1,55 @@
-def bisectie_rec(list, target, left = 0, right = -1):
-    if len(list) == 0:
+def bisectie_rec(arr, x, l=0, r=-1):
+    if r == -1:
+        r = len(arr) - 1
+
+    # Check base case
+    if r >= l:
+
+        mid = l + (r - l) / 2
+
+        # If element is present at the middle itself
+        if arr[mid] == x:
+            return mid
+
+            # If element is smaller than mid, then it
+        # can only be present in left subarray
+        elif arr[mid] > x:
+            return bisectie_rec(arr, l, mid - 1, x)
+
+            # Else the element can only be present
+        # in right subarray
+        else:
+            return bisectie_rec(arr, mid + 1, r, x)
+
+    else:
+        # Element is not present in the array
         return -1
 
-    if right == -1:
-        right = len(list) - 1
-
-
-    idx = round((right+left) / 2)
-
-    # Check middle
-    if list[idx] == target:
-        output = idx
-    elif left == right: # We're on the same number, and it's not target, so doesn't exist.
-        return -1
-    elif list[idx] > target:
-        output = bisectie_rec(list, target, left=left, right=idx-1)
-    else: # list[idx] < target:
-        output = bisectie_rec(list, target, left=idx+1, right=right)
-
-    # We need the left most idx, so we'll walk left until we're done
-    try:
-        while True:
-            if list[output-1] != list[output] or output == 0:
-                break
-            else:
-                output -= 1
-    except IndexError:
-        pass
-
-    return output
-
-def bisectie_it(list, target):
-    if len(list) == 0:
+def bisectie_it(arr, x):
+    if len(arr) == 0:
         return -1
 
-    left = 0
-    right = len(list) - 1
+    l = 0
+    r = len(arr) - 1
+    while l <= r:
 
+        mid = l + (r - l) / 2;
 
-    while True:
-        idx = round((right+left) / 2)
+        # Check if x is present at mid
+        if arr[mid] == x:
+            return mid
 
-        # Check middle
-        if list[idx] == target:
-            output = idx
-            break
-        elif left == right: # We're on the same number, and it's not target, so doesn't exist.
-            return -1
-        elif list[idx] > target:
-            right = idx-1
-        else: # list[idx] < target:
-            left = idx+1
+            # If x is greater, ignore left half
+        elif arr[mid] < x:
+            l = mid + 1
 
-    # We need the left most idx, so we'll walk left until we're done
-    try:
-        while True:
-            if list[output-1] != list[output] or output == 0:
-                break
-            else:
-                output -= 1
-    except IndexError:
-        pass
+        # If x is smaller, ignore right half
+        else:
+            r = mid - 1
 
-    return output
+    # If we reach here, then the element
+    # was not present
+    return -1
 
 
 if __name__ == '__main__':
