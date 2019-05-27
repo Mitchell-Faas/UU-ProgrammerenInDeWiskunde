@@ -1,6 +1,7 @@
+from collections import deque
 inputlist = input().split()
 
-operands = []
+operands = deque()
 
 for char in inputlist:
     # Precursive checking for int (Error raising is too slow)
