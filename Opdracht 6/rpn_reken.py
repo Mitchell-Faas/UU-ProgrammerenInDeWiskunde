@@ -9,13 +9,15 @@ for char in inputlist:
         operands.append(int(char))
     else:
         # input is not convertible to number, so is an operation and the previous 2 are numbers
+        b, a = operands.pop(), operands.pop()
+
         if char == '+':
-            operands.append(operands.pop() + operands.pop())
+            operands.append(a + b)
         if char == '-':
-            operands.append(operands.pop() + operands.pop())
+            operands.append(a - b)
         if char == '*':
-            operands.append(operands.pop() + operands.pop())
+            operands.append(a * b)
         if char == '/':
-            operands.append(operands.pop() + operands.pop())
+            operands.append(a / b)
 
 print(float(operands.pop()))
