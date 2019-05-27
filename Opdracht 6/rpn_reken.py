@@ -1,28 +1,21 @@
 inputlist = input().split()
 
-idx = 0
-while True:
-    try:
-        try:  # If input is convertible to number, do so.
-            inputlist[idx] = int(inputlist[idx])
-            idx += 1
-        except ValueError:
-            # input is not convertible to number, so is an operation and the previous 2 are numbers
-            if inputlist[idx] == '+':
-                inputlist[idx] = inputlist[idx-2] + inputlist[idx-1]
-            if inputlist[idx] == '-':
-                inputlist[idx] = inputlist[idx-2] - inputlist[idx-1]
-            if inputlist[idx] == '*':
-                inputlist[idx] = inputlist[idx-2] * inputlist[idx-1]
-            if inputlist[idx] == '/':
-                inputlist[idx] = inputlist[idx-2] / inputlist[idx-1]
+operands = []
 
-            # Remove the 2 old values (Order is important here)
-            del inputlist[idx - 1]
-            del inputlist[idx - 2]
+for char in inputlist:
+    # Precursive checking for int (Error raising is too slow)
+    if char.isdigit():
+        # Convert to number
+        operands.append(int(char))
+    else:
+        # input is not convertible to number, so is an operation and the previous 2 are numbers
+        if char == '+':
+            operands.append(operands.pop() + operands.pop())
+        if char == '-':
+            operands.append(operands.pop() + operands.pop())
+        if char == '*':
+            operands.append(operands.pop() + operands.pop())
+        if char == '/':
+            operands.append(operands.pop() + operands.pop())
 
-            idx -= 1
-    except IndexError:
-        break
-
-print(float(inputlist[0]))
+print(float(operands.pop()))
