@@ -81,6 +81,7 @@ def main():
     mouse = tcod.Mouse()
 
     game_state = GameStates.PLAYERS_TURN
+    previous_game_state = game_state
 
     # Initialise the console with some hardcoded data
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
@@ -116,7 +117,8 @@ def main():
                           panelHeight=panelHeight,
                           panelY=panelY,
                           mouse=mouse,
-                          colours=colours)
+                          colours=colours,
+                          game_state=game_state)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
         # Remove all entities so we can update
@@ -130,6 +132,7 @@ def main():
         exit = action.get('exit')
         pickup = action.get('pickup')
         wait = action.get('wait')
+        show_inventory = action.get('show_inventory')
         fullscreen = action.get('fullscreen')
 
         player_turn_results = []
@@ -160,9 +163,16 @@ def main():
                     break
             else:
                 player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
+        elif show_inventory:
+            if game_state != GameStates.SHOW_INVENTORY:
+                previous_game_state = game_state
+            game_state = GameStates.SHOW_INVENTORY
 
         if exit:
-            return True
+            if game_state == GameStates.SHOW_INVENTORY:
+                game_state = previous_game_state
+            else:
+                return True
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
         # Look at the results of the player's turn and print the appropriate messages

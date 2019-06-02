@@ -139,7 +139,7 @@ class GameMap:
 
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
                 item_component = Item()
-                item = Entity(x, y, '!', tcod.violet, 'Healing Potion',
+                item = Entity(x, y, '!', tcod.violet, 'Blood Crystal',
                               render_order=RenderOrder.item, item=item_component)
 
                 entities.append(item)

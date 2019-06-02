@@ -25,6 +25,7 @@ def handleKeys(key):
         'b': {'move': (-1, 1)},
         'n': {'move': (1, 1)},
         'g': {'pickup': True},
+        'i': {'show_inventory': True},
         tcod.KEY_ESCAPE: {'exit': True}
     }
 
