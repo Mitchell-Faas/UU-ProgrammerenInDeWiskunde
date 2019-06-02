@@ -11,6 +11,7 @@ def handleKeys(key):
         tcod.KEY_KP2: {'move': (0, 1)},
         tcod.KEY_KP3: {'move': (1, 1)},
         tcod.KEY_KP4: {'move': (-1, 0)},
+        tcod.KEY_KP5: {'wait': True},
         tcod.KEY_KP6: {'move': (1, 0)},
         tcod.KEY_KP7: {'move': (-1, -1)},
         tcod.KEY_KP8: {'move': (0, -1)},
@@ -33,8 +34,14 @@ def handleKeys(key):
         return {'fullscreen': True}
 
     try:
-        # Return the appropriate action
-        return action_dict[key.vk]
+        # Output the appropriate action
+        key_result = action_dict[key.vk]
     except KeyError:
-        # Key is unkown.
-        return {}
+        # The key is not explicitly listed in tcod list of inputs
+        try:
+            # Output action in case key was letter
+            key_result = action_dict[chr(key.c)]
+        except KeyError:
+            # Key is unkown.
+            key_result = {}
+    return key_result

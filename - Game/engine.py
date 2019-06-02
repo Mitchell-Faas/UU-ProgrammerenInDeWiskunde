@@ -129,6 +129,7 @@ def main():
         move = action.get('move')
         exit = action.get('exit')
         pickup = action.get('pickup')
+        wait = action.get('wait')
         fullscreen = action.get('fullscreen')
 
         player_turn_results = []
@@ -149,14 +150,16 @@ def main():
                 game_state = GameStates.ENEMIES_TURN
             else:
                 player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
-        if pickup and game_state == GameStates.PLAYERS_TURN:
+        elif wait and game_state == GameStates.PLAYERS_TURN:
+            game_state = GameStates.ENEMIES_TURN
+        elif pickup and game_state == GameStates.PLAYERS_TURN:
             for entity in entities:
                 if entity.item and entity.x == player.x and entity.y == player.y:
                     pickup_results = player.inventory.add_item(entity)
-                    player_turn_result.extend(pickup_results)
+                    player_turn_results.extend(pickup_results)
                     break
-                else:
-                    player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
+            else:
+                player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
 
         if exit:
             return True

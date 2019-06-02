@@ -12,7 +12,7 @@ class Inventory():
         if len(self.items) >= self.capacity:
             results.append({
                 'item_added': None,
-                'message': Message('You cannot carry any more, your inventory is full')
+                'message': Message('You don\'t have room for additional items.')
             })
         else:
             results.append({
