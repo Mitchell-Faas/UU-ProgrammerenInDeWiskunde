@@ -1,0 +1,28 @@
+# Get the input
+in_set = [int(x) for x in input().split()]
+
+# We need a minimum of 3 elements to be able to do this.
+# This figures out the step size
+step_size = min(in_set[1]-in_set[0], in_set[2]-in_set[1])
+
+# Knowing the step size, we can use a binary search
+left = 0
+right = len(in_set) - 1
+middle = None
+while left < right:
+    # Find middle
+    middle = (left+right) // 2
+
+    # If the left sequence is good
+    if (in_set[middle] - in_set[left]) == (middle-left)*step_size:
+        # Move to the right side
+        left = middle + 1
+        continue
+    else:
+        # Stay in the left side
+        right = middle - 1
+        continue
+
+# While has terminated, so we know that left >= right (left == right)
+# Therefore we know that middle is now the right index, and we can simply add step size.
+print(middle, in_set[middle]+step_size)
