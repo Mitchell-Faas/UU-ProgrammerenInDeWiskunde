@@ -9,20 +9,20 @@ step_size = min(in_set[1]-in_set[0], in_set[2]-in_set[1])
 left = 0
 right = len(in_set) - 1
 middle = None
-while left < right:
+while left + 1 != right:
     # Find middle
     middle = (left+right) // 2
 
     # If the left sequence is good
     if (in_set[middle] - in_set[left]) == (middle-left)*step_size:
         # Move to the right side
-        left = middle + 1
+        left = middle
         continue
     else:
         # Stay in the left side
-        right = middle - 1
+        right = middle
         continue
 
-# While has terminated, so we know that left >= right (left == right)
-# Therefore we know that middle is now the right index, and we can simply add step size.
-print(middle, in_set[middle]+step_size)
+# While has terminated, so we know that left+1 = right, and that the jump happens between them.
+# Therefore we can increment one stepsize to the left index.
+print(left, in_set[left]+step_size)
