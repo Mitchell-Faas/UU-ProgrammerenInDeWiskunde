@@ -1,5 +1,7 @@
 import tcod
 from enum import Enum
+from game_states import GameStates
+from menus import inventory_menu
 
 class RenderOrder(Enum):
     corpse = 1
@@ -30,7 +32,7 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
                              '{0}: {1}/{2}'.format(name, value, maximum))
 
 def render_all(console, panel, entities, player, game_map, fov_map, fov_recompute, messageLog,
-               screen_width, screen_height, barWidth, panelHeight, panelY, mouse, colours):
+               screen_width, screen_height, barWidth, panelHeight, panelY, mouse, colours, game_state):
     """Renders all given entities on the screen.
 
     params
@@ -103,12 +105,18 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
     tcod.console_print_ex(panel, 1, 0, tcod.BKGND_NONE, tcod.LEFT,
                              get_names_under_mouse(mouse, entities, fov_map))
 
+    # Blit UI bar
     tcod.console_blit(src=panel,
                       x=0, y=0,
                       w=screen_width,
                       h=panelHeight,
                       dst=0,
                       xdst=0, ydst=panelY)
+
+    # Display inventory
+    if game_state == GameStates.SHOW_INVENTORY:
+        inventory_menu(console, 'Press the key next to an item to use it, or Esc to cancel.\n',
+                       player.inventory, 50, screen_width, screen_height)
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

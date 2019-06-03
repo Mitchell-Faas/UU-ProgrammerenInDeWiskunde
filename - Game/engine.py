@@ -81,6 +81,7 @@ def main():
     mouse = tcod.Mouse()
 
     game_state = GameStates.PLAYERS_TURN
+    previous_game_state = game_state
 
     # Initialise the console with some hardcoded data
     tcod.console_set_custom_font('arial10x10.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
@@ -116,19 +117,23 @@ def main():
                           panelHeight=panelHeight,
                           panelY=panelY,
                           mouse=mouse,
-                          colours=colours)
+                          colours=colours,
+                          game_state=game_state)
         fov_recompute = False  # Keep on false until we move again
         tcod.console_flush()
         # Remove all entities so we can update
         render.clear_all(console=console, entities=entities)
 
         # Translate keypress in to action
-        action = inputHandlers.handleKeys(key)
+        action = inputHandlers.handleKeys(key, game_state)
 
         # dict.get returns None if key doesn't exist
         move = action.get('move')
         exit = action.get('exit')
         pickup = action.get('pickup')
+        wait = action.get('wait')
+        show_inventory = action.get('show_inventory')
+        inventory_index = action.get('inventory_index')
         fullscreen = action.get('fullscreen')
 
         player_turn_results = []
@@ -149,17 +154,34 @@ def main():
                 game_state = GameStates.ENEMIES_TURN
             else:
                 player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
-        if pickup and game_state == GameStates.PLAYERS_TURN:
+        elif wait and game_state == GameStates.PLAYERS_TURN:
+            game_state = GameStates.ENEMIES_TURN
+        elif pickup and game_state == GameStates.PLAYERS_TURN:
             for entity in entities:
                 if entity.item and entity.x == player.x and entity.y == player.y:
                     pickup_results = player.inventory.add_item(entity)
-                    player_turn_result.extend(pickup_results)
+                    player_turn_results.extend(pickup_results)
                     break
-                else:
-                    player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
+            else:
+                player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
+        # Take necessary steps to display inventory
+        elif show_inventory:
+            # Sets what state to go back to after exiting the inventory
+            if game_state != GameStates.SHOW_INVENTORY: # Exit state can't also be inventory
+                previous_game_state = game_state
+            game_state = GameStates.SHOW_INVENTORY
+        # Take necessary steps to select item from inventory
+        elif inventory_index != None and previous_game_state != GameStates.PLAYER_DEAD \
+                and inventory_index < len(player.inventory.items):
+            item = player.inventory.items[inventory_index]
+            player_turn_results.extend(player.inventory.use(item))
+
 
         if exit:
-            return True
+            if game_state == GameStates.SHOW_INVENTORY:
+                game_state = previous_game_state
+            else:
+                return True
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
         # Look at the results of the player's turn and print the appropriate messages
@@ -167,6 +189,7 @@ def main():
             message = player_turn_result.get('message')
             dead_entity = player_turn_result.get('dead')
             item_added = player_turn_result.get('item_added')
+            item_consumed = player_turn_result.get('consumed')
 
             if message:
                 messageLog.add_message(message)
@@ -182,6 +205,9 @@ def main():
             if item_added:
                 entities.remove(item_added)
 
+                game_state = GameStates.ENEMIES_TURN
+
+            if item_consumed:
                 game_state = GameStates.ENEMIES_TURN
 
         if game_state == GameStates.ENEMIES_TURN:

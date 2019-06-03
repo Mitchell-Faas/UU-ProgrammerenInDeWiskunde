@@ -7,6 +7,7 @@ from renderFunctions import RenderOrder
 
 import tcod
 from entity import Entity
+from item_functions import item_heal
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
 
@@ -138,8 +139,8 @@ class GameMap:
             y = randint(room.y1 + 1, room.y2 - 1)
 
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
-                item_component = Item()
-                item = Entity(x, y, '!', tcod.violet, 'Healing Potion',
+                item_component = Item(use_function=item_heal, amount=4)
+                item = Entity(x, y, '!', tcod.violet, 'Blood Crystal',
                               render_order=RenderOrder.item, item=item_component)
 
                 entities.append(item)
