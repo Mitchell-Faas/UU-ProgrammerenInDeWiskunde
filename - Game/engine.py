@@ -19,13 +19,14 @@ Created by Mitchell Faas and Pim te Rietmole
 Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.com/tutorials/tcod/
 """
 
+
 def main():
     screenWidth = 80
     screenHeight = 50
 
     barWidth = 20
     panelHeight = 7
-    panelY = screenHeight-panelHeight
+    panelY = screenHeight - panelHeight
 
     messageX = barWidth + 2
     messageWidth = screenWidth - barWidth - 2
@@ -51,7 +52,7 @@ def main():
                'light_ground': tcod.Color(200, 180, 50),
                'black': tcod.Color(0, 0, 0)}
 
-    fighter_component = Fighter(15,0,3)
+    fighter_component = Fighter(15, 0, 3)
     inventory_component = Inventory(26)
     # Create variables to store player location
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
@@ -153,7 +154,7 @@ def main():
                     fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
-                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.',tcod.sky)}])
+                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
         elif wait and game_state == GameStates.PLAYERS_TURN:
             game_state = GameStates.ENEMIES_TURN
         elif pickup and game_state == GameStates.PLAYERS_TURN:
@@ -163,19 +164,18 @@ def main():
                     player_turn_results.extend(pickup_results)
                     break
             else:
-                player_turn_results.extend([{'message': Message('There is nothing to pick up.',tcod.sky)}])
+                player_turn_results.extend([{'message': Message('There is nothing to pick up.', tcod.sky)}])
         # Take necessary steps to display inventory
         elif show_inventory:
             # Sets what state to go back to after exiting the inventory
-            if game_state != GameStates.SHOW_INVENTORY: # Exit state can't also be inventory
+            if game_state != GameStates.SHOW_INVENTORY:  # Exit state can't also be inventory
                 previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY
         # Take necessary steps to select item from inventory
-        elif inventory_index != None and previous_game_state != GameStates.PLAYER_DEAD \
+        elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
                 and inventory_index < len(player.inventory.items):
             item = player.inventory.items[inventory_index]
             player_turn_results.extend(player.inventory.use(item))
-
 
         if exit:
             if game_state == GameStates.SHOW_INVENTORY:
@@ -231,11 +231,11 @@ def main():
                                 messageLog.add_message(message)
 
                                 if game_state == GameStates.PLAYER_DEAD:
-                                    break # Ignore further results of this enemy's turn
+                                    break  # Ignore further results of this enemy's turn
                         if game_state == GameStates.PLAYER_DEAD:
-                            break # Skip other enemies' turns
+                            break  # Skip other enemies' turns
 
-            else: # If the for-loop was broken, dont give player their turn back
+            else:  # If the for-loop was broken, dont give player their turn back
                 game_state = GameStates.PLAYERS_TURN
 
 

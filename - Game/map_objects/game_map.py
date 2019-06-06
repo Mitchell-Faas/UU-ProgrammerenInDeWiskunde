@@ -19,8 +19,8 @@ class GameMap:
         self.tiles = self.initialize_tiles()
 
     def initialize_tiles(self):
-        tiles = [[Tile(blocked=True) for y in range(self.height)]
-                 for x in range(self.width)]
+        tiles = [[Tile(blocked=True) for _ in range(self.height)]
+                 for _ in range(self.width)]
         return tiles
 
     def create_map(self, max_rooms, room_min_size, room_max_size, width, height,
@@ -108,7 +108,8 @@ class GameMap:
             self.tiles[x][y].blocked = False
             self.tiles[x][y].block_sight = False
 
-    def place_entities(self, room, entities, max_monsters_per_room, max_items_per_room):
+    @staticmethod
+    def place_entities(room, entities, max_monsters_per_room, max_items_per_room):
         # Get a random number of monsters
         number_of_monsters = randint(0, max_monsters_per_room)
         number_of_items = randint(0, max_items_per_room)

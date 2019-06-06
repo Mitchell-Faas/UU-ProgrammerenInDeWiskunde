@@ -1,7 +1,7 @@
 import tcod
 from gameMessages import Message
 
-class Inventory():
+class Inventory:
     def __init__(self,capacity):
         self.capacity = capacity
         self.items = []
