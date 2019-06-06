@@ -4,7 +4,44 @@ import tcod
 from renderFunctions import RenderOrder
 
 class Entity:
-    """"An object representing entities"""
+    """"A comprehensive object to represent any entity in the game.
+
+    An entity is the main construct for things like monsters NPCs and items.
+    This class provides all the options needed for a well functioning entity
+    and is used for every entity in the game.
+
+    Parameters
+    ----------
+    x : int
+        Starting x coordinate of the entity.
+    y : int
+        Starting y coordinate of the entity.
+    char : char
+        Character (think !, ?, @, etc.) that represents this entity on the screen.
+    colour : tcod.Color
+        Render colour of the the entity's character.
+    name : str
+        Name of the entity.
+    blocks : bool, optional
+        Whether the player is able to walk through the entity or not.
+        Defaults to False. (Meaning the player can walk through.)
+    fighter : :obj:`Fighter`, optional
+        Describes the stats used for fighting such as health, strength and defense.
+        Also describes the available actions, such as different attacks.
+        Defaults to None.
+    ai : Class, optional
+        A class that houses the AI logic of the entity. This class is required
+        to have a `take_turn()` method.
+        Defaults to None.
+    render_order : int, optional
+        Describes the order in which to render object (lowest first). Idiomatically
+        used in conjunction with a `RenderOrder` class.
+        Defaults to `RenderOrder.corpse`
+    item : :obj:`Item`, optional
+        An Item object.
+        Defaults to None
+    inventory: : :obj:`Inventory`, optional
+        The inventory of this entity."""
 
     def __init__(self, x, y, char, colour, name, blocks=False,
                  fighter=None, ai=None, render_order=RenderOrder.corpse, item=None, inventory=None):
@@ -30,6 +67,16 @@ class Entity:
             self.inventory.owner = self
 
     def move(self, dx, dy):
+        """Moves the entity by some amount.
+
+        Moves the entity by dx in the x direction and dy in the y direction.
+
+        Parameters
+        ----------
+        dx : int
+            Change in x direction
+        dy : int
+            Change in y direction"""
         self.x += dx
         self.y += dy
 
