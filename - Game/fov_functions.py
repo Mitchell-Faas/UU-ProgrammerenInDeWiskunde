@@ -1,6 +1,5 @@
 import tcod
 
-
 def initialize_fov(game_map):
     fov_map = tcod.map_new(game_map.width, game_map.height)
 

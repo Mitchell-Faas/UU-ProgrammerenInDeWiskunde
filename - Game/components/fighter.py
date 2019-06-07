@@ -2,7 +2,9 @@ import tcod
 from gameMessages import Message
 
 class Fighter:
-    """A class that can be used when creating entity instances, to allow them to partake in combat
+    """ Provides basic fighting logic like health, attacks and defense.
+
+    A class that can be used when creating entity instances, to allow them to partake in combat
     This class can be optionally handed to entities. It allows them to do combat, and to be attacked themselves.
 
     Parameters
@@ -23,13 +25,14 @@ class Fighter:
         self.power = power
 
     def take_damage(self,amount):
-        """A function that deals damage to the entity
-        Used when an entity is damaged, for example through attacks by other entities.
+        """Deals damage to self.
+
+        Used when an entity is being damaged, for example through attacks by other entities.
 
         Parameters
         ----------
         amount : int
-            The number of hitpoints that will be detracted.
+            The number of hitpoints that will be subtracted.
         """
         results = []
         self.hp -= amount
