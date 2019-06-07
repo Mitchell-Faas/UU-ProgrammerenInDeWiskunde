@@ -26,9 +26,6 @@ def sudo_solve(inputsudoku):
     # A stack for previous grid-states to revert back to if a guess fails
     prev_grid_stack = []
 
-    # A dictionary to tell us what square is diagonally opposite to another within the same quadrant
-    diag_square_dict = {0:1,1:0,2:3,3:2}
-
     # We adjust the grid of possibilities based on the input sudoku
     for rowidx in range(4):
         for colidx in range(4):
@@ -56,10 +53,12 @@ def sudo_solve(inputsudoku):
 
             # To wipe the quadrant we only need to wipe the diagonal square in it
             # The others we have already had
-            diag_square_row = diag_square_dict[wiperow]
-            diag_square_col = diag_square_dict[wipecol]
+            wipe_quadrant = (wiperow//2,wipecol//2)
+            wipe_coord_in_quadrant = ((wiperow+1)%2,(wipecol+1)%2)
+            diag_square_row, diag_square_col = (2*wipe_quadrant[0]+wipe_coord_in_quadrant[0],\
+                                                2*wipe_quadrant[1]+wipe_coord_in_quadrant[1],)
             try:
-                possgrid[diag_square_row][diag_square_col]
+                possgrid[diag_square_row][diag_square_col].remove(wipeval)
             except:
                 pass
 
