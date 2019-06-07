@@ -2,6 +2,19 @@ import tcod
 from game_states import GameStates
 
 def handleKeys(key, game_state):
+    """A function to interpret key inputs
+    Returns a dictionary containing the relevant information for the game to react to key inputs.
+    What keys have which effect is dependent on the gamestate. A dead player can't move for example,
+    and when the inventory is opened there are different controls also.
+
+    Parameters
+    ----------
+    key: int
+        An integer representing the key that was pressed. Which keys correspond to what number is managed by tcod.
+    game_state: int
+        An integer representing the gamestate. This tells us whose turns it is, if the player is dead, etc.
+        What integer corresponds to which state is kept track of in game_states.py.
+    """
     # Controls available during player's turn
     if game_state == GameStates.PLAYERS_TURN:
         action_dict = {  # Defines return values for single-key actions

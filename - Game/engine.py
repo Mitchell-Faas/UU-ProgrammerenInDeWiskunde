@@ -11,9 +11,6 @@ from components.inventory import Inventory
 from death_functions import kill_player, kill_monster
 from gameMessages import Message, MessageLog
 
-# To do: Fix: player moving into a wall skips their turn, allowing enemies to move
-# To do: Add: pressing '5' should skip player turn
-
 """
 Created by Mitchell Faas and Pim te Rietmole
 Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.com/tutorials/tcod/
@@ -21,6 +18,7 @@ Heavily based on the python 3 roguelike tutorial at http://rogueliketutorials.co
 
 
 def main():
+
     screenWidth = 80
     screenHeight = 50
 
