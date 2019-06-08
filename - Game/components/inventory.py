@@ -27,7 +27,7 @@ class Inventory:
 
         Parameters
         ----------
-        item : :obj: `Item`
+        item : :obj:`Item`
             An instance of the Item class.
         """
         results = []
@@ -55,7 +55,7 @@ class Inventory:
 
         Parameters
         ----------
-        item : :obj: `Item`
+        item : :obj:`Item`
             An instance of the Item class.
         """
         self.items.remove(item)
@@ -67,7 +67,7 @@ class Inventory:
 
         Parameters
         ----------
-        item_entity : :obj: `Entity`
+        item_entity : :obj:`Entity`
             An instance of the Entity class that is the owner of an instance of the Item class.
         **kwargs : dict
             A dictionary containing relevant information about what the item can be used for.

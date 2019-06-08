@@ -1,6 +1,14 @@
 class Tile:
-    """
-    A tile, may or may not be blocked, may block sight.
+    """A class for tiles in the game-map
+
+    A tile in the game-map. It may or may not be passable, and it may or may not block sight.
+
+    Parameters
+    ----------
+    blocked : bool
+        A boolean which determines whether this tile can be walked through.
+    block_sight : bool, optional
+        A boolean which determines whether this tile can be seen through.
     """
 
     def __init__(self, blocked, block_sight=None):

@@ -42,6 +42,7 @@ class Fighter:
 
     def heal(self, amount):
         """A function that restores hitpoints to the entity
+
         Used when an entity is healed, for example through the use of items
 
         Parameters
@@ -56,12 +57,13 @@ class Fighter:
 
     def attack(self, target):
         """A function that allows one entity to attack another
+
         This function is used when one entity attacks another. Damage is calculated depending on both their stats.
         This function outputs results of such an attack, for example messages to be appended to the messagelog.
 
         Parameters
         ----------
-        target : :obj: `Entity`
+        target : :obj:`Entity`
             An instance of the entity class. The entity that is to be attacked.
         """
         results = []
