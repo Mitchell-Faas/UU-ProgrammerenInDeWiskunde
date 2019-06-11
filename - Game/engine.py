@@ -44,10 +44,11 @@ def main():
     max_monsters_per_room = 3
     max_items_per_room = 2
 
-    colours = {'dark_wall': tcod.Color(0, 0, 100),
-               'dark_ground': tcod.Color(50, 50, 150),
-               'light_wall': tcod.Color(130, 110, 50),
-               'light_ground': tcod.Color(200, 180, 50),
+    colours = {'dark_wall': tcod.Color(0, 0, 50),
+               'dark_ground': tcod.Color(25, 25, 60),
+               'light_wall': tcod.Color(70, 70, 70),
+               'light_ground': tcod.Color(120, 120, 120),
+               'bloody_ground': tcod.Color(130, 10, 10),
                'black': tcod.Color(0, 0, 0)}
 
     fighter_component = Fighter(15, 0, 3)
@@ -150,7 +151,7 @@ def main():
                 else:
                     # move is a (dx, dy) tuple
                     player.move(*move)
-                    fov_recompute = True
+                fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
                 player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
@@ -198,6 +199,7 @@ def main():
             item_consumed = player_turn_result.get('consumed')
             enemy_item_dropped = player_turn_result.get('enemy_item_dropped')
             item_dropped = player_turn_result.get('item_dropped')
+            bled_on_tile = player_turn_result.get('bled_on_tile')
 
             if message:
                 messageLog.add_message(message)
@@ -225,6 +227,9 @@ def main():
             if enemy_item_dropped:
                 entities.append(enemy_item_dropped)
 
+            if bled_on_tile:
+                game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
+
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
@@ -233,9 +238,13 @@ def main():
                         for enemy_turn_result in enemy_turn_results:
                             message = enemy_turn_result.get('message')
                             dead_entity = enemy_turn_result.get('dead')
+                            bled_on_tile = enemy_turn_result.get('bled_on_tile')
 
                             if message:
                                 messageLog.add_message(message)
+
+                            if bled_on_tile:
+                                game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
 
                             if dead_entity:
                                 if dead_entity == player:
@@ -247,6 +256,7 @@ def main():
 
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break  # Ignore further results of this enemy's turn
+
                         if game_state == GameStates.PLAYER_DEAD:
                             break  # Skip other enemies' turns
 

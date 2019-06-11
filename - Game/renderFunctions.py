@@ -71,10 +71,13 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
             for x in range(game_map.width):
                 visible = tcod.map_is_in_fov(fov_map, x, y)
                 wall = game_map.tiles[x][y].block_sight
+                bloody = game_map.tiles[x][y].bloody
 
                 if visible:
                     if wall:
                         colour = colours.get('light_wall')
+                    elif bloody:
+                        colour = colours.get('bloody_ground')
                     else:
                         colour = colours.get('light_ground')
                     # We've now explored this tile
