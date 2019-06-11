@@ -163,7 +163,7 @@ def main():
                     player_turn_results.extend(pickup_results)
                     break
             else:
-                player_turn_results.extend([{'message': Message('There is nothing to pick up.', tcod.sky)}])
+                player_turn_results.extend([{'message': Message('There is nothing to pick you dum-dum!', tcod.sky)}])
         # Take necessary steps to display inventory
         elif show_inventory:
             # Sets what state to go back to after exiting the inventory
