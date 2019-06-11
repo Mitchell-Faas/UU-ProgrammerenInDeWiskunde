@@ -4,12 +4,26 @@ import textwrap
 
 
 class Message:
+    """Defines an arbitrary message by text and colour
+
+    Parameters
+    ----------
+    text : str
+        Text to display in the message
+    color : tcod.color
+        Color to display the message in"""
+
     def __init__(self, text, color=tcod.white):
         self.text = text
         self.color = color
 
 
 class MessageLog:
+    """Message log object displayed at the bottom of the screen.
+
+    Parameters
+    ----------
+    """
     def __init__(self, x, width, height):
         self.messages = []
         self.x = x

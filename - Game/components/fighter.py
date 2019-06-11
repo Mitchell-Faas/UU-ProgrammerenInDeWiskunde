@@ -1,5 +1,9 @@
 import tcod
 from gameMessages import Message
+from components.item import Item
+from renderFunctions import RenderOrder
+from item_functions import item_heal
+from entity import Entity
 
 class Fighter:
     """ Provides basic fighting logic like health, attacks and defense.
@@ -24,7 +28,7 @@ class Fighter:
         self.defense = defense
         self.power = power
 
-    def take_damage(self,amount):
+    def take_damage(self, amount, form):
         """Deals damage to self.
 
         Used when an entity is being damaged, for example through attacks by other entities.
@@ -33,11 +37,20 @@ class Fighter:
         ----------
         amount : int
             The number of hitpoints that will be subtracted.
+        form : string
+            Source of the attack (melee, spell, etc.)
         """
         results = []
         self.hp -= amount
         if self.hp <= 0:
             results.append({'dead':self.owner})
+
+            # If we killed it by a melee attack, drop a blood crystal
+            if form == 'melee':
+                item_component = Item(use_function=item_heal, amount=4)
+                item = Entity(self.owner.x, self.owner.y, '!', tcod.violet, 'Blood Crystal',
+                              render_order=RenderOrder.item, item=item_component)
+                results.append({'item_dropped':item})
         return results
 
     def heal(self, amount):
@@ -72,7 +85,7 @@ class Fighter:
         if damage > 0:
             results.append({'message': Message('{0} attacks {1}, spraying {2} liters of blood.'.format(
                 self.owner.name.capitalize(), target.name, str(damage)), tcod.white)})
-            results.extend(target.fighter.take_damage(damage))
+            results.extend(target.fighter.take_damage(damage, form='melee'))
         else:
             results.append({'message': Message('{0} attacks {1} but does no damage.'.format(
                 self.owner.name.capitalize(), target.name),tcod.white)})

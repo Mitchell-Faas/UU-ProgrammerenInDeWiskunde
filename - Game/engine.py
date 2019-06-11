@@ -188,6 +188,7 @@ def main():
             dead_entity = player_turn_result.get('dead')
             item_added = player_turn_result.get('item_added')
             item_consumed = player_turn_result.get('consumed')
+            item_dropped = player_turn_result.get('item_dropped')
 
             if message:
                 messageLog.add_message(message)
@@ -207,6 +208,9 @@ def main():
 
             if item_consumed:
                 game_state = GameStates.ENEMIES_TURN
+
+            if item_dropped:
+                entities.append(item_dropped)
 
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:

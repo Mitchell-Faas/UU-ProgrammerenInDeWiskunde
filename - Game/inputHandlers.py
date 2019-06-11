@@ -65,13 +65,10 @@ def handleKeys(key, game_state):
 
     try:
         # Output the appropriate action
-        key_result = action_dict[key.vk]
-    except KeyError:
-        # The key is not explicitly listed in tcod list of inputs
-        try:
-            # Output action in case key was letter
+        if key.vk == tcod.KEY_CHAR:
             key_result = action_dict[chr(key.c)]
-        except KeyError:
-            # Key is unkown.
-            key_result = {}
+        else:
+            key_result = action_dict[key.vk]
+    except KeyError:
+        key_result = {}
     return key_result

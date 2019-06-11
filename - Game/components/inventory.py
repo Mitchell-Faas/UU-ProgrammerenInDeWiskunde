@@ -69,9 +69,8 @@ class Inventory:
         ----------
         item_entity : :obj:`Entity`
             An instance of the Entity class that is the owner of an instance of the Item class.
-        **kwargs : dict
-            A dictionary containing relevant information about what the item can be used for.
-            This includes the use_function, for example heal.
+        **kwargs
+            Keywords arguments to pass through to the item. This includes the use_function, for example heal.
             It also includes relevant parameters for such function, for example the amount to be healed.
         """
         results = []
