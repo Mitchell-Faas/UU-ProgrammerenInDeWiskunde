@@ -229,12 +229,12 @@ class GameMap:
                 if randint(0, 100) < 80:
                     fighter_component = Fighter(hp=5, defense=0, power=1)
                     ai_component = BasicMonster()
-                    monster = Entity(x, y, 'o', tcod.desaturated_green, 'orc', blocks=True,
+                    monster = Entity(x, y, 'o', tcod.Color(0, 80, 0), 'orc', blocks=True,
                                      fighter=fighter_component, ai=ai_component, render_order=RenderOrder.actor)
                 else:
                     fighter_component = Fighter(hp=10, defense=1, power=1)
                     ai_component = BasicMonster()
-                    monster = Entity(x, y, 'T', tcod.darker_green, 'troll', blocks=True,
+                    monster = Entity(x, y, 'T', tcod.Color(0, 120, 0), 'troll', blocks=True,
                                      fighter=fighter_component, ai=ai_component, render_order=RenderOrder.actor)
 
                 entities.append(monster)

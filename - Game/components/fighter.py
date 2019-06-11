@@ -48,9 +48,12 @@ class Fighter:
             # If we killed it by a melee attack, drop a blood crystal
             if form == 'melee':
                 item_component = Item(use_function=item_heal, amount=4)
-                item = Entity(self.owner.x, self.owner.y, '!', tcod.violet, 'Blood Crystal',
+                item = Entity(self.owner.x, self.owner.y, '!', tcod.Color(147, 113, 230), 'Blood Crystal',
                               render_order=RenderOrder.item, item=item_component)
                 results.append({'item_dropped':item})
+        # Make ground bloody if the attack was melee
+        if form == 'melee':
+            results.append({'bled_on_tile': (self.owner.x,self.owner.y)})
         return results
 
     def heal(self, amount):
