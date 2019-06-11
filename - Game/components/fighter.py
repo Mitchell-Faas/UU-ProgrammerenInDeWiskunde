@@ -50,7 +50,7 @@ class Fighter:
                 item_component = Item(use_function=item_heal, amount=4)
                 item = Entity(self.owner.x, self.owner.y, '!', tcod.violet, 'Blood Crystal',
                               render_order=RenderOrder.item, item=item_component)
-                results.append({'item_dropped':item})
+                results.append({'enemy_item_dropped':item})
         return results
 
     def heal(self, amount):

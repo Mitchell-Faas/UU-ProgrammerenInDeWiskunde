@@ -4,11 +4,28 @@ from game_states import GameStates
 from menus import inventory_menu
 
 class RenderOrder(Enum):
+    """Static data on render order"""
     corpse = 1
     item = 2
     actor = 3
 
 def get_names_under_mouse(mouse, entities, fov_map):
+    """Finds the name of whichever entity is located below the cursor
+
+    Parameters
+    ----------
+    mouse : tcod.Mouse
+        Mouse object which gives coordinates
+    entities : list
+        List of entities on the map
+    fov_map : :obj:`GameMap`
+        Mapobject which gives the FOV (Don't want to show
+        objects which we can't see.)
+
+    Returns
+    -------
+    str
+        Name of the entity your cursor is positioned above"""
     (x, y) = (mouse.cx, mouse.cy)
 
     names = [entity.name for entity in entities
@@ -18,6 +35,7 @@ def get_names_under_mouse(mouse, entities, fov_map):
     return names.capitalize()
 
 def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
+    """"""
     barWidth = int(float(value) / maximum * total_width)
 
     tcod.console_set_default_background(panel, back_color)
