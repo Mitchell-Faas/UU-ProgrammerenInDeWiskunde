@@ -1,9 +1,21 @@
 import tcod
 from gameMessages import Message
 
-def item_heal(*args, **kwargs):
-    entity = args[0]
-    amount = kwargs.get('amount')
+def item_heal(entity, amount):
+    """Executes the actions associated with healing items
+
+    Parameters
+    ----------
+    entity : :obj:`Entity`
+        Entity to heal
+    amount : int
+        Amount to heal the entity
+
+    Returns
+    -------
+    list
+        List containing the dict entry to add to
+        player_results in engine."""
 
     results = []
 
