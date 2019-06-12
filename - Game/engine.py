@@ -173,12 +173,14 @@ def main():
 
             elif wait:
                 game_state = GameStates.ENEMIES_TURN
+
         # Take necessary steps to display inventory
         elif show_inventory:
             # Sets what state to go back to after exiting the inventory
             if game_state != GameStates.SHOW_INVENTORY:  # Exit state can't also be inventory
                 previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY
+
         # Take necessary steps to select item from inventory
         elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
                 and inventory_index < len(player.inventory.items):
@@ -187,19 +189,23 @@ def main():
                 player_turn_results.extend(player.inventory.use(item))
             elif game_state == GameStates.DROP_INVENTORY:
                 player_turn_results.extend(player.inventory.drop(item))
+
         # Take necessary steps to allow the player to drop items
         elif drop_inventory:
             if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
                 previous_game_state = game_state
             game_state = GameStates.DROP_INVENTORY
+
         if exit:
             if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
                 game_state = previous_game_state
             else:
                 return True
+
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
-        # Look at the results of the player's turn and print the appropriate messages
+
+        # Executes all the results of the player's turn
         for player_turn_result in player_turn_results:
             message = player_turn_result.get('message')
             dead_entity = player_turn_result.get('dead')
@@ -222,7 +228,6 @@ def main():
 
             if item_added:
                 entities.remove(item_added)
-
                 game_state = GameStates.ENEMIES_TURN
 
             if item_consumed:
@@ -270,7 +275,6 @@ def main():
 
             else:  # If the for-loop was broken, dont give player their turn back
                 game_state = GameStates.PLAYERS_TURN
-
 
 if __name__ == '__main__':
     main()
