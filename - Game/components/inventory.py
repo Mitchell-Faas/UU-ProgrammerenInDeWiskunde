@@ -27,7 +27,7 @@ class Inventory:
 
         Parameters
         ----------
-        item : :obj: `Item`
+        item : :obj:`Item`
             An instance of the Item class.
         """
         results = []
@@ -55,10 +55,23 @@ class Inventory:
 
         Parameters
         ----------
-        item : :obj: `Item`
+        item : :obj:`Item`
             An instance of the Item class.
         """
         self.items.remove(item)
+
+    def drop(self, item):
+        results = []
+
+        item.x = self.owner.x
+        item.y = self.owner.y
+
+        self.remove_item(item)
+        results.append({'item_dropped': item,
+                        'message': Message('You drop the {0} on the ground.'.format(item.name))})
+
+        return results
+
 
     def use(self, item_entity, **kwargs):
         """A function that allows items in the inventory to be used
@@ -67,11 +80,10 @@ class Inventory:
 
         Parameters
         ----------
-        item_entity : :obj: `Entity`
+        item_entity : :obj:`Entity`
             An instance of the Entity class that is the owner of an instance of the Item class.
-        **kwargs : dict
-            A dictionary containing relevant information about what the item can be used for.
-            This includes the use_function, for example heal.
+        **kwargs
+            Keywords arguments to pass through to the item. This includes the use_function, for example heal.
             It also includes relevant parameters for such function, for example the amount to be healed.
         """
         results = []

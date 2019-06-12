@@ -3,6 +3,7 @@ import tcod
 
 class BasicMonster:
     """A class that can be used when creating enemy entity instances, to allow them to take basic actions
+
     This class can be optionally given to an entity. If this class is given to an entity,
     it will be able to move and make attacks when in view of the player.
     """

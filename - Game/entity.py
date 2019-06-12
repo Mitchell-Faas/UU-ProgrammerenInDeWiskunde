@@ -81,6 +81,22 @@ class Entity:
         self.y += dy
 
     def move_towards(self, target_x, target_y, game_map, entities):
+        """Applies the entity-specific AI to move towards a target.
+
+        Goes through the entire entity list and asks their AI to make
+        a move towards a certain target based on its location and the
+        game map.
+
+        Parameters
+        ----------
+        target_x : int
+            x-location of target
+        target_y : int
+            y-location of target
+        game_map : :obj:`GameMap`
+            Game map to apply the AI on
+        entities : list
+            List of all entities that need processing."""
         dx = target_x - self.x
         dy = target_y - self.y
         distance = math.sqrt(dx**2 + dy**2)
@@ -93,6 +109,17 @@ class Entity:
             self.move(dx, dy)
 
     def move_astar(self, target, entities, game_map):
+        """Uses A* algorithmic logic to move towards the target
+
+        Parameters
+        ----------
+        target : :obj:`Entity`
+            The target.
+        entities : list
+            List of entities to move
+        game_map : :obj:`GameMap`
+            Game Map to apply the algorithm on"""
+
         # Create a FOV map that has the dimensions of the map
         fov = tcod.map_new(game_map.width, game_map.height)
 
@@ -136,12 +163,28 @@ class Entity:
         tcod.path_delete(my_path)
 
     def distance_to(self, other):
+        """Calculates the distance from self to another entity
+
+        Parameters
+        ----------
+        other : :obj:`Entity`
+            Entity to which we need to calculate the distance"""
         dx = other.x - self.x
         dy = other.y - self.y
         return math.sqrt(dx**2 + dy**2)
 
 
 def get_blocking_entities_at(x, y, entity_list):
+    """Checks if there are any movement-blocking entities at location
+
+    Parameters
+    ----------
+    x : int
+        x location
+    y : int
+        y location
+    entity_list : list
+        list of entities to check"""
     for entity in entity_list:
         if entity.blocks and entity.x == x and entity.y == y:
             return entity

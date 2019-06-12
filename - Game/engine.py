@@ -44,10 +44,11 @@ def main():
     max_monsters_per_room = 3
     max_items_per_room = 2
 
-    colours = {'dark_wall': tcod.Color(0, 0, 100),
-               'dark_ground': tcod.Color(50, 50, 150),
-               'light_wall': tcod.Color(130, 110, 50),
-               'light_ground': tcod.Color(200, 180, 50),
+    colours = {'dark_wall': tcod.Color(0, 0, 50),
+               'dark_ground': tcod.Color(25, 25, 60),
+               'light_wall': tcod.Color(70, 70, 70),
+               'light_ground': tcod.Color(120, 120, 120),
+               'bloody_ground': tcod.Color(130, 10, 10),
                'black': tcod.Color(0, 0, 0)}
 
     fighter_component = Fighter(15, 0, 3)
@@ -132,6 +133,7 @@ def main():
         pickup = action.get('pickup')
         wait = action.get('wait')
         show_inventory = action.get('show_inventory')
+        drop_inventory = action.get('drop_inventory')
         inventory_index = action.get('inventory_index')
         fullscreen = action.get('fullscreen')
 
@@ -167,11 +169,10 @@ def main():
                         pickup_results = player.inventory.add_item(entity)
                         player_turn_results.extend(pickup_results)
                 else:
-                    player_turn_results.extend([{'message': Message('There is nothing to pick up.', tcod.sky)}])
+                    player_turn_results.extend([{'message': Message('The ground growls at you for touching it!', tcod.sky)}])
 
             elif wait:
                 game_state = GameStates.ENEMIES_TURN
-
         # Take necessary steps to display inventory
         elif show_inventory:
             # Sets what state to go back to after exiting the inventory
@@ -182,10 +183,17 @@ def main():
         elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
                 and inventory_index < len(player.inventory.items):
             item = player.inventory.items[inventory_index]
-            player_turn_results.extend(player.inventory.use(item))
-
-        if exit:
             if game_state == GameStates.SHOW_INVENTORY:
+                player_turn_results.extend(player.inventory.use(item))
+            elif game_state == GameStates.DROP_INVENTORY:
+                player_turn_results.extend(player.inventory.drop(item))
+        # Take necessary steps to allow the player to drop items
+        elif drop_inventory:
+            if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
+                previous_game_state = game_state
+            game_state = GameStates.DROP_INVENTORY
+        if exit:
+            if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
                 game_state = previous_game_state
             else:
                 return True
@@ -197,6 +205,9 @@ def main():
             dead_entity = player_turn_result.get('dead')
             item_added = player_turn_result.get('item_added')
             item_consumed = player_turn_result.get('consumed')
+            enemy_item_dropped = player_turn_result.get('enemy_item_dropped')
+            item_dropped = player_turn_result.get('item_dropped')
+            bled_on_tile = player_turn_result.get('bled_on_tile')
 
             if message:
                 messageLog.add_message(message)
@@ -217,6 +228,16 @@ def main():
             if item_consumed:
                 game_state = GameStates.ENEMIES_TURN
 
+            if item_dropped:
+                entities.append(item_dropped)
+                game_state = GameStates.ENEMIES_TURN
+
+            if enemy_item_dropped:
+                entities.append(enemy_item_dropped)
+
+            if bled_on_tile:
+                game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
+
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
@@ -225,9 +246,13 @@ def main():
                         for enemy_turn_result in enemy_turn_results:
                             message = enemy_turn_result.get('message')
                             dead_entity = enemy_turn_result.get('dead')
+                            bled_on_tile = enemy_turn_result.get('bled_on_tile')
 
                             if message:
                                 messageLog.add_message(message)
+
+                            if bled_on_tile:
+                                game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
 
                             if dead_entity:
                                 if dead_entity == player:
@@ -239,6 +264,7 @@ def main():
 
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break  # Ignore further results of this enemy's turn
+
                         if game_state == GameStates.PLAYER_DEAD:
                             break  # Skip other enemies' turns
 

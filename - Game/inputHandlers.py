@@ -41,6 +41,7 @@ def handleKeys(key, game_state):
             'n': {'move': (1, 1)},
             'g': {'pickup': True},
             'i': {'show_inventory': True},
+            'd': {'drop_inventory': True},
             tcod.KEY_ESCAPE: {'exit': True}
         }
     # Controls available when player is dead
@@ -49,8 +50,8 @@ def handleKeys(key, game_state):
             'i': {'show_inventory': True},
             tcod.KEY_ESCAPE: {'exit': True}
         }
-    # Controls available when inventory is open
-    elif game_state == GameStates.SHOW_INVENTORY:
+    # Controls available when inventory or drop menu is open
+    elif game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
         action_dict = {
         tcod.KEY_ESCAPE: {'exit': True}
         }
@@ -65,13 +66,10 @@ def handleKeys(key, game_state):
 
     try:
         # Output the appropriate action
-        key_result = action_dict[key.vk]
-    except KeyError:
-        # The key is not explicitly listed in tcod list of inputs
-        try:
-            # Output action in case key was letter
+        if key.vk == tcod.KEY_CHAR:
             key_result = action_dict[chr(key.c)]
-        except KeyError:
-            # Key is unkown.
-            key_result = {}
+        else:
+            key_result = action_dict[key.vk]
+    except KeyError:
+        key_result = {}
     return key_result

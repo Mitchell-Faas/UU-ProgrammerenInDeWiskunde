@@ -4,11 +4,28 @@ from game_states import GameStates
 from menus import inventory_menu
 
 class RenderOrder(Enum):
+    """Static data on render order"""
     corpse = 1
     item = 2
     actor = 3
 
 def get_names_under_mouse(mouse, entities, fov_map):
+    """Finds the name of whichever entity is located below the cursor
+
+    Parameters
+    ----------
+    mouse : tcod.Mouse
+        Mouse object which gives coordinates
+    entities : list
+        List of entities on the map
+    fov_map : :obj:`GameMap`
+        Mapobject which gives the FOV (Don't want to show
+        objects which we can't see.)
+
+    Returns
+    -------
+    str
+        Name of the entity your cursor is positioned above"""
     (x, y) = (mouse.cx, mouse.cy)
 
     names = [entity.name for entity in entities
@@ -18,6 +35,7 @@ def get_names_under_mouse(mouse, entities, fov_map):
     return names.capitalize()
 
 def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
+    """"""
     barWidth = int(float(value) / maximum * total_width)
 
     tcod.console_set_default_background(panel, back_color)
@@ -53,10 +71,13 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
             for x in range(game_map.width):
                 visible = tcod.map_is_in_fov(fov_map, x, y)
                 wall = game_map.tiles[x][y].block_sight
+                bloody = game_map.tiles[x][y].bloody
 
                 if visible:
                     if wall:
                         colour = colours.get('light_wall')
+                    elif bloody:
+                        colour = colours.get('bloody_ground')
                     else:
                         colour = colours.get('light_ground')
                     # We've now explored this tile
@@ -114,9 +135,12 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
                       xdst=0, ydst=panelY)
 
     # Display inventory
-    if game_state == GameStates.SHOW_INVENTORY:
-        inventory_menu(console, 'Press the key next to an item to use it, or Esc to cancel.\n',
-                       player.inventory, 50, screen_width, screen_height)
+    if game_state in (GameStates.SHOW_INVENTORY,GameStates.DROP_INVENTORY):
+        if game_state == GameStates.SHOW_INVENTORY:
+            inventory_title = 'Press the key next to an item to use it, or Esc to cancel.\n'
+        else:
+            inventory_title = 'Press the key next to an item to drop it, or Esc to cancel.\n'
+        inventory_menu(console, inventory_title, player.inventory, 50, screen_width, screen_height)
 
 def clear_all(console, entities):
     """Removes all given entities from screen.

@@ -1,6 +1,26 @@
 import tcod
 
 def menu(console, header, options, width, screen_width, screen_height):
+    """Sets up an interactive menu
+
+    Menu displays options for interactive behaviour and pauses the game
+    while it's being accessed.
+
+    Parameters
+    ----------
+    console : tcod.Console
+        Console window to draw to
+    header : str
+        Header text for the menu
+    options : list
+        List with available options to choose from
+    width : int
+        Width of menu screen
+    screen_width : int
+        Width of the entire game-screen (window)
+    screen_height : int
+        Height of the entire game-screen (window)"""
+
     if len(options) > 26: raise ValueError('Cannot have a menu with more than 26 options.')
 
     # calculate total height for the header (after auto-wrap) and one line per option
@@ -30,7 +50,8 @@ def menu(console, header, options, width, screen_width, screen_height):
 
 
 def inventory_menu(console, header, inventory, inventory_width, screen_width, screen_height):
-    # Show menu with items in inventory as options
+    """Shows a menu which has the items stored in your inventory as options.
+    For further information please look at the documentation for :obj:`menu`"""
     if len(inventory.items) == 0:
         options = ['You own nothing save the clothes on your back.']
     else:

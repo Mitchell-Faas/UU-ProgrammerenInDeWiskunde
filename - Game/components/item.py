@@ -9,8 +9,8 @@ class Item:
     use_function : function, optional
         The use_function allows us to define whether an item is usable, and if so, what its effect is.
         An example is the item_heal function, which heals the user.
-    **kwargs : dict
-        A dictionary containing relevant parameters for the use_function if necessary.
+    **kwargs
+        Keyword arguments to pass on to the usage function.
         An example is the amount healed with the item_heal function.
     """
     def __init__(self, use_function = None, **kwargs):
