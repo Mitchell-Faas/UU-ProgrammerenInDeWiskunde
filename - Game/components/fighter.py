@@ -32,6 +32,7 @@ class Fighter:
         """Deals damage to self.
 
         Used when an entity is being damaged, for example through attacks by other entities.
+        If the form of the attack was melee, also bloodies the tile the entity was standing on.
 
         Parameters
         ----------
