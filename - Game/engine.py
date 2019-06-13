@@ -145,6 +145,8 @@ def main():
             dx, dy = move
             dest_x = player.x + dx
             dest_y = player.y + dy
+
+            # Check if destination is blocked
             if not game_map.is_blocked(x=dest_x, y=dest_y):
                 enemy = get_blocking_entities_at(dest_x, dest_y, entity_list=entities)
                 if enemy:
@@ -156,10 +158,13 @@ def main():
                 fov_recompute = True
                 game_state = GameStates.ENEMIES_TURN
             else:
+                # The destination is blocked
                 player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
+
         # This part handles the logic of what happens if the player inputs the wait command
         elif wait and game_state == GameStates.PLAYERS_TURN:
             game_state = GameStates.ENEMIES_TURN
+
         # This part handles the logic of what happens if the player tries to pick up an item
         elif pickup and game_state == GameStates.PLAYERS_TURN:
             for entity in entities:
@@ -175,6 +180,7 @@ def main():
             if game_state != GameStates.SHOW_INVENTORY:  # Exit state can't also be inventory
                 previous_game_state = game_state
             game_state = GameStates.SHOW_INVENTORY
+
         # Take necessary steps to select item from inventory
         elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
                 and inventory_index < len(player.inventory.items):
@@ -183,6 +189,7 @@ def main():
                 player_turn_results.extend(player.inventory.use(item))
             elif game_state == GameStates.DROP_INVENTORY:
                 player_turn_results.extend(player.inventory.drop(item))
+
         # Take necessary steps to allow the player to drop items
         elif drop_inventory:
             if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
@@ -227,7 +234,6 @@ def main():
 
             if item_added:
                 entities.remove(item_added)
-
                 game_state = GameStates.ENEMIES_TURN
 
             if item_consumed:
