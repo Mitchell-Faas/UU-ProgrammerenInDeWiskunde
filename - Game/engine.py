@@ -140,40 +140,43 @@ def main():
         player_turn_results = []
 
         # This section tells the game how to respond to various inputs
-        # This part handles the logic of what happens when the player inputs a movement command
-        if move and game_state == GameStates.PLAYERS_TURN:
-            dx, dy = move
-            dest_x = player.x + dx
-            dest_y = player.y + dy
+        if game_state == GameStates.PLAYERS_TURN:
+            # Player moved
+            if move:
+                dx, dy = move
+                dest_x = player.x + dx
+                dest_y = player.y + dy
 
-            # Check if destination is blocked
-            if not game_map.is_blocked(x=dest_x, y=dest_y):
-                enemy = get_blocking_entities_at(dest_x, dest_y, entity_list=entities)
-                if enemy:
-                    attack_results = player.fighter.attack(enemy)
-                    player_turn_results.extend(attack_results)
+                # Check if destination is blocked
+                if not game_map.is_blocked(x=dest_x, y=dest_y):
+                    enemy = get_blocking_entities_at(dest_x, dest_y, entity_list=entities)
+                    # Attack if we try to move on to an enemy
+                    if enemy:
+                        attack_results = player.fighter.attack(enemy)
+                        player_turn_results.extend(attack_results)
+                    else:
+                        player.move(*move) # move is a (dx, dy) tuple
+                        fov_recompute = True
+
+                    game_state = GameStates.ENEMIES_TURN
                 else:
-                    # move is a (dx, dy) tuple
-                    player.move(*move)
-                fov_recompute = True
+                    # The destination is blocked
+                    player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
+
+            # Player picked something up
+            elif pickup:
+                # Check if there's an item to be picked up, and pick up all such items
+                for entity in entities:
+                    if entity.item and entity.x == player.x and entity.y == player.y:
+                        pickup_results = player.inventory.add_item(entity)
+                        player_turn_results.extend(pickup_results)
+                else:
+                    player_turn_results.extend([{'message': Message('The ground growls at you for touching it!', tcod.sky)}])
+
+            # Player decided to wait a turn
+            elif wait:
                 game_state = GameStates.ENEMIES_TURN
-            else:
-                # The destination is blocked
-                player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
 
-        # This part handles the logic of what happens if the player inputs the wait command
-        elif wait and game_state == GameStates.PLAYERS_TURN:
-            game_state = GameStates.ENEMIES_TURN
-
-        # This part handles the logic of what happens if the player tries to pick up an item
-        elif pickup and game_state == GameStates.PLAYERS_TURN:
-            for entity in entities:
-                if entity.item and entity.x == player.x and entity.y == player.y:
-                    pickup_results = player.inventory.add_item(entity)
-                    player_turn_results.extend(pickup_results)
-                    break
-            else:
-                player_turn_results.extend([{'message': Message('The ground growls at you for touching it!', tcod.sky)}])
         # Take necessary steps to display inventory
         elif show_inventory:
             # Sets what state to go back to after exiting the inventory
