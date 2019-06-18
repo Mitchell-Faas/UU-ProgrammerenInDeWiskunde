@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>map_objects.game_map &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for map_objects.game_map</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
+
+<span class="kn">from</span> <span class="nn">components.ai</span> <span class="k">import</span> <span class="n">BasicMonster</span>
+<span class="kn">from</span> <span class="nn">components.fighter</span> <span class="k">import</span> <span class="n">Fighter</span>
+<span class="kn">from</span> <span class="nn">components.item</span> <span class="k">import</span> <span class="n">Item</span>
+<span class="kn">from</span> <span class="nn">renderFunctions</span> <span class="k">import</span> <span class="n">RenderOrder</span>
+
+<span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">from</span> <span class="nn">entity</span> <span class="k">import</span> <span class="n">Entity</span>
+<span class="kn">from</span> <span class="nn">item_functions</span> <span class="k">import</span> <span class="n">item_heal</span>
+<span class="kn">from</span> <span class="nn">map_objects.rectangle</span> <span class="k">import</span> <span class="n">Rect</span>
+<span class="kn">from</span> <span class="nn">map_objects.tile</span> <span class="k">import</span> <span class="n">Tile</span>
+
+
+<div class="viewcode-block" id="GameMap"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap">[docs]</a><span class="k">class</span> <span class="nc">GameMap</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to represent information about the game map</span>
+
+<span class="sd">    This class is used to save information about the game map. This mainly involves the different types of tiles</span>
+<span class="sd">    (walkable, non-walkable, transparent or opaque) in different positions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    width : int</span>
+<span class="sd">        The horizontal number of tiles in the map</span>
+<span class="sd">    height : int</span>
+<span class="sd">        The vertical number of tiles in the map</span>
+<span class="sd">    tiles : list</span>
+<span class="sd">        This is a nested list which serves as an array, to keep track of what tiles are walls, and which are not.</span>
+<span class="sd">        We start out with a game-map fully consisting of walls, and then dig out rooms and corridors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_tiles</span><span class="p">()</span>
+
+<div class="viewcode-block" id="GameMap.initialize_tiles"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.initialize_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function to construct the initial game-map</span>
+
+<span class="sd">        This function allows us to create an array of tiles, the width and height of the game-map.</span>
+<span class="sd">        We return this array. This array is initially completely filled with walls.</span>
+<span class="sd">        It is later altered by digging out rooms and corridors, so it can serve as a map</span>
+<span class="sd">        the player can maneuver through.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tiles</span> <span class="o">=</span> <span class="p">[[</span><span class="n">Tile</span><span class="p">(</span><span class="n">blocked</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)]</span>
+                 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">tiles</span></div>
+
+<div class="viewcode-block" id="GameMap.create_map"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.create_map">[docs]</a>    <span class="k">def</span> <span class="nf">create_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_rooms</span><span class="p">,</span> <span class="n">room_min_size</span><span class="p">,</span> <span class="n">room_max_size</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span>
+                   <span class="n">player</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">max_monsters_per_room</span><span class="p">,</span> <span class="n">max_items_per_room</span><span class="p">,</span> <span class="n">map_type</span><span class="o">=</span><span class="s1">&#39;regular&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function that constructs a playable version of the game-map</span>
+
+<span class="sd">        This function takes the initial game-map, which consists of only walls. It digs out rooms, connects</span>
+<span class="sd">        them via corridors, and places entities and items.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        max_rooms : int</span>
+<span class="sd">            The maximum number of rooms in a game-map. This is the number of times this function will attempt</span>
+<span class="sd">            to place a room before finishing.</span>
+<span class="sd">        room_min_size: int</span>
+<span class="sd">            The minimum width and height allowed for rooms that are placed procedurally, in number of tiles.</span>
+<span class="sd">        room_max_size: int</span>
+<span class="sd">            The maximum width and height allowed for rooms that are placed procedurally, in number of tiles.</span>
+<span class="sd">        width : int</span>
+<span class="sd">            The horizontal number of tiles in the map.</span>
+<span class="sd">        height : int</span>
+<span class="sd">            The vertical number of tiles in the map.</span>
+<span class="sd">        player : :obj:`Entity`</span>
+<span class="sd">            The instance of the Entity class representing the player. It is handed to the create_map function so</span>
+<span class="sd">            it can be placed to initially start in a room.</span>
+<span class="sd">        entities : list</span>
+<span class="sd">            A list of instances of the Entity class. When handed to this function, it normally only contains the player.</span>
+<span class="sd">            Other entities such as enemies are added to this list during procedural map generation.</span>
+<span class="sd">        max_monsters_per_room : int</span>
+<span class="sd">            The maximum number of enemies allowed to be placed in a single procedurally generated room.</span>
+<span class="sd">        max_items_per_room : int</span>
+<span class="sd">            The maximum number of items allowed to be placed in a single procedurally generated room.</span>
+<span class="sd">        map_type : str, optional</span>
+<span class="sd">            A string indicating what type of map to generate. Setting it to anything other than &#39;regular&#39; allows</span>
+<span class="sd">            for the creation of non-standard maps, such as boss-rooms, using a different generation procedure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">map_type</span> <span class="o">==</span> <span class="s1">&#39;regular&#39;</span><span class="p">:</span>
+            <span class="n">rooms</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">num_rooms</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_rooms</span><span class="p">):</span>
+                <span class="c1"># random room_width and room_height</span>
+                <span class="n">room_width</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room_min_size</span><span class="p">,</span> <span class="n">room_max_size</span><span class="p">)</span>
+                <span class="n">room_height</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room_min_size</span><span class="p">,</span> <span class="n">room_max_size</span><span class="p">)</span>
+                <span class="c1"># random position without going out of the boundaries of the map</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">room_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">room_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">new_room</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">room_width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">room_height</span><span class="p">)</span>
+                <span class="c1"># Check if the new room intersects any previous ones</span>
+                <span class="k">for</span> <span class="n">other_room</span> <span class="ow">in</span> <span class="n">rooms</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">new_room</span><span class="o">.</span><span class="n">intersects_with</span><span class="p">(</span><span class="n">other_room</span><span class="p">):</span>
+                        <span class="c1"># They intersect; don&#39;t add this room</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># There are no intersections with other rooms, it is valid</span>
+
+                    <span class="c1"># Carve out this room on the map</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">create_room</span><span class="p">(</span><span class="n">new_room</span><span class="p">)</span>
+
+                    <span class="c1"># center coordinates of new room, will be useful later</span>
+                    <span class="p">(</span><span class="n">new_center_x</span><span class="p">,</span> <span class="n">new_center_y</span><span class="p">)</span> <span class="o">=</span> <span class="n">new_room</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+
+                    <span class="k">if</span> <span class="n">num_rooms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1"># This is the first room, where the player starts at</span>
+                        <span class="n">player</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">new_center_x</span>
+                        <span class="n">player</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">new_center_y</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># This is not the first room. That means we need to connect it to the previous one using tunnels.</span>
+
+                        <span class="c1"># Take the center coordinates of the previous room</span>
+                        <span class="p">(</span><span class="n">prev_center_x</span><span class="p">,</span> <span class="n">prev_center_y</span><span class="p">)</span> <span class="o">=</span> <span class="n">rooms</span><span class="p">[</span><span class="n">num_rooms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+
+                        <span class="c1"># Choose randomly whether to first dig vertically then horizontally, or vice versa</span>
+                        <span class="k">if</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">create_h_tunnel</span><span class="p">(</span><span class="n">prev_center_x</span><span class="p">,</span> <span class="n">new_center_x</span><span class="p">,</span> <span class="n">prev_center_y</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">create_v_tunnel</span><span class="p">(</span><span class="n">prev_center_y</span><span class="p">,</span> <span class="n">new_center_y</span><span class="p">,</span> <span class="n">new_center_x</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># first move vertically, then horizontally</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">create_v_tunnel</span><span class="p">(</span><span class="n">prev_center_y</span><span class="p">,</span> <span class="n">new_center_y</span><span class="p">,</span> <span class="n">prev_center_x</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">create_h_tunnel</span><span class="p">(</span><span class="n">prev_center_x</span><span class="p">,</span> <span class="n">new_center_x</span><span class="p">,</span> <span class="n">new_center_y</span><span class="p">)</span>
+
+                    <span class="c1"># Place some monsters</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">place_entities</span><span class="p">(</span><span class="n">new_room</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">max_monsters_per_room</span><span class="p">,</span> <span class="n">max_items_per_room</span><span class="p">)</span>
+
+                    <span class="c1"># Add the succesfully placed room to the list of rooms</span>
+                    <span class="n">rooms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_room</span><span class="p">)</span>
+                    <span class="n">num_rooms</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">map_type</span> <span class="o">==</span> <span class="s1">&#39;boss1&#39;</span><span class="p">:</span>
+            <span class="n">entry_room</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_room</span><span class="p">(</span><span class="n">entry_room</span><span class="p">)</span>
+            <span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry_room</span><span class="o">.</span><span class="n">center</span><span class="p">()</span>
+            <span class="n">boss_hall</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_room</span><span class="p">(</span><span class="n">boss_hall</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_h_tunnel</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_v_tunnel</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_h_tunnel</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_h_tunnel</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="mi">8</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="GameMap.create_room"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.create_room">[docs]</a>    <span class="k">def</span> <span class="nf">create_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">room</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function for digging out rooms.</span>
+
+<span class="sd">        This function digs out a room in the game-map, of a certain size and at a certain position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        room : :obj:`Rect`</span>
+<span class="sd">            An instance of the rectangle class, used for the position and proportions of the room to be placed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Go through each tile in the rectangle and make it passable</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">x2</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">y2</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">blocked</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">block_sight</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="GameMap.create_h_tunnel"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.create_h_tunnel">[docs]</a>    <span class="k">def</span> <span class="nf">create_h_tunnel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function for digging out horizontal corridors.</span>
+
+<span class="sd">        This function digs out a horizontal corridor in the game-map, of a certain length and at a certain position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x1 : int</span>
+<span class="sd">            This integer indicates the horizontal coordinate of one end of the corridor.</span>
+<span class="sd">        x2 : int</span>
+<span class="sd">            This integer indicates the horizontal coordinate of the other end of the corridor.</span>
+<span class="sd">        y : int</span>
+<span class="sd">            This integer indicates the vertical coordinate of the corridor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">blocked</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">block_sight</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="GameMap.create_v_tunnel"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.create_v_tunnel">[docs]</a>    <span class="k">def</span> <span class="nf">create_v_tunnel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function for digging out vertical corridors.</span>
+
+<span class="sd">        This function digs out a vertical corridor in the game-map, of a certain length and at a certain position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        y1 : int</span>
+<span class="sd">            This integer indicates the vertical coordinate of one end of the corridor.</span>
+<span class="sd">        y2 : int</span>
+<span class="sd">            This integer indicates the vertical coordinate of the other end of the corridor.</span>
+<span class="sd">        x : int</span>
+<span class="sd">            This integer indicates the horizontal coordinate of the corridor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">blocked</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">block_sight</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="GameMap.place_entities"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.place_entities">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">place_entities</span><span class="p">(</span><span class="n">room</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">max_monsters_per_room</span><span class="p">,</span> <span class="n">max_items_per_room</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A static function that places enemies and items</span>
+
+<span class="sd">        This function is used to populate a single room with both items and enemies.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        room : :obj:`Rect`</span>
+<span class="sd">            An instance of the Rectangle class. This is the room we place things in.</span>
+<span class="sd">        entities : list</span>
+<span class="sd">            The list of entities on the floor. Any items or enemies that are placed, are appended to this list.</span>
+<span class="sd">        max_monsters_per_room : int</span>
+<span class="sd">            The maximum number of enemies allowed to be placed in a single procedurally generated room.</span>
+<span class="sd">        max_items_per_room : int</span>
+<span class="sd">            The maximum number of items allowed to be placed in a single procedurally generated room.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get a random number of monsters</span>
+        <span class="n">number_of_monsters</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_monsters_per_room</span><span class="p">)</span>
+        <span class="n">number_of_items</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_items_per_room</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_monsters</span><span class="p">):</span>
+            <span class="c1"># Choose a random location in the room</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">x2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">room</span><span class="o">.</span><span class="n">y2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># One-liner to say: If there&#39;s not already an entity at this location</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">entity</span> <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span> <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y</span><span class="p">]):</span>
+                <span class="c1"># Add some variety in monsters</span>
+                <span class="k">if</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">80</span><span class="p">:</span>
+                    <span class="n">fighter_component</span> <span class="o">=</span> <span class="n">Fighter</span><span class="p">(</span><span class="n">hp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">defense</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
+                    <span class="n">monster</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="n">blocks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">fighter</span><span class="o">=</span><span class="n">fighter_component</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="n">ai_component</span><span class="p">,</span> <span class="n">render_order</span><span class="o">=</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">actor</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fighter_component</span> <span class="o">=</span> <span class="n">Fighter</span><span class="p">(</span><span class="n">hp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">defense</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
+                    <span class="n">monster</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;troll&#39;</span><span class="p">,</span> <span class="n">blocks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">fighter</span><span class="o">=</span><span class="n">fighter_component</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="n">ai_component</span><span class="p">,</span> <span class="n">render_order</span><span class="o">=</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">actor</span><span class="p">)</span>
+
+                <span class="n">entities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">monster</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GameMap.is_blocked"><a class="viewcode-back" href="../../map_objects.html#map_objects.game_map.GameMap.is_blocked">[docs]</a>    <span class="k">def</span> <span class="nf">is_blocked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function to check if a tile is blocked</span>
+
+<span class="sd">        This function checks the game-map&#39;s tile array, to see whether a tile can be moved through or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : int</span>
+<span class="sd">            The horizontal coordinate of the tile to be checked</span>
+<span class="sd">        y : int</span>
+<span class="sd">            The vertical coordinate of the tile to be checked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">blocked</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

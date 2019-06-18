@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>map_objects.rectangle &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for map_objects.rectangle</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Rect"><a class="viewcode-back" href="../../map_objects.html#map_objects.rectangle.Rect">[docs]</a><span></span><span class="k">class</span> <span class="nc">Rect</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class of rectangles, to be used for rooms</span>
+
+<span class="sd">    This class consists of rectangles at a certain position and of certain proportions. This class is used</span>
+<span class="sd">    during map creation to procedurally place rooms.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : int</span>
+<span class="sd">        The horizontal coordinate of the top-left corner of the rectangle.</span>
+<span class="sd">    y : int</span>
+<span class="sd">        The vertical coordinate of the top-left corner of the rectangle.</span>
+<span class="sd">    width : int</span>
+<span class="sd">        The horizontal length of the rectangle, in number of tiles.</span>
+<span class="sd">    height : int</span>
+<span class="sd">        The vertical length of the rectangle, in number of tiles.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span>
+
+<div class="viewcode-block" id="Rect.center"><a class="viewcode-back" href="../../map_objects.html#map_objects.rectangle.Rect.center">[docs]</a>    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function that calculates the center of a rectangle</span>
+
+<span class="sd">        This function gives the coordinates of the center of an instance of the Rectangle class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">center_x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">center_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span></div>
+
+<div class="viewcode-block" id="Rect.intersects_with"><a class="viewcode-back" href="../../map_objects.html#map_objects.rectangle.Rect.intersects_with">[docs]</a>    <span class="k">def</span> <span class="nf">intersects_with</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A function that checks whether two rectangles overlap</span>
+
+<span class="sd">        This function checks whether two instances of the Rectangle class overlap. This is important during</span>
+<span class="sd">        map creation, so we can avoid placing overlapping rooms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : :obj:`Rectangle`</span>
+<span class="sd">            Another instance of the Rectangle class, of which we want to know whether it overlaps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># returns true if this rectangle intersects with &quot;other&quot;</span>
+        <span class="n">intersect_bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">x2</span> <span class="ow">and</span> \
+                         <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">&gt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">x1</span> <span class="ow">and</span> \
+                         <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">y2</span> <span class="ow">and</span> \
+                         <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">&gt;=</span> <span class="n">other</span><span class="o">.</span><span class="n">y1</span>
+        <span class="k">return</span> <span class="n">intersect_bool</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

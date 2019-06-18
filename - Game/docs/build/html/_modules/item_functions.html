@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>item_functions &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for item_functions</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">from</span> <span class="nn">gameMessages</span> <span class="k">import</span> <span class="n">Message</span>
+
+<div class="viewcode-block" id="item_heal"><a class="viewcode-back" href="../auxiliary_functions.html#item_functions.item_heal">[docs]</a><span class="k">def</span> <span class="nf">item_heal</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Executes the actions associated with healing items</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    entity : :obj:`Entity`</span>
+<span class="sd">        Entity to heal</span>
+<span class="sd">    amount : int</span>
+<span class="sd">        Amount to heal the entity</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List containing the dict entry to add to</span>
+<span class="sd">        player_results in engine.&quot;&quot;&quot;</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">fighter</span><span class="o">.</span><span class="n">hp</span> <span class="o">==</span> <span class="n">entity</span><span class="o">.</span><span class="n">fighter</span><span class="o">.</span><span class="n">max_hp</span><span class="p">:</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;consumed&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">Message</span><span class="p">(</span><span class="s1">&#39;Your veins already flow with ample blood.&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">sky</span><span class="p">)})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">entity</span><span class="o">.</span><span class="n">fighter</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;consumed&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">Message</span><span class="p">(</span><span class="s1">&#39;You ingest the blood. Your pain diminishes.&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">green</span><span class="p">)})</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Player Interaction &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Auxiliary Functions" href="auxiliary_functions.html" />
+    <link rel="prev" title="Map Objects" href="map_objects.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-gameMessages">
+<span id="id1"></span><span id="player-interaction"></span><h1>Player Interaction<a class="headerlink" href="#module-gameMessages" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="gameMessages.Message">
+<em class="property">class </em><code class="sig-prename descclassname">gameMessages.</code><code class="sig-name descname">Message</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">color=Color(255</em>, <em class="sig-param">255</em>, <em class="sig-param">255)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gameMessages.html#Message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gameMessages.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines an arbitrary message by text and colour</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – Text to display in the message</p></li>
+<li><p><strong>color</strong> (<em>tcod.color</em>) – Color to display the message in</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="gameMessages.MessageLog">
+<em class="property">class </em><code class="sig-prename descclassname">gameMessages.</code><code class="sig-name descname">MessageLog</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gameMessages.html#MessageLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gameMessages.MessageLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message log object displayed at the bottom of the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Starting x-coordinate of messages. (We don’t need y because
+it’s necessarily set at the bottom of the screen.</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – Width of message box</p></li>
+<li><p><strong>height</strong> (<em>int</em>) – Height of message box</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="gameMessages.MessageLog.add_message">
+<code class="sig-name descname">add_message</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gameMessages.html#MessageLog.add_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gameMessages.MessageLog.add_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a message to the log</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference internal" href="#gameMessages.Message" title="gameMessages.Message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></a>) – The message to display</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-menus"></span><dl class="function">
+<dt id="menus.inventory_menu">
+<code class="sig-prename descclassname">menus.</code><code class="sig-name descname">inventory_menu</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">header</em>, <em class="sig-param">inventory</em>, <em class="sig-param">inventory_width</em>, <em class="sig-param">screen_width</em>, <em class="sig-param">screen_height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/menus.html#inventory_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#menus.inventory_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a menu which has the items stored in your inventory as options.
+For further information please look at the documentation for <a class="reference internal" href="#menus.menu" title="menus.menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">menu</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="menus.menu">
+<code class="sig-prename descclassname">menus.</code><code class="sig-name descname">menu</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">header</em>, <em class="sig-param">options</em>, <em class="sig-param">width</em>, <em class="sig-param">screen_width</em>, <em class="sig-param">screen_height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/menus.html#menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#menus.menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up an interactive menu</p>
+<p>Menu displays options for interactive behaviour and pauses the game
+while it’s being accessed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>tcod.Console</em>) – Console window to draw to</p></li>
+<li><p><strong>header</strong> (<em>str</em>) – Header text for the menu</p></li>
+<li><p><strong>options</strong> (<em>list</em>) – List with available options to choose from</p></li>
+<li><p><strong>width</strong> (<em>int</em>) – Width of menu screen</p></li>
+<li><p><strong>screen_width</strong> (<em>int</em>) – Width of the entire game-screen (window)</p></li>
+<li><p><strong>screen_height</strong> (<em>int</em>) – Height of the entire game-screen (window)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="entity.html">Entity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="map_objects.html" title="previous chapter">Map Objects</a></li>
+      <li>Next: <a href="auxiliary_functions.html" title="next chapter">Auxiliary Functions</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/player_interaction.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

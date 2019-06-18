@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Engine Components &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Components" href="components.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-entity">
+<span id="engine-components"></span><span id="engine"></span><h1>Engine Components<a class="headerlink" href="#module-entity" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="entity.Entity">
+<em class="property">class </em><code class="sig-prename descclassname">entity.</code><code class="sig-name descname">Entity</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">char</em>, <em class="sig-param">colour</em>, <em class="sig-param">name</em>, <em class="sig-param">blocks=False</em>, <em class="sig-param">fighter=None</em>, <em class="sig-param">ai=None</em>, <em class="sig-param">render_order=&lt;RenderOrder.corpse: 1&gt;</em>, <em class="sig-param">item=None</em>, <em class="sig-param">inventory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#Entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.Entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>“A comprehensive object to represent any entity in the game.</p>
+<p>An entity is the main construct for things like monsters NPCs and items.
+This class provides all the options needed for a well functioning entity
+and is used for every entity in the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – Starting x coordinate of the entity.</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – Starting y coordinate of the entity.</p></li>
+<li><p><strong>char</strong> (<em>char</em>) – Character (think !, ?, &#64;, etc.) that represents this entity on the screen.</p></li>
+<li><p><strong>colour</strong> (<em>tcod.Color</em>) – Render colour of the the entity’s character.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the entity.</p></li>
+<li><p><strong>blocks</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the player is able to walk through the entity or not.
+Defaults to False. (Meaning the player can walk through.)</p></li>
+<li><p><strong>fighter</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Fighter</span></code>, optional) – Describes the stats used for fighting such as health, strength and defense.
+Also describes the available actions, such as different attacks.
+Defaults to None.</p></li>
+<li><p><strong>ai</strong> (<em>Class</em><em>, </em><em>optional</em>) – A class that houses the AI logic of the entity. This class is required
+to have a <cite>take_turn()</cite> method.
+Defaults to None.</p></li>
+<li><p><strong>render_order</strong> (<em>int</em><em>, </em><em>optional</em>) – Describes the order in which to render object (lowest first). Idiomatically
+used in conjunction with a <cite>RenderOrder</cite> class.
+Defaults to <cite>RenderOrder.corpse</cite></p></li>
+<li><p><strong>item</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Item</span></code>, optional) – An Item object.
+Defaults to None</p></li>
+<li><p><strong>inventory</strong> (: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Inventory</span></code>, optional) – The inventory of this entity.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="entity.Entity.distance_to">
+<code class="sig-name descname">distance_to</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#Entity.distance_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.Entity.distance_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the distance from self to another entity</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#entity.Entity" title="entity.Entity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code></a>) – Entity to which we need to calculate the distance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="entity.Entity.move">
+<code class="sig-name descname">move</code><span class="sig-paren">(</span><em class="sig-param">dx</em>, <em class="sig-param">dy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#Entity.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.Entity.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves the entity by some amount.</p>
+<p>Moves the entity by dx in the x direction and dy in the y direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dx</strong> (<em>int</em>) – Change in x direction</p></li>
+<li><p><strong>dy</strong> (<em>int</em>) – Change in y direction</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="entity.Entity.move_astar">
+<code class="sig-name descname">move_astar</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">entities</em>, <em class="sig-param">game_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#Entity.move_astar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.Entity.move_astar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses A* algorithmic logic to move towards the target</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<a class="reference internal" href="#entity.Entity" title="entity.Entity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code></a>) – The target.</p></li>
+<li><p><strong>entities</strong> (<em>list</em>) – List of entities to move</p></li>
+<li><p><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Game Map to apply the algorithm on</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="entity.Entity.move_towards">
+<code class="sig-name descname">move_towards</code><span class="sig-paren">(</span><em class="sig-param">target_x</em>, <em class="sig-param">target_y</em>, <em class="sig-param">game_map</em>, <em class="sig-param">entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#Entity.move_towards"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.Entity.move_towards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the entity-specific AI to move towards a target.</p>
+<p>Goes through the entire entity list and asks their AI to make
+a move towards a certain target based on its location and the
+game map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target_x</strong> (<em>int</em>) – x-location of target</p></li>
+<li><p><strong>target_y</strong> (<em>int</em>) – y-location of target</p></li>
+<li><p><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Game map to apply the AI on</p></li>
+<li><p><strong>entities</strong> (<em>list</em>) – List of all entities that need processing.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="entity.get_blocking_entities_at">
+<code class="sig-prename descclassname">entity.</code><code class="sig-name descname">get_blocking_entities_at</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">entity_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/entity.html#get_blocking_entities_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#entity.get_blocking_entities_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if there are any movement-blocking entities at location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x location</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y location</p></li>
+<li><p><strong>entity_list</strong> (<em>list</em>) – list of entities to check</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-game_states"></span><dl class="class">
+<dt id="game_states.GameStates">
+<em class="property">class </em><code class="sig-prename descclassname">game_states.</code><code class="sig-name descname">GameStates</code><a class="reference internal" href="_modules/game_states.html#GameStates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#game_states.GameStates" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that keeps track of the state of the game
+This class inherits from Enum. It allows us to keep track of the state the game is in.
+This is used to check whose turn it is, whether the player is dead or not,
+whether the inventory menu is opened, etc.
+This helps us keep track of which inputs are allowed, what their consequences are, and what actions are possible.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial.html" title="previous chapter">Tutorial</a></li>
+      <li>Next: <a href="components.html" title="next chapter">Components</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/engine.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

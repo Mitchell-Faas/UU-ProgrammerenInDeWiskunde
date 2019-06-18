@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Auxiliary Functions &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Player Interaction" href="player_interaction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="auxiliary-functions">
+<span id="id1"></span><h1>Auxiliary Functions<a class="headerlink" href="#auxiliary-functions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-inputHandlers">
+<span id="input-handling"></span><h2>Input Handling<a class="headerlink" href="#module-inputHandlers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="inputHandlers.handleKeys">
+<code class="sig-prename descclassname">inputHandlers.</code><code class="sig-name descname">handleKeys</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inputHandlers.html#handleKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inputHandlers.handleKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to interpret key inputs
+Returns a dictionary containing the relevant information for the game to react to key inputs.
+What keys have which effect is dependent on the gamestate. A dead player can’t move for example,
+and when the inventory is opened there are different controls also.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>int</em>) – An integer representing the key that was pressed. Which keys correspond to what number is managed by tcod.</p></li>
+<li><p><strong>game_state</strong> (<em>int</em>) – An integer representing the gamestate. This tells us whose turns it is, if the player is dead, etc.
+What integer corresponds to which state is kept track of in game_states.py.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Below follows an example of how inputs are recognized and handled.</p>
+</div>
+<div class="section" id="module-fov_functions">
+<span id="rendering"></span><h2>Rendering<a class="headerlink" href="#module-fov_functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fov_functions.initialize_fov">
+<code class="sig-prename descclassname">fov_functions.</code><code class="sig-name descname">initialize_fov</code><span class="sig-paren">(</span><em class="sig-param">game_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#initialize_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.initialize_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new <code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code> based on FOV calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Game map over which to compute FOV.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="fov_functions.recompute_fov">
+<code class="sig-prename descclassname">fov_functions.</code><code class="sig-name descname">recompute_fov</code><span class="sig-paren">(</span><em class="sig-param">fov_map</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">radius=10</em>, <em class="sig-param">light_walls=True</em>, <em class="sig-param">algorithm=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#recompute_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.recompute_fov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recomputes a FOV map</p>
+<p>Uses the player coordinates to update the fov map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – old FOV map</p></li>
+<li><p><strong>x</strong> (<em>int</em>) – player x-location</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – player y-location</p></li>
+<li><p><strong>radius</strong> (<em>int</em>) – radius of vision around player</p></li>
+<li><p><strong>light_walls</strong> (<em>bool</em>) – Whether or not to light the first block of the walls we see</p></li>
+<li><p><strong>algorithm</strong> (<em>int</em>) – The integer identification of the algorithm we want to use
+for FOV computation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-renderFunctions"></span><dl class="class">
+<dt id="renderFunctions.RenderOrder">
+<em class="property">class </em><code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">RenderOrder</code><a class="reference internal" href="_modules/renderFunctions.html#RenderOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.RenderOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static data on render order</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="renderFunctions.clear_all">
+<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">clear_all</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes all given entities from screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
+<li><p><strong>entities</strong> (<em>list of entity objects</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="renderFunctions.clear_entity">
+<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">clear_entity</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a given entity from the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
+<li><p><strong>entity</strong> (<em>entity object</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="renderFunctions.draw_entity">
+<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">draw_entity</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entity</em>, <em class="sig-param">fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#draw_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.draw_entity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders a given entity on the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
+<li><p><strong>entity</strong> (<em>entity object</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="renderFunctions.get_names_under_mouse">
+<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">get_names_under_mouse</code><span class="sig-paren">(</span><em class="sig-param">mouse</em>, <em class="sig-param">entities</em>, <em class="sig-param">fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#get_names_under_mouse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.get_names_under_mouse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the name of whichever entity is located below the cursor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mouse</strong> (<em>tcod.Mouse</em>) – Mouse object which gives coordinates</p></li>
+<li><p><strong>entities</strong> (<em>list</em>) – List of entities on the map</p></li>
+<li><p><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Mapobject which gives the FOV (Don’t want to show
+objects which we can’t see.)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Name of the entity your cursor is positioned above</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="renderFunctions.render_all">
+<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">render_all</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">panel</em>, <em class="sig-param">entities</em>, <em class="sig-param">player</em>, <em class="sig-param">game_map</em>, <em class="sig-param">fov_map</em>, <em class="sig-param">fov_recompute</em>, <em class="sig-param">messageLog</em>, <em class="sig-param">screen_width</em>, <em class="sig-param">screen_height</em>, <em class="sig-param">barWidth</em>, <em class="sig-param">panelHeight</em>, <em class="sig-param">panelY</em>, <em class="sig-param">mouse</em>, <em class="sig-param">colours</em>, <em class="sig-param">game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#render_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.render_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders all given entities on the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
+<li><p><strong>entities</strong> (<em>list</em>) – List of entity objects</p></li>
+<li><p><strong>game_map</strong> (<em>list</em>) – Nested list containing all tiles on the map</p></li>
+<li><p><strong>screen_width</strong> (<em>int</em>) – Horizontal length of the screen in number of tiles</p></li>
+<li><p><strong>screen_height</strong> (<em>int</em>) – Vertical length of the screen in number of tiles</p></li>
+<li><p><strong>colours</strong> (<em>dict</em>) – Dictionary containing the colours of different map tiles</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-death_functions">
+<span id="other-random-functions"></span><h2>Other Random Functions<a class="headerlink" href="#module-death_functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="death_functions.kill_monster">
+<code class="sig-prename descclassname">death_functions.</code><code class="sig-name descname">kill_monster</code><span class="sig-paren">(</span><em class="sig-param">monster</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_monster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_monster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes all the actions required to kill a monster</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>monster</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Monster Entity object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Message associated with the death of a monster.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="death_functions.kill_player">
+<code class="sig-prename descclassname">death_functions.</code><code class="sig-name descname">kill_player</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_player" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes all the actions required to kill the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Player object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Message associated with killing the player</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-item_functions"></span><dl class="function">
+<dt id="item_functions.item_heal">
+<code class="sig-prename descclassname">item_functions.</code><code class="sig-name descname">item_heal</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">amount</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/item_functions.html#item_heal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#item_functions.item_heal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes the actions associated with healing items</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Entity to heal</p></li>
+<li><p><strong>amount</strong> (<em>int</em>) – Amount to heal the entity</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List containing the dict entry to add to
+player_results in engine.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Auxiliary Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-inputHandlers">Input Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fov_functions">Rendering</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-death_functions">Other Random Functions</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="player_interaction.html" title="previous chapter">Player Interaction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/auxiliary_functions.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

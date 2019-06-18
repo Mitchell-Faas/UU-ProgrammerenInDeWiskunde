@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>entity &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for entity</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">tcod</span>
+
+<span class="kn">from</span> <span class="nn">renderFunctions</span> <span class="k">import</span> <span class="n">RenderOrder</span>
+
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../engine.html#entity.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;&quot;A comprehensive object to represent any entity in the game.</span>
+
+<span class="sd">    An entity is the main construct for things like monsters NPCs and items.</span>
+<span class="sd">    This class provides all the options needed for a well functioning entity</span>
+<span class="sd">    and is used for every entity in the game.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : int</span>
+<span class="sd">        Starting x coordinate of the entity.</span>
+<span class="sd">    y : int</span>
+<span class="sd">        Starting y coordinate of the entity.</span>
+<span class="sd">    char : char</span>
+<span class="sd">        Character (think !, ?, @, etc.) that represents this entity on the screen.</span>
+<span class="sd">    colour : tcod.Color</span>
+<span class="sd">        Render colour of the the entity&#39;s character.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Name of the entity.</span>
+<span class="sd">    blocks : bool, optional</span>
+<span class="sd">        Whether the player is able to walk through the entity or not.</span>
+<span class="sd">        Defaults to False. (Meaning the player can walk through.)</span>
+<span class="sd">    fighter : :obj:`Fighter`, optional</span>
+<span class="sd">        Describes the stats used for fighting such as health, strength and defense.</span>
+<span class="sd">        Also describes the available actions, such as different attacks.</span>
+<span class="sd">        Defaults to None.</span>
+<span class="sd">    ai : Class, optional</span>
+<span class="sd">        A class that houses the AI logic of the entity. This class is required</span>
+<span class="sd">        to have a `take_turn()` method.</span>
+<span class="sd">        Defaults to None.</span>
+<span class="sd">    render_order : int, optional</span>
+<span class="sd">        Describes the order in which to render object (lowest first). Idiomatically</span>
+<span class="sd">        used in conjunction with a `RenderOrder` class.</span>
+<span class="sd">        Defaults to `RenderOrder.corpse`</span>
+<span class="sd">    item : :obj:`Item`, optional</span>
+<span class="sd">        An Item object.</span>
+<span class="sd">        Defaults to None</span>
+<span class="sd">    inventory: : :obj:`Inventory`, optional</span>
+<span class="sd">        The inventory of this entity.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">char</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">blocks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">fighter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">render_order</span><span class="o">=</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">corpse</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inventory</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">char</span> <span class="o">=</span> <span class="n">char</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colour</span> <span class="o">=</span> <span class="n">colour</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render_order</span> <span class="o">=</span> <span class="n">render_order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fighter</span> <span class="o">=</span> <span class="n">fighter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ai</span> <span class="o">=</span> <span class="n">ai</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span> <span class="o">=</span> <span class="n">inventory</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fighter</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fighter</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ai</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inventory</span><span class="o">.</span><span class="n">owner</span> <span class="o">=</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="Entity.move"><a class="viewcode-back" href="../engine.html#entity.Entity.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Moves the entity by some amount.</span>
+
+<span class="sd">        Moves the entity by dx in the x direction and dy in the y direction.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dx : int</span>
+<span class="sd">            Change in x direction</span>
+<span class="sd">        dy : int</span>
+<span class="sd">            Change in y direction&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span></div>
+
+<div class="viewcode-block" id="Entity.move_towards"><a class="viewcode-back" href="../engine.html#entity.Entity.move_towards">[docs]</a>    <span class="k">def</span> <span class="nf">move_towards</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_x</span><span class="p">,</span> <span class="n">target_y</span><span class="p">,</span> <span class="n">game_map</span><span class="p">,</span> <span class="n">entities</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies the entity-specific AI to move towards a target.</span>
+
+<span class="sd">        Goes through the entire entity list and asks their AI to make</span>
+<span class="sd">        a move towards a certain target based on its location and the</span>
+<span class="sd">        game map.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_x : int</span>
+<span class="sd">            x-location of target</span>
+<span class="sd">        target_y : int</span>
+<span class="sd">            y-location of target</span>
+<span class="sd">        game_map : :obj:`GameMap`</span>
+<span class="sd">            Game map to apply the AI on</span>
+<span class="sd">        entities : list</span>
+<span class="sd">            List of all entities that need processing.&quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">target_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">target_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">dx</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">dy</span> <span class="o">/</span> <span class="n">distance</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">is_blocked</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+</span><span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">+</span><span class="n">dy</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="n">get_blocking_entities_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">,</span> <span class="n">entities</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Entity.move_astar"><a class="viewcode-back" href="../engine.html#entity.Entity.move_astar">[docs]</a>    <span class="k">def</span> <span class="nf">move_astar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">game_map</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Uses A* algorithmic logic to move towards the target</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target : :obj:`Entity`</span>
+<span class="sd">            The target.</span>
+<span class="sd">        entities : list</span>
+<span class="sd">            List of entities to move</span>
+<span class="sd">        game_map : :obj:`GameMap`</span>
+<span class="sd">            Game Map to apply the algorithm on&quot;&quot;&quot;</span>
+
+        <span class="c1"># Create a FOV map that has the dimensions of the map</span>
+        <span class="n">fov</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">map_new</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+
+        <span class="c1"># Scan the current map each turn and set all the walls as unwalkable</span>
+        <span class="k">for</span> <span class="n">y1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">game_map</span><span class="o">.</span><span class="n">width</span><span class="p">):</span>
+                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">block_sight</span><span class="p">,</span>
+                                           <span class="ow">not</span> <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">]</span><span class="o">.</span><span class="n">blocked</span><span class="p">)</span>
+
+        <span class="c1"># Scan all the objects to see if there are objects that must be navigated around</span>
+        <span class="c1"># Check also that the object isn&#39;t self or the target (so that the start and the end points are free)</span>
+        <span class="c1"># The AI class handles the situation if self is next to the target so it will not use this A* function anyway</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">blocks</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="bp">self</span> <span class="ow">and</span> <span class="n">entity</span> <span class="o">!=</span> <span class="n">target</span><span class="p">:</span>
+                <span class="c1"># Set the tile as a wall so it must be navigated around</span>
+                <span class="n">tcod</span><span class="o">.</span><span class="n">map_set_properties</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Allocate a A* path</span>
+        <span class="c1"># The 1.41 is the normal diagonal cost of moving, it can be set as 0.0 if diagonal moves are prohibited</span>
+        <span class="n">my_path</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_new_using_map</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="mf">1.41</span><span class="p">)</span>
+
+        <span class="c1"># Compute the path between self&#39;s coordinates and the target&#39;s coordinates</span>
+        <span class="n">tcod</span><span class="o">.</span><span class="n">path_compute</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="c1"># Check if the path exists, and in this case, also the path is shorter than 25 tiles</span>
+        <span class="c1"># The path size matters if you want the monster to use alternative longer paths (for example through other rooms) if for example the player is in a corridor</span>
+        <span class="c1"># It makes sense to keep path size relatively low to keep the monsters from running around the map if there&#39;s an alternative path really far away</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_is_empty</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_size</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">:</span>
+            <span class="c1"># Find the next coordinates in the computed full path</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tcod</span><span class="o">.</span><span class="n">path_walk</span><span class="p">(</span><span class="n">my_path</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">or</span> <span class="n">y</span><span class="p">:</span>
+                <span class="c1"># Set self&#39;s coordinates to the next path tile</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Keep the old move function as a backup so that if there are no paths (for example another monster blocks a corridor)</span>
+            <span class="c1"># it will still try to move towards the player (closer to the corridor opening)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_towards</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">game_map</span><span class="p">,</span> <span class="n">entities</span><span class="p">)</span>
+
+            <span class="c1"># Delete the path to free memory</span>
+        <span class="n">tcod</span><span class="o">.</span><span class="n">path_delete</span><span class="p">(</span><span class="n">my_path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Entity.distance_to"><a class="viewcode-back" href="../engine.html#entity.Entity.distance_to">[docs]</a>    <span class="k">def</span> <span class="nf">distance_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculates the distance from self to another entity</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        other : :obj:`Entity`</span>
+<span class="sd">            Entity to which we need to calculate the distance&quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">other</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="get_blocking_entities_at"><a class="viewcode-back" href="../engine.html#entity.get_blocking_entities_at">[docs]</a><span class="k">def</span> <span class="nf">get_blocking_entities_at</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">entity_list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Checks if there are any movement-blocking entities at location</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : int</span>
+<span class="sd">        x location</span>
+<span class="sd">    y : int</span>
+<span class="sd">        y location</span>
+<span class="sd">    entity_list : list</span>
+<span class="sd">        list of entities to check&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entity_list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">blocks</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entity</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+.. _entity:
+
+Entity
+======
+
+.. automodule:: entity
+    :members:

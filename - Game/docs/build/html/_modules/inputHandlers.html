@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>inputHandlers &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for inputHandlers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tcod</span>
+<span class="kn">from</span> <span class="nn">game_states</span> <span class="k">import</span> <span class="n">GameStates</span>
+
+<div class="viewcode-block" id="handleKeys"><a class="viewcode-back" href="../auxiliary_functions.html#inputHandlers.handleKeys">[docs]</a><span class="k">def</span> <span class="nf">handleKeys</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">game_state</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A function to interpret key inputs</span>
+<span class="sd">    Returns a dictionary containing the relevant information for the game to react to key inputs.</span>
+<span class="sd">    What keys have which effect is dependent on the gamestate. A dead player can&#39;t move for example,</span>
+<span class="sd">    and when the inventory is opened there are different controls also.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    key: int</span>
+<span class="sd">        An integer representing the key that was pressed. Which keys correspond to what number is managed by tcod.</span>
+<span class="sd">    game_state: int</span>
+<span class="sd">        An integer representing the gamestate. This tells us whose turns it is, if the player is dead, etc.</span>
+<span class="sd">        What integer corresponds to which state is kept track of in game_states.py.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Controls available during player&#39;s turn</span>
+    <span class="k">if</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYERS_TURN</span><span class="p">:</span>
+        <span class="n">action_dict</span> <span class="o">=</span> <span class="p">{</span>  <span class="c1"># Defines return values for single-key actions</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_UP</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_DOWN</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_LEFT</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_RIGHT</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP1</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP2</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP3</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP4</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP5</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;wait&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP6</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP7</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP8</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_KP9</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;j&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;h&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="s1">&#39;l&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)},</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;u&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;move&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)},</span>
+            <span class="s1">&#39;.&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;wait&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;pickup&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;show_inventory&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;drop_inventory&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_ESCAPE</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;exit&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="p">}</span>
+    <span class="c1"># Controls available when player is dead</span>
+    <span class="k">elif</span> <span class="n">game_state</span> <span class="o">==</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">PLAYER_DEAD</span><span class="p">:</span>
+        <span class="n">action_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;show_inventory&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_ESCAPE</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;exit&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="p">}</span>
+    <span class="c1"># Controls available when inventory or drop menu is open</span>
+    <span class="k">elif</span> <span class="n">game_state</span> <span class="ow">in</span> <span class="p">(</span><span class="n">GameStates</span><span class="o">.</span><span class="n">SHOW_INVENTORY</span><span class="p">,</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">DROP_INVENTORY</span><span class="p">):</span>
+        <span class="n">action_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_ESCAPE</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;exit&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="p">}</span>
+        <span class="c1"># Give inventory index associated with each letter of the alphabet</span>
+        <span class="k">for</span> <span class="n">letteridx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">26</span><span class="p">):</span>
+            <span class="n">action_dict</span><span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">letteridx</span> <span class="o">+</span> <span class="mi">97</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;inventory_index&#39;</span><span class="p">:</span> <span class="n">letteridx</span><span class="p">}</span>
+
+    <span class="c1"># Multi-key actions</span>
+    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">vk</span> <span class="o">==</span> <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_ENTER</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">lalt</span><span class="p">:</span>
+        <span class="c1"># Alt+Enter: toggle full screen</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;fullscreen&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Output the appropriate action</span>
+        <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">vk</span> <span class="o">==</span> <span class="n">tcod</span><span class="o">.</span><span class="n">KEY_CHAR</span><span class="p">:</span>
+            <span class="n">key_result</span> <span class="o">=</span> <span class="n">action_dict</span><span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">c</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key_result</span> <span class="o">=</span> <span class="n">action_dict</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">vk</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">key_result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">return</span> <span class="n">key_result</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../engine.html">Engine Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auxiliary_functions.html">Auxiliary Functions</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
