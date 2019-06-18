@@ -10,7 +10,7 @@ Introduction
 ++++++++++++
 Welcome to the documentation for our project, ExsanguinatorRL! ExsanguinatorRL, as the name implies, is a traditional roguelike game. The code is heavily based on the Python Roguelike tutorial at http://rogueliketutorials.com/.
 
-You play as a blood sorcerer, on a quest for power and glory. Fight your way through a dark and unforgiving dungeon! Decimate the monsters that spawn there, and use their blood against them! And above all; feast!
+You play as a blood sorcerer on a quest for power and glory. Fight your way through a dark and unforgiving dungeon! Hack all living creatures you find into bloody gore! And above all; feast!
 
 
 .. toctree::

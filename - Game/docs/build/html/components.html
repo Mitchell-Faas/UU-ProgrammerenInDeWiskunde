@@ -15,7 +15,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Map Objects" href="map_objects.html" />
-    <link rel="prev" title="Welcome to ExsanguinatorRL’s documentation!" href="index.html" />
+    <link rel="prev" title="Engine Components" href="engine.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -132,10 +132,18 @@ If the form of the attack was melee, also bloodies the tile the entity was stand
 
 </dd></dl>
 
-<p>Below follows an example of how the ai and fighter components are used when creating an entity.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fighter_component</span> <span class="o">=</span> <span class="n">Fighter</span><span class="p">(</span><span class="n">hp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">defense</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">ai_component</span> <span class="o">=</span> <span class="n">BasicMonster</span><span class="p">()</span>
-<span class="n">monster</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="s1">&#39;orc&#39;</span><span class="p">,</span> <span class="n">blocks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fighter</span><span class="o">=</span><span class="n">fighter_component</span><span class="p">,</span> <span class="n">ai</span><span class="o">=</span><span class="n">ai_component</span><span class="p">,</span> <span class="n">render_order</span><span class="o">=</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">actor</span><span class="p">)</span>
+<p>The fighter class gives us the functions we need to allow combat between entities.
+It includes attacking, taking damage, healing, and other such functions.
+Below follows a simplified example of combat.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fighter1</span> <span class="o">=</span> <span class="n">Fighter</span><span class="p">(</span><span class="n">hp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">defense</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fighter2</span> <span class="o">=</span> <span class="n">Fighter</span><span class="p">(</span><span class="n">hp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">defense</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Entity1 = (..., fighter_component=fighter1)</span>
+<span class="c1"># Entity2 = (..., fighter_component=fighter2)</span>
+<span class="n">fighter1</span><span class="o">.</span><span class="n">attack</span><span class="p">(</span><span class="n">Entity2</span><span class="p">)</span>
+
+<span class="c1"># As a result of this, Entity2 will take damage</span>
+<span class="o">&gt;&gt;&gt;</span><span class="n">fighter2</span><span class="o">.</span><span class="n">hp</span>
+<span class="mi">4</span>
 </pre></div>
 </div>
 <span class="target" id="module-components.inventory"></span><dl class="class">
@@ -199,9 +207,7 @@ It also includes relevant parameters for such function, for example the amount t
 
 <p>Below follows an example of how the inventory component is added to the player entity.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inventory_component</span> <span class="o">=</span> <span class="n">Inventory</span><span class="p">(</span><span class="mi">26</span><span class="p">)</span>
-<span class="n">player</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">char</span><span class="o">=</span><span class="s1">&#39;@&#39;</span><span class="p">,</span> <span class="n">colour</span><span class="o">=</span><span class="n">tcod</span><span class="o">.</span><span class="n">white</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Player&#39;</span><span class="p">,</span>
-                <span class="n">blocks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fighter</span><span class="o">=</span><span class="n">fighter_component</span><span class="p">,</span> <span class="n">render_order</span><span class="o">=</span><span class="n">render</span><span class="o">.</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span>
-                <span class="n">inventory</span><span class="o">=</span><span class="n">inventory_component</span><span class="p">)</span>
+<span class="c1"># player = Entity(..., inventory=inventory_component)</span>
 </pre></div>
 </div>
 <span class="target" id="module-components.item"></span><dl class="class">
@@ -224,8 +230,7 @@ An example is the amount healed with the item_heal function.</p></li>
 
 <p>Below follows an example of how the item component is added to an item entity.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">item_component</span> <span class="o">=</span> <span class="n">Item</span><span class="p">(</span><span class="n">use_function</span><span class="o">=</span><span class="n">item_heal</span><span class="p">,</span> <span class="n">amount</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">item</span> <span class="o">=</span> <span class="n">Entity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">owner</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="s1">&#39;!&#39;</span><span class="p">,</span> <span class="n">tcod</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">147</span><span class="p">,</span> <span class="mi">113</span><span class="p">,</span> <span class="mi">230</span><span class="p">),</span> <span class="s1">&#39;Blood Crystal&#39;</span><span class="p">,</span>
-                          <span class="n">render_order</span><span class="o">=</span><span class="n">RenderOrder</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">item</span><span class="o">=</span><span class="n">item_component</span><span class="p">)</span>
+<span class="c1"># item = Entity(..., item=item_component)</span>
 </pre></div>
 </div>
 </div>
@@ -250,11 +255,14 @@ An example is the amount healed with the item_heal function.</p></li>
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-components.ai">AI</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_functions.html">Auxiliary Functions</a></li>
 </ul>
 
@@ -262,7 +270,7 @@ An example is the amount healed with the item_heal function.</p></li>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Welcome to ExsanguinatorRL’s documentation!</a></li>
+      <li>Previous: <a href="engine.html" title="previous chapter">Engine Components</a></li>
       <li>Next: <a href="map_objects.html" title="next chapter">Map Objects</a></li>
   </ul></li>
 </ul>
