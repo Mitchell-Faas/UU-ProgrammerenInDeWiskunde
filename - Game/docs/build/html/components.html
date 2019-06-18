@@ -14,6 +14,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Map Objects" href="map_objects.html" />
     <link rel="prev" title="Welcome to ExsanguinatorRL’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -63,9 +64,6 @@ monsters cannot move through each other.</p></li>
 
 </dd></dl>
 
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;hello world!&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <span class="target" id="module-components.fighter"></span><dl class="class">
 <dt id="components.fighter.Fighter">
 <em class="property">class </em><code class="sig-prename descclassname">components.fighter.</code><code class="sig-name descname">Fighter</code><span class="sig-paren">(</span><em class="sig-param">hp</em>, <em class="sig-param">defense</em>, <em class="sig-param">power</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter" title="Permalink to this definition">¶</a></dt>
@@ -111,7 +109,8 @@ This function outputs results of such an attack, for example messages to be appe
 <dt id="components.fighter.Fighter.take_damage">
 <code class="sig-name descname">take_damage</code><span class="sig-paren">(</span><em class="sig-param">amount</em>, <em class="sig-param">form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter.take_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter.take_damage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deals damage to self.</p>
-<p>Used when an entity is being damaged, for example through attacks by other entities.</p>
+<p>Used when an entity is being damaged, for example through attacks by other entities.
+If the form of the attack was melee, also bloodies the tile the entity was standing on.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -223,6 +222,7 @@ An example is the amount healed with the item_heal function.</p></li>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
 </ul>
 
 <div class="relations">
@@ -230,6 +230,7 @@ An example is the amount healed with the item_heal function.</p></li>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to ExsanguinatorRL’s documentation!</a></li>
+      <li>Next: <a href="map_objects.html" title="next chapter">Map Objects</a></li>
   </ul></li>
 </ul>
 </div>

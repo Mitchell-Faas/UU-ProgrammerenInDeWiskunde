@@ -11,6 +11,8 @@ Welcome to ExsanguinatorRL's documentation!
    :caption: Contents:
 
    components
+   map_objects
+   auxiliary_functions
 
 
 Indices and tables
