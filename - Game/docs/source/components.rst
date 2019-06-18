@@ -7,15 +7,26 @@ Components contains a number of classes that are used to give certain properties
 Examples of such entities are enemies, items, and the player themselves. Examples of properties are the ability to move, \
 fight, carry items, etcetera.
 
+AI
+++
+
 .. automodule:: components.ai
     :members: BasicMonster
+
+The AI classes (just BasicMonster for now) employ one function: take_turn.
+This function is called to elicit behaviour of an entity. Example:
+
+.. code-block:: python
+
+    AI = BasicMonster()
+    AI.take_turn()
 
 .. automodule:: components.fighter
     :members: Fighter
 
 Below follows an example of how the ai and fighter components are used when creating an entity.
 
-.. codeblock:: python
+.. code-block:: python
 
     fighter_component = Fighter(hp=5, defense=0, power=1)
     ai_component = BasicMonster()
@@ -26,7 +37,7 @@ Below follows an example of how the ai and fighter components are used when crea
 
 Below follows an example of how the inventory component is added to the player entity.
 
-.. codeblock:: python
+.. code-block:: python
 
     inventory_component = Inventory(26)
     player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
@@ -38,7 +49,7 @@ Below follows an example of how the inventory component is added to the player e
 
 Below follows an example of how the item component is added to an item entity.
 
-.. codeblock:: python
+.. code-block:: python
 
     item_component = Item(use_function=item_heal, amount=4)
     item = Entity(self.owner.x, self.owner.y, '!', tcod.Color(147, 113, 230), 'Blood Crystal',
