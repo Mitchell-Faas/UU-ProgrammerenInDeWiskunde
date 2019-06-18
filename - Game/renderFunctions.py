@@ -53,16 +53,22 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
                screen_width, screen_height, barWidth, panelHeight, panelY, mouse, colours, game_state):
     """Renders all given entities on the screen.
 
-    params
-    -------------
-    console: console object
-    entities: list of entity objects
-    game_map: nested list containing all tiles on the map
-    screen_width: horizontal length of the screen in number of tiles
-    screen_height: vertical length of the screen in number of tiles
-    colours: dictionary containing the colours of different map tiles
-    returns
-    -------------
+    Parameters
+    ----------
+    console : console object
+    entities : list
+        List of entity objects
+    game_map : list
+        Nested list containing all tiles on the map
+    screen_width : int
+        Horizontal length of the screen in number of tiles
+    screen_height : int
+        Vertical length of the screen in number of tiles
+    colours : dict
+        Dictionary containing the colours of different map tiles
+
+    Returns
+    -------
     None
     """
     if fov_recompute:
@@ -144,11 +150,13 @@ def render_all(console, panel, entities, player, game_map, fov_map, fov_recomput
 
 def clear_all(console, entities):
     """Removes all given entities from screen.
-    params
-    -------------
-    console: console object
+
+    Parameters
+    ----------
+    console : console object
     entities: list of entity objects
-    returns
+
+    Returns
     -------------
     None"""
     for entity in entities:
@@ -158,13 +166,13 @@ def clear_all(console, entities):
 def draw_entity(console, entity, fov_map):
     """Renders a given entity on the screen.
 
-    params
-    -------------
+    Parameters
+    ----------
     console: console object
     entity: entity object
 
-    returns
-    -------------
+    Returns
+    -------
     None
     """
     if tcod.map_is_in_fov(fov_map, entity.x, entity.y):
@@ -178,12 +186,12 @@ def draw_entity(console, entity, fov_map):
 def clear_entity(console, entity):
     """Removes a given entity from the screen.
 
-    params
-    -------------
+    Parameters
+    ----------
     console: console object
     entity: entity object
 
-    returns
+    Returns
     -------------
     None
     """

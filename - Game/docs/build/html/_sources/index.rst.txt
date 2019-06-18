@@ -17,8 +17,11 @@ You play as a blood sorcerer, on a quest for power and glory. Fight your way thr
    :maxdepth: 2
    :caption: Contents:
 
+   tutorial
+   engine
    components
    map_objects
+   player_interaction
    auxiliary_functions
 
 
