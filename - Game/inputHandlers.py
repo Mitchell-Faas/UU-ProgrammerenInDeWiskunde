@@ -39,6 +39,7 @@ def handleKeys(key, game_state):
             'u': {'move': (1, -1)},
             'b': {'move': (-1, 1)},
             'n': {'move': (1, 1)},
+            '.': {'wait': True},
             'g': {'pickup': True},
             'i': {'show_inventory': True},
             'd': {'drop_inventory': True},
