@@ -24,13 +24,21 @@ This function is called to elicit behaviour of an entity. Example:
 .. automodule:: components.fighter
     :members: Fighter
 
-Below follows an example of how the ai and fighter components are used when creating an entity.
+The fighter class gives us the functions we need to allow combat between entities.
+It includes attacking, taking damage, healing, and other such functions.
+Below follows a simplified example of combat.
 
 .. code-block:: python
 
-    fighter_component = Fighter(hp=5, defense=0, power=1)
-    ai_component = BasicMonster()
-    monster = Entity(x, y, 'o', tcod.Color(0, 80, 0), 'orc', blocks=True, fighter=fighter_component, ai=ai_component, render_order=RenderOrder.actor)
+    fighter1 = Fighter(hp=5, defense=0, power=1)
+    fighter2 = Fighter(hp=5, defense=0, power=1)
+    # Entity1 = (..., fighter_component=fighter1)
+    # Entity2 = (..., fighter_component=fighter2)
+    fighter1.attack(Entity2)
+
+    # As a result of this, Entity2 will take damage
+    >>>fighter2.hp
+    4
 
 .. automodule:: components.inventory
     :members: Inventory
@@ -40,9 +48,7 @@ Below follows an example of how the inventory component is added to the player e
 .. code-block:: python
 
     inventory_component = Inventory(26)
-    player = Entity(x=0, y=0, char='@', colour=tcod.white, name='Player',
-                    blocks=True, fighter=fighter_component, render_order=render.RenderOrder.actor,
-                    inventory=inventory_component)
+    # player = Entity(..., inventory=inventory_component)
 
 .. automodule:: components.item
     :members: Item
@@ -52,5 +58,4 @@ Below follows an example of how the item component is added to an item entity.
 .. code-block:: python
 
     item_component = Item(use_function=item_heal, amount=4)
-    item = Entity(self.owner.x, self.owner.y, '!', tcod.Color(147, 113, 230), 'Blood Crystal',
-                              render_order=RenderOrder.item, item=item_component)
+    # item = Entity(..., item=item_component)
