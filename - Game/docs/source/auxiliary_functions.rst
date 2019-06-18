@@ -9,6 +9,9 @@ Input Handling
 .. automodule:: inputHandlers
     :members:
 
+Below follows an example of how inputs are recognized and handled.
+
+
 Rendering
 +++++++++
 
