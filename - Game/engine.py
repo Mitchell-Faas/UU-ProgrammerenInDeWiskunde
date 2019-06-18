@@ -48,7 +48,7 @@ def main():
                'dark_ground': tcod.Color(25, 25, 60),
                'light_wall': tcod.Color(70, 70, 70),
                'light_ground': tcod.Color(120, 120, 120),
-               'bloody_ground': tcod.Color(130, 10, 10),
+               'bloody_ground': tcod.Color(130, 30, 30),
                'black': tcod.Color(0, 0, 0)}
 
     fighter_component = Fighter(15, 0, 3)
@@ -139,8 +139,9 @@ def main():
 
         player_turn_results = []
 
-
+        # This section tells the game how to respond to various inputs
         if game_state == GameStates.PLAYERS_TURN:
+            # Player moved
             if move:
                 dx, dy = move
                 dest_x = player.x + dx
@@ -162,6 +163,7 @@ def main():
                     # The destination is blocked
                     player_turn_results.extend([{'message': Message('The wall stubbornly refuses to move.', tcod.sky)}])
 
+            # Player picked something up
             elif pickup:
                 # Check if there's an item to be picked up, and pick up all such items
                 for entity in entities:
@@ -171,6 +173,7 @@ def main():
                 else:
                     player_turn_results.extend([{'message': Message('The ground growls at you for touching it!', tcod.sky)}])
 
+            # Player decided to wait a turn
             elif wait:
                 game_state = GameStates.ENEMIES_TURN
 
@@ -195,17 +198,23 @@ def main():
             if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
                 previous_game_state = game_state
             game_state = GameStates.DROP_INVENTORY
-
+        # On pressing escape, exits the current menu. If not in a menu, exits the game
         if exit:
             if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
+                # Exit the menu to the previous state
                 game_state = previous_game_state
             else:
+                # Exit the game
                 return True
-
+        # If the relevant keys are pressed, enters full-screen mode
         if fullscreen:
             tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
-        # Executes all the results of the player's turn
+
+        # Look at the results of the player's turn and print the appropriate
+        # Also implement the consequences of various turn results
+        # E.g. dropping an item places it in the list of entities
+        # E.g. places blood on a tile after the entity on it was attacked
         for player_turn_result in player_turn_results:
             message = player_turn_result.get('message')
             dead_entity = player_turn_result.get('dead')
@@ -243,22 +252,28 @@ def main():
             if bled_on_tile:
                 game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
 
+        # This section goes through the list of entities and tells them to take their turns
         if game_state == GameStates.ENEMIES_TURN:
             for entity in entities:
                 if entity.ai:
+                    # The enemy is an intelligent actor, and can thus take a turn
                     enemy_turn_results = entity.ai.take_turn(player, fov_map, game_map, entities)
                     if enemy_turn_results:
+                        # If there are any results of enemy actions we need to handle, we do so here
                         for enemy_turn_result in enemy_turn_results:
                             message = enemy_turn_result.get('message')
                             dead_entity = enemy_turn_result.get('dead')
                             bled_on_tile = enemy_turn_result.get('bled_on_tile')
 
+                            # Add any messages to the messagelog
                             if message:
                                 messageLog.add_message(message)
 
+                            # Spray blood where necessary
                             if bled_on_tile:
                                 game_map.tiles[bled_on_tile[0]][bled_on_tile[1]].bloody = True
 
+                            # Make sure to properly kill any dead entities
                             if dead_entity:
                                 if dead_entity == player:
                                     message, game_state = kill_player(dead_entity)
@@ -267,6 +282,7 @@ def main():
 
                                 messageLog.add_message(message)
 
+                                # If the player died, break out of the loop
                                 if game_state == GameStates.PLAYER_DEAD:
                                     break  # Ignore further results of this enemy's turn
 
@@ -276,5 +292,6 @@ def main():
             else:  # If the for-loop was broken, dont give player their turn back
                 game_state = GameStates.PLAYERS_TURN
 
+# Run the game
 if __name__ == '__main__':
     main()
