@@ -1,0 +1,6 @@
+.. _components/ai2:
+
+TESTY
+=====
+
+hi2.

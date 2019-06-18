@@ -1,0 +1,21 @@
+.. _components:
+
+Components
+==========
+
+.. automodule:: components.ai
+    :members: BasicMonster
+
+.. code-block:: python
+
+    print("hello world!")
+
+
+.. automodule:: components.fighter
+    :members: Fighter
+
+.. automodule:: components.inventory
+    :members: Inventory
+
+.. automodule:: components.item
+    :members: Item

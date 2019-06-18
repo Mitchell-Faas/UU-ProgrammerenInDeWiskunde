@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Components &#8212; ExsanguinatorRL 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to ExsanguinatorRL’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="components">
+<span id="id1"></span><h1>Components<a class="headerlink" href="#components" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-components.ai"></span><dl class="class">
+<dt id="components.ai.BasicMonster">
+<em class="property">class </em><code class="sig-prename descclassname">components.ai.</code><code class="sig-name descname">BasicMonster</code><a class="reference internal" href="_modules/components/ai.html#BasicMonster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.ai.BasicMonster" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that can be used when creating enemy entity instances, to allow them to take basic actions</p>
+<p>This class can be optionally given to an entity. If this class is given to an entity,
+it will be able to move and make attacks when in view of the player.</p>
+<dl class="method">
+<dt id="components.ai.BasicMonster.take_turn">
+<code class="sig-name descname">take_turn</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">fov_map</em>, <em class="sig-param">game_map</em>, <em class="sig-param">entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/ai.html#BasicMonster.take_turn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.ai.BasicMonster.take_turn" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that lets enemies take their turn</p>
+<p>This function is called to let enemies take their turn. If they are in view of the player, they will attack
+if they can, or otherwise move towards the player. The function outputs the result of any such action
+where necessary, such as messages to be put in the message log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – The target entity to be attacked. Currently this is always the player.</p></li>
+<li><p><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">TCODMap</span></code>) – A map-object from the tcod library. It keeps track of which tiles are visible.
+If a monster is outside player vision, it does not act.</p></li>
+<li><p><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – A class for the game-map. It includes information about which tiles can be walked through.
+This is necessary information for path-finding by enemies.</p></li>
+<li><p><strong>entities</strong> (<em>list</em>) – A list of instances of the entity class. This is necessary for path-finding because
+monsters cannot move through each other.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;hello world!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<span class="target" id="module-components.fighter"></span><dl class="class">
+<dt id="components.fighter.Fighter">
+<em class="property">class </em><code class="sig-prename descclassname">components.fighter.</code><code class="sig-name descname">Fighter</code><span class="sig-paren">(</span><em class="sig-param">hp</em>, <em class="sig-param">defense</em>, <em class="sig-param">power</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides basic fighting logic like health, attacks and defense.</p>
+<p>A class that can be used when creating entity instances, to allow them to partake in combat
+This class can be optionally handed to entities. It allows them to do combat, and to be attacked themselves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_hp</strong> (<em>int</em>) – The maximum hitpoints of the entity. Entities start out at this number of hitpoints.</p></li>
+<li><p><strong>hp</strong> (<em>int</em>) – The current number of hitpoints this entity has.</p></li>
+<li><p><strong>defense</strong> (<em>int</em>) – The number which is detracted from attacks on this entity when calculating damage.</p></li>
+<li><p><strong>power</strong> (<em>int</em>) – The number of hitpoints this entity damages others for when it attacks.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="components.fighter.Fighter.attack">
+<code class="sig-name descname">attack</code><span class="sig-paren">(</span><em class="sig-param">target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter.attack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter.attack" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that allows one entity to attack another</p>
+<p>This function is used when one entity attacks another. Damage is calculated depending on both their stats.
+This function outputs results of such an attack, for example messages to be appended to the messagelog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – An instance of the entity class. The entity that is to be attacked.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="components.fighter.Fighter.heal">
+<code class="sig-name descname">heal</code><span class="sig-paren">(</span><em class="sig-param">amount</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter.heal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter.heal" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that restores hitpoints to the entity</p>
+<p>Used when an entity is healed, for example through the use of items</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>amount</strong> (<em>int</em>) – The number of hitpoints that will be restored up to the maximum number of hitpoints.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="components.fighter.Fighter.take_damage">
+<code class="sig-name descname">take_damage</code><span class="sig-paren">(</span><em class="sig-param">amount</em>, <em class="sig-param">form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/fighter.html#Fighter.take_damage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.fighter.Fighter.take_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deals damage to self.</p>
+<p>Used when an entity is being damaged, for example through attacks by other entities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> (<em>int</em>) – The number of hitpoints that will be subtracted.</p></li>
+<li><p><strong>form</strong> (<em>string</em>) – Source of the attack (melee, spell, etc.)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-components.inventory"></span><dl class="class">
+<dt id="components.inventory.Inventory">
+<em class="property">class </em><code class="sig-prename descclassname">components.inventory.</code><code class="sig-name descname">Inventory</code><span class="sig-paren">(</span><em class="sig-param">capacity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/inventory.html#Inventory"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.inventory.Inventory" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that allows an entity to carry items</p>
+<p>This class allows entities to carry items with them, up to a maximum number. This provides the
+necessary functionality for the player to pick up and use items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>capacity</strong> (<em>int</em>) – An integer that determines how many items may be carried at maximum by the entity.</p></li>
+<li><p><strong>items</strong> (<em>list</em>) – A list containing instances of the entity class that are owners of the item class.
+These items are the ones carried by the entity.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="components.inventory.Inventory.add_item">
+<code class="sig-name descname">add_item</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/inventory.html#Inventory.add_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.inventory.Inventory.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that allows items to be added to the inventory</p>
+<p>This function allows items to be added to the inventory.
+It is used for example when picking up items off the ground.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Item</span></code>) – An instance of the Item class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="components.inventory.Inventory.remove_item">
+<code class="sig-name descname">remove_item</code><span class="sig-paren">(</span><em class="sig-param">item</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/inventory.html#Inventory.remove_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.inventory.Inventory.remove_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that allows items to be removed from the inventory</p>
+<p>This function allows items to be removed from the inventory.
+It is used for example when using items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Item</span></code>) – An instance of the Item class.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="components.inventory.Inventory.use">
+<code class="sig-name descname">use</code><span class="sig-paren">(</span><em class="sig-param">item_entity</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/inventory.html#Inventory.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.inventory.Inventory.use" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that allows items in the inventory to be used</p>
+<p>This function allows items to be used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item_entity</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – An instance of the Entity class that is the owner of an instance of the Item class.</p></li>
+<li><p><strong>**kwargs</strong> – Keywords arguments to pass through to the item. This includes the use_function, for example heal.
+It also includes relevant parameters for such function, for example the amount to be healed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-components.item"></span><dl class="class">
+<dt id="components.item.Item">
+<em class="property">class </em><code class="sig-prename descclassname">components.item.</code><code class="sig-name descname">Item</code><span class="sig-paren">(</span><em class="sig-param">use_function=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/components/item.html#Item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#components.item.Item" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class that can be used when creating an entity, to make it into an item</p>
+<p>When creating an instance of the entity class, it can be handed an instance of this class to give it the
+properties of an item. This means it can be picked up, carried in an inventory, and possible used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>use_function</strong> (<em>function</em><em>, </em><em>optional</em>) – The use_function allows us to define whether an item is usable, and if so, what its effect is.
+An example is the item_heal function, which heals the user.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments to pass on to the usage function.
+An example is the amount healed with the item_heal function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">ExsanguinatorRL</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to ExsanguinatorRL’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Pim te Rietmole and Mitchell Faas.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/components.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
