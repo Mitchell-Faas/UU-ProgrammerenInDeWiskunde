@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Map Objects &#8212; ExsanguinatorRL 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +16,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Player Interaction" href="player_interaction.html" />
+    <link rel="next" title="User Interface" href="player_interaction.html" />
     <link rel="prev" title="Components" href="components.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -32,152 +34,118 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-map_objects.tile">
-<span id="id1"></span><span id="map-objects"></span><h1>Map Objects<a class="headerlink" href="#module-map_objects.tile" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-map_objects.game_map">
+<span id="id1"></span><span id="map-objects"></span><h1>Map Objects<a class="headerlink" href="#module-map_objects.game_map" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="map_objects.tile.Tile">
-<em class="property">class </em><code class="sig-prename descclassname">map_objects.tile.</code><code class="sig-name descname">Tile</code><span class="sig-paren">(</span><em class="sig-param">blocked</em>, <em class="sig-param">block_sight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.tile.Tile" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class for tiles in the game-map</p>
-<p>A tile in the game-map. It may or may not be passable, and it may or may not block sight.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>blocked</strong> (<em>bool</em>) – A boolean which determines whether this tile can be walked through.</p></li>
-<li><p><strong>block_sight</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean which determines whether this tile can be seen through.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<span class="target" id="module-map_objects.rectangle"></span><dl class="class">
-<dt id="map_objects.rectangle.Rect">
-<em class="property">class </em><code class="sig-prename descclassname">map_objects.rectangle.</code><code class="sig-name descname">Rect</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class of rectangles, to be used for rooms</p>
-<p>This class consists of rectangles at a certain position and of certain proportions. This class is used
-during map creation to procedurally place rooms.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>int</em>) – The horizontal coordinate of the top-left corner of the rectangle.</p></li>
-<li><p><strong>y</strong> (<em>int</em>) – The vertical coordinate of the top-left corner of the rectangle.</p></li>
-<li><p><strong>width</strong> (<em>int</em>) – The horizontal length of the rectangle, in number of tiles.</p></li>
-<li><p><strong>height</strong> (<em>int</em>) – The vertical length of the rectangle, in number of tiles.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="method">
-<dt id="map_objects.rectangle.Rect.center">
-<code class="sig-name descname">center</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect.center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect.center" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that calculates the center of a rectangle</p>
-<p>This function gives the coordinates of the center of an instance of the Rectangle class.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="map_objects.rectangle.Rect.intersects_with">
-<code class="sig-name descname">intersects_with</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect.intersects_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect.intersects_with" title="Permalink to this definition">¶</a></dt>
-<dd><p>A function that checks whether two rectangles overlap</p>
-<p>This function checks whether two instances of the Rectangle class overlap. This is important during
-map creation, so we can avoid placing overlapping rooms.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rectangle</span></code>) – Another instance of the Rectangle class, of which we want to know whether it overlaps.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-map_objects.game_map"></span><dl class="class">
 <dt id="map_objects.game_map.GameMap">
-<em class="property">class </em><code class="sig-prename descclassname">map_objects.game_map.</code><code class="sig-name descname">GameMap</code><span class="sig-paren">(</span><em class="sig-param">width</em>, <em class="sig-param">height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">map_objects.game_map.</code><code class="descname">GameMap</code><span class="sig-paren">(</span><em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to represent information about the game map</p>
 <p>This class is used to save information about the game map. This mainly involves the different types of tiles
 (walkable, non-walkable, transparent or opaque) in different positions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>width</strong> (<em>int</em>) – The horizontal number of tiles in the map</p></li>
-<li><p><strong>height</strong> (<em>int</em>) – The vertical number of tiles in the map</p></li>
-<li><p><strong>tiles</strong> (<em>list</em>) – This is a nested list which serves as an array, to keep track of what tiles are walls, and which are not.
-We start out with a game-map fully consisting of walls, and then dig out rooms and corridors.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> (<em>int</em>) – The horizontal number of tiles in the map</li>
+<li><strong>height</strong> (<em>int</em>) – The vertical number of tiles in the map</li>
+<li><strong>tiles</strong> (<em>list</em>) – This is a nested list which serves as an array, to keep track of what tiles are walls, and which are not.
+We start out with a game-map fully consisting of walls, and then dig out rooms and corridors.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.create_h_tunnel">
-<code class="sig-name descname">create_h_tunnel</code><span class="sig-paren">(</span><em class="sig-param">x1</em>, <em class="sig-param">x2</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_h_tunnel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_h_tunnel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_h_tunnel</code><span class="sig-paren">(</span><em>x1</em>, <em>x2</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_h_tunnel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_h_tunnel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function for digging out horizontal corridors.</p>
 <p>This function digs out a horizontal corridor in the game-map, of a certain length and at a certain position.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x1</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of one end of the corridor.</p></li>
-<li><p><strong>x2</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of the other end of the corridor.</p></li>
-<li><p><strong>y</strong> (<em>int</em>) – This integer indicates the vertical coordinate of the corridor.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x1</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of one end of the corridor.</li>
+<li><strong>x2</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of the other end of the corridor.</li>
+<li><strong>y</strong> (<em>int</em>) – This integer indicates the vertical coordinate of the corridor.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.create_map">
-<code class="sig-name descname">create_map</code><span class="sig-paren">(</span><em class="sig-param">max_rooms</em>, <em class="sig-param">room_min_size</em>, <em class="sig-param">room_max_size</em>, <em class="sig-param">width</em>, <em class="sig-param">height</em>, <em class="sig-param">player</em>, <em class="sig-param">entities</em>, <em class="sig-param">max_monsters_per_room</em>, <em class="sig-param">max_items_per_room</em>, <em class="sig-param">map_type='regular'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_map" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_map</code><span class="sig-paren">(</span><em>max_rooms</em>, <em>room_min_size</em>, <em>room_max_size</em>, <em>width</em>, <em>height</em>, <em>player</em>, <em>entities</em>, <em>max_monsters_per_room</em>, <em>max_items_per_room</em>, <em>map_type='regular'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_map" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function that constructs a playable version of the game-map</p>
 <p>This function takes the initial game-map, which consists of only walls. It digs out rooms, connects
 them via corridors, and places entities and items.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>max_rooms</strong> (<em>int</em>) – The maximum number of rooms in a game-map. This is the number of times this function will attempt
-to place a room before finishing.</p></li>
-<li><p><strong>room_min_size</strong> (<em>int</em>) – The minimum width and height allowed for rooms that are placed procedurally, in number of tiles.</p></li>
-<li><p><strong>room_max_size</strong> (<em>int</em>) – The maximum width and height allowed for rooms that are placed procedurally, in number of tiles.</p></li>
-<li><p><strong>width</strong> (<em>int</em>) – The horizontal number of tiles in the map.</p></li>
-<li><p><strong>height</strong> (<em>int</em>) – The vertical number of tiles in the map.</p></li>
-<li><p><strong>player</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – The instance of the Entity class representing the player. It is handed to the create_map function so
-it can be placed to initially start in a room.</p></li>
-<li><p><strong>entities</strong> (<em>list</em>) – A list of instances of the Entity class. When handed to this function, it normally only contains the player.
-Other entities such as enemies are added to this list during procedural map generation.</p></li>
-<li><p><strong>max_monsters_per_room</strong> (<em>int</em>) – The maximum number of enemies allowed to be placed in a single procedurally generated room.</p></li>
-<li><p><strong>max_items_per_room</strong> (<em>int</em>) – The maximum number of items allowed to be placed in a single procedurally generated room.</p></li>
-<li><p><strong>map_type</strong> (<em>str</em><em>, </em><em>optional</em>) – A string indicating what type of map to generate. Setting it to anything other than ‘regular’ allows
-for the creation of non-standard maps, such as boss-rooms, using a different generation procedure.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_rooms</strong> (<em>int</em>) – The maximum number of rooms in a game-map. This is the number of times this function will attempt
+to place a room before finishing.</li>
+<li><strong>room_min_size</strong> (<em>int</em>) – The minimum width and height allowed for rooms that are placed procedurally, in number of tiles.</li>
+<li><strong>room_max_size</strong> (<em>int</em>) – The maximum width and height allowed for rooms that are placed procedurally, in number of tiles.</li>
+<li><strong>width</strong> (<em>int</em>) – The horizontal number of tiles in the map.</li>
+<li><strong>height</strong> (<em>int</em>) – The vertical number of tiles in the map.</li>
+<li><strong>player</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – The instance of the Entity class representing the player. It is handed to the create_map function so
+it can be placed to initially start in a room.</li>
+<li><strong>entities</strong> (<em>list</em>) – A list of instances of the Entity class. When handed to this function, it normally only contains the player.
+Other entities such as enemies are added to this list during procedural map generation.</li>
+<li><strong>max_monsters_per_room</strong> (<em>int</em>) – The maximum number of enemies allowed to be placed in a single procedurally generated room.</li>
+<li><strong>max_items_per_room</strong> (<em>int</em>) – The maximum number of items allowed to be placed in a single procedurally generated room.</li>
+<li><strong>map_type</strong> (<em>str</em><em>, </em><em>optional</em>) – A string indicating what type of map to generate. Setting it to anything other than ‘regular’ allows
+for the creation of non-standard maps, such as boss-rooms, using a different generation procedure.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.create_room">
-<code class="sig-name descname">create_room</code><span class="sig-paren">(</span><em class="sig-param">room</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_room"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_room" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_room</code><span class="sig-paren">(</span><em>room</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_room"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_room" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function for digging out rooms.</p>
 <p>This function digs out a room in the game-map, of a certain size and at a certain position.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>room</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rect</span></code>) – An instance of the rectangle class, used for the position and proportions of the room to be placed.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>room</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rect</span></code>) – An instance of the rectangle class, used for the position and proportions of the room to be placed.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.create_v_tunnel">
-<code class="sig-name descname">create_v_tunnel</code><span class="sig-paren">(</span><em class="sig-param">y1</em>, <em class="sig-param">y2</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_v_tunnel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_v_tunnel" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_v_tunnel</code><span class="sig-paren">(</span><em>y1</em>, <em>y2</em>, <em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.create_v_tunnel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.create_v_tunnel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function for digging out vertical corridors.</p>
 <p>This function digs out a vertical corridor in the game-map, of a certain length and at a certain position.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>y1</strong> (<em>int</em>) – This integer indicates the vertical coordinate of one end of the corridor.</p></li>
-<li><p><strong>y2</strong> (<em>int</em>) – This integer indicates the vertical coordinate of the other end of the corridor.</p></li>
-<li><p><strong>x</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of the corridor.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>y1</strong> (<em>int</em>) – This integer indicates the vertical coordinate of one end of the corridor.</li>
+<li><strong>y2</strong> (<em>int</em>) – This integer indicates the vertical coordinate of the other end of the corridor.</li>
+<li><strong>x</strong> (<em>int</em>) – This integer indicates the horizontal coordinate of the corridor.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.initialize_tiles">
-<code class="sig-name descname">initialize_tiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.initialize_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.initialize_tiles" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_tiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.initialize_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.initialize_tiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to construct the initial game-map</p>
 <p>This function allows us to create an array of tiles, the width and height of the game-map.
 We return this array. This array is initially completely filled with walls.
@@ -187,38 +155,125 @@ the player can maneuver through.</p>
 
 <dl class="method">
 <dt id="map_objects.game_map.GameMap.is_blocked">
-<code class="sig-name descname">is_blocked</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.is_blocked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.is_blocked" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_blocked</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.is_blocked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.is_blocked" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to check if a tile is blocked</p>
 <p>This function checks the game-map’s tile array, to see whether a tile can be moved through or not.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>int</em>) – The horizontal coordinate of the tile to be checked</p></li>
-<li><p><strong>y</strong> (<em>int</em>) – The vertical coordinate of the tile to be checked</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>int</em>) – The horizontal coordinate of the tile to be checked</li>
+<li><strong>y</strong> (<em>int</em>) – The vertical coordinate of the tile to be checked</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="map_objects.game_map.GameMap.place_entities">
+<em class="property">static </em><code class="descname">place_entities</code><span class="sig-paren">(</span><em>room</em>, <em>entities</em>, <em>max_monsters_per_room</em>, <em>max_items_per_room</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.place_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.place_entities" title="Permalink to this definition">¶</a></dt>
+<dd><p>A static function that places enemies and items</p>
+<p>This function is used to populate a single room with both items and enemies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>room</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rect</span></code>) – An instance of the Rectangle class. This is the room we place things in.</li>
+<li><strong>entities</strong> (<em>list</em>) – The list of entities on the floor. Any items or enemies that are placed, are appended to this list.</li>
+<li><strong>max_monsters_per_room</strong> (<em>int</em>) – The maximum number of enemies allowed to be placed in a single procedurally generated room.</li>
+<li><strong>max_items_per_room</strong> (<em>int</em>) – The maximum number of items allowed to be placed in a single procedurally generated room.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-map_objects.tile"></span><dl class="class">
+<dt id="map_objects.tile.Tile">
+<em class="property">class </em><code class="descclassname">map_objects.tile.</code><code class="descname">Tile</code><span class="sig-paren">(</span><em>blocked</em>, <em>block_sight=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/tile.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.tile.Tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for tiles in the game-map</p>
+<p>A tile in the game-map. It may or may not be passable, and it may or may not block sight.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>blocked</strong> (<em>bool</em>) – A boolean which determines whether this tile can be walked through.</li>
+<li><strong>block_sight</strong> (<em>bool</em><em>, </em><em>optional</em>) – A boolean which determines whether this tile can be seen through.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>A tile has several kinds of important attributes. For example, we need to know whether a tile is bloody or not to determine what colour to use when rendering it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bled_on_tile</span> <span class="o">=</span> <span class="n">turn_results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bled_on_tile&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">bled_on_tile</span><span class="p">:</span>
+    <span class="n">game_map</span><span class="o">.</span><span class="n">tiles</span><span class="p">[</span><span class="n">bled_on_tile</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">bled_on_tile</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">bloody</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div>
+</div>
+<span class="target" id="module-map_objects.rectangle"></span><dl class="class">
+<dt id="map_objects.rectangle.Rect">
+<em class="property">class </em><code class="descclassname">map_objects.rectangle.</code><code class="descname">Rect</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class of rectangles, to be used for rooms</p>
+<p>This class consists of rectangles at a certain position and of certain proportions. This class is used
+during map creation to procedurally place rooms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>int</em>) – The horizontal coordinate of the top-left corner of the rectangle.</li>
+<li><strong>y</strong> (<em>int</em>) – The vertical coordinate of the top-left corner of the rectangle.</li>
+<li><strong>width</strong> (<em>int</em>) – The horizontal length of the rectangle, in number of tiles.</li>
+<li><strong>height</strong> (<em>int</em>) – The vertical length of the rectangle, in number of tiles.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="map_objects.rectangle.Rect.center">
+<code class="descname">center</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect.center"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect.center" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that calculates the center of a rectangle</p>
+<p>This function gives the coordinates of the center of an instance of the Rectangle class.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="map_objects.game_map.GameMap.place_entities">
-<em class="property">static </em><code class="sig-name descname">place_entities</code><span class="sig-paren">(</span><em class="sig-param">room</em>, <em class="sig-param">entities</em>, <em class="sig-param">max_monsters_per_room</em>, <em class="sig-param">max_items_per_room</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/game_map.html#GameMap.place_entities"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.game_map.GameMap.place_entities" title="Permalink to this definition">¶</a></dt>
-<dd><p>A static function that places enemies and items</p>
-<p>This function is used to populate a single room with both items and enemies.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>room</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rect</span></code>) – An instance of the Rectangle class. This is the room we place things in.</p></li>
-<li><p><strong>entities</strong> (<em>list</em>) – The list of entities on the floor. Any items or enemies that are placed, are appended to this list.</p></li>
-<li><p><strong>max_monsters_per_room</strong> (<em>int</em>) – The maximum number of enemies allowed to be placed in a single procedurally generated room.</p></li>
-<li><p><strong>max_items_per_room</strong> (<em>int</em>) – The maximum number of items allowed to be placed in a single procedurally generated room.</p></li>
-</ul>
-</dd>
-</dl>
+<dt id="map_objects.rectangle.Rect.intersects_with">
+<code class="descname">intersects_with</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/map_objects/rectangle.html#Rect.intersects_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#map_objects.rectangle.Rect.intersects_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function that checks whether two rectangles overlap</p>
+<p>This function checks whether two instances of the Rectangle class overlap. This is important during
+map creation, so we can avoid placing overlapping rooms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Rectangle</span></code>) – Another instance of the Rectangle class, of which we want to know whether it overlaps.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
+<p>Rectangles are used to create rooms during procedural level generation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">room_width</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room_min_size</span><span class="p">,</span> <span class="n">room_max_size</span><span class="p">)</span>
+<span class="n">room_height</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">room_min_size</span><span class="p">,</span> <span class="n">room_max_size</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span> <span class="o">-</span> <span class="n">room_width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span> <span class="o">-</span> <span class="n">room_height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">new_room</span> <span class="o">=</span> <span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">room_width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">room_height</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 
 
@@ -244,7 +299,7 @@ the player can maneuver through.</p>
 <li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Map Objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_functions.html">Auxiliary Functions</a></li>
 </ul>
 
@@ -253,16 +308,18 @@ the player can maneuver through.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="components.html" title="previous chapter">Components</a></li>
-      <li>Next: <a href="player_interaction.html" title="next chapter">Player Interaction</a></li>
+      <li>Next: <a href="player_interaction.html" title="next chapter">User Interface</a></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -283,7 +340,7 @@ the player can maneuver through.</p>
       &copy;2019, Pim te Rietmole and Mitchell Faas.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

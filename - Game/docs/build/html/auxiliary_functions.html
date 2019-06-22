@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Auxiliary Functions &#8212; ExsanguinatorRL 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +16,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Player Interaction" href="player_interaction.html" />
+    <link rel="prev" title="User Interface" href="player_interaction.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -37,225 +39,289 @@
 <span id="input-handling"></span><h2>Input Handling<a class="headerlink" href="#module-inputHandlers" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="inputHandlers.handleKeys">
-<code class="sig-prename descclassname">inputHandlers.</code><code class="sig-name descname">handleKeys</code><span class="sig-paren">(</span><em class="sig-param">key</em>, <em class="sig-param">game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inputHandlers.html#handleKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inputHandlers.handleKeys" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">inputHandlers.</code><code class="descname">handleKeys</code><span class="sig-paren">(</span><em>key</em>, <em>game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inputHandlers.html#handleKeys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inputHandlers.handleKeys" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to interpret key inputs
 Returns a dictionary containing the relevant information for the game to react to key inputs.
 What keys have which effect is dependent on the gamestate. A dead player can’t move for example,
 and when the inventory is opened there are different controls also.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>int</em>) – An integer representing the key that was pressed. Which keys correspond to what number is managed by tcod.</p></li>
-<li><p><strong>game_state</strong> (<em>int</em>) – An integer representing the gamestate. This tells us whose turns it is, if the player is dead, etc.
-What integer corresponds to which state is kept track of in game_states.py.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<em>int</em>) – An integer representing the key that was pressed. Which keys correspond to what number is managed by tcod.</li>
+<li><strong>game_state</strong> (<em>int</em>) – An integer representing the gamestate. This tells us whose turns it is, if the player is dead, etc.
+What integer corresponds to which state is kept track of in game_states.py.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p>Below follows an example of how inputs are recognized and handled.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">action</span> <span class="o">=</span> <span class="n">inputHandlers</span><span class="o">.</span><span class="n">handleKeys</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">game_state</span><span class="p">)</span>
+<span class="n">wait</span> <span class="o">=</span> <span class="n">action</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wait&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">wait</span><span class="p">:</span>
+    <span class="n">game_state</span> <span class="o">=</span> <span class="n">GameStates</span><span class="o">.</span><span class="n">ENEMIES_TURN</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="module-fov_functions">
 <span id="rendering"></span><h2>Rendering<a class="headerlink" href="#module-fov_functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="fov_functions.initialize_fov">
-<code class="sig-prename descclassname">fov_functions.</code><code class="sig-name descname">initialize_fov</code><span class="sig-paren">(</span><em class="sig-param">game_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#initialize_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.initialize_fov" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fov_functions.</code><code class="descname">initialize_fov</code><span class="sig-paren">(</span><em>game_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#initialize_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.initialize_fov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new <code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code> based on FOV calculations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Game map over which to compute FOV.</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>game_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Game map over which to compute FOV.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="fov_functions.recompute_fov">
-<code class="sig-prename descclassname">fov_functions.</code><code class="sig-name descname">recompute_fov</code><span class="sig-paren">(</span><em class="sig-param">fov_map</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">radius=10</em>, <em class="sig-param">light_walls=True</em>, <em class="sig-param">algorithm=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#recompute_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.recompute_fov" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">fov_functions.</code><code class="descname">recompute_fov</code><span class="sig-paren">(</span><em>fov_map</em>, <em>x</em>, <em>y</em>, <em>radius=10</em>, <em>light_walls=True</em>, <em>algorithm=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fov_functions.html#recompute_fov"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fov_functions.recompute_fov" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recomputes a FOV map</p>
 <p>Uses the player coordinates to update the fov map.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – old FOV map</p></li>
-<li><p><strong>x</strong> (<em>int</em>) – player x-location</p></li>
-<li><p><strong>y</strong> (<em>int</em>) – player y-location</p></li>
-<li><p><strong>radius</strong> (<em>int</em>) – radius of vision around player</p></li>
-<li><p><strong>light_walls</strong> (<em>bool</em>) – Whether or not to light the first block of the walls we see</p></li>
-<li><p><strong>algorithm</strong> (<em>int</em>) – The integer identification of the algorithm we want to use
-for FOV computation.</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – old FOV map</li>
+<li><strong>x</strong> (<em>int</em>) – player x-location</li>
+<li><strong>y</strong> (<em>int</em>) – player y-location</li>
+<li><strong>radius</strong> (<em>int</em>) – radius of vision around player</li>
+<li><strong>light_walls</strong> (<em>bool</em>) – Whether or not to light the first block of the walls we see</li>
+<li><strong>algorithm</strong> (<em>int</em>) – The integer identification of the algorithm we want to use
+for FOV computation.</li>
 </ul>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <span class="target" id="module-renderFunctions"></span><dl class="class">
 <dt id="renderFunctions.RenderOrder">
-<em class="property">class </em><code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">RenderOrder</code><a class="reference internal" href="_modules/renderFunctions.html#RenderOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.RenderOrder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">renderFunctions.</code><code class="descname">RenderOrder</code><a class="reference internal" href="_modules/renderFunctions.html#RenderOrder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.RenderOrder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Static data on render order</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="renderFunctions.clear_all">
-<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">clear_all</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_all" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">renderFunctions.</code><code class="descname">clear_all</code><span class="sig-paren">(</span><em>console</em>, <em>entities</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes all given entities from screen.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
-<li><p><strong>entities</strong> (<em>list of entity objects</em>) – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>console</strong> (<em>console object</em>) – </li>
+<li><strong>entities</strong> (<em>list of entity objects</em>) – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="renderFunctions.clear_entity">
-<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">clear_entity</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_entity" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">renderFunctions.</code><code class="descname">clear_entity</code><span class="sig-paren">(</span><em>console</em>, <em>entity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#clear_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.clear_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes a given entity from the screen.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
-<li><p><strong>entity</strong> (<em>entity object</em>) – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>console</strong> (<em>console object</em>) – </li>
+<li><strong>entity</strong> (<em>entity object</em>) – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="renderFunctions.draw_entity">
-<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">draw_entity</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">entity</em>, <em class="sig-param">fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#draw_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.draw_entity" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">renderFunctions.</code><code class="descname">draw_entity</code><span class="sig-paren">(</span><em>console</em>, <em>entity</em>, <em>fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#draw_entity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.draw_entity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders a given entity on the screen.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
-<li><p><strong>entity</strong> (<em>entity object</em>) – </p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>console</strong> (<em>console object</em>) – </li>
+<li><strong>entity</strong> (<em>entity object</em>) – </li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="renderFunctions.get_names_under_mouse">
-<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">get_names_under_mouse</code><span class="sig-paren">(</span><em class="sig-param">mouse</em>, <em class="sig-param">entities</em>, <em class="sig-param">fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#get_names_under_mouse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.get_names_under_mouse" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">renderFunctions.</code><code class="descname">get_names_under_mouse</code><span class="sig-paren">(</span><em>mouse</em>, <em>entities</em>, <em>fov_map</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#get_names_under_mouse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.get_names_under_mouse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds the name of whichever entity is located below the cursor</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mouse</strong> (<em>tcod.Mouse</em>) – Mouse object which gives coordinates</p></li>
-<li><p><strong>entities</strong> (<em>list</em>) – List of entities on the map</p></li>
-<li><p><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Mapobject which gives the FOV (Don’t want to show
-objects which we can’t see.)</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mouse</strong> (<em>tcod.Mouse</em>) – Mouse object which gives coordinates</li>
+<li><strong>entities</strong> (<em>list</em>) – List of entities on the map</li>
+<li><strong>fov_map</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">GameMap</span></code>) – Mapobject which gives the FOV (Don’t want to show
+objects which we can’t see.)</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Name of the entity your cursor is positioned above</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Name of the entity your cursor is positioned above</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="renderFunctions.render_all">
-<code class="sig-prename descclassname">renderFunctions.</code><code class="sig-name descname">render_all</code><span class="sig-paren">(</span><em class="sig-param">console</em>, <em class="sig-param">panel</em>, <em class="sig-param">entities</em>, <em class="sig-param">player</em>, <em class="sig-param">game_map</em>, <em class="sig-param">fov_map</em>, <em class="sig-param">fov_recompute</em>, <em class="sig-param">messageLog</em>, <em class="sig-param">screen_width</em>, <em class="sig-param">screen_height</em>, <em class="sig-param">barWidth</em>, <em class="sig-param">panelHeight</em>, <em class="sig-param">panelY</em>, <em class="sig-param">mouse</em>, <em class="sig-param">colours</em>, <em class="sig-param">game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#render_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.render_all" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">renderFunctions.</code><code class="descname">render_all</code><span class="sig-paren">(</span><em>console</em>, <em>panel</em>, <em>entities</em>, <em>player</em>, <em>game_map</em>, <em>fov_map</em>, <em>fov_recompute</em>, <em>messageLog</em>, <em>screen_width</em>, <em>screen_height</em>, <em>barWidth</em>, <em>panelHeight</em>, <em>panelY</em>, <em>mouse</em>, <em>colours</em>, <em>game_state</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/renderFunctions.html#render_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#renderFunctions.render_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders all given entities on the screen.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>console</strong> (<em>console object</em>) – </p></li>
-<li><p><strong>entities</strong> (<em>list</em>) – List of entity objects</p></li>
-<li><p><strong>game_map</strong> (<em>list</em>) – Nested list containing all tiles on the map</p></li>
-<li><p><strong>screen_width</strong> (<em>int</em>) – Horizontal length of the screen in number of tiles</p></li>
-<li><p><strong>screen_height</strong> (<em>int</em>) – Vertical length of the screen in number of tiles</p></li>
-<li><p><strong>colours</strong> (<em>dict</em>) – Dictionary containing the colours of different map tiles</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>console</strong> (<em>console object</em>) – </li>
+<li><strong>entities</strong> (<em>list</em>) – List of entity objects</li>
+<li><strong>game_map</strong> (<em>list</em>) – Nested list containing all tiles on the map</li>
+<li><strong>screen_width</strong> (<em>int</em>) – Horizontal length of the screen in number of tiles</li>
+<li><strong>screen_height</strong> (<em>int</em>) – Vertical length of the screen in number of tiles</li>
+<li><strong>colours</strong> (<em>dict</em>) – Dictionary containing the colours of different map tiles</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<p>These renderfunctions are used together in engine.py to calculate what to put on the display.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">fov_recompute</span><span class="p">:</span>
+    <span class="n">recompute_fov</span><span class="p">(</span><span class="n">fov_map</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># render.render_all(..., fov_map=fov_map, ...)</span>
+<span class="n">fov_recompute</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">tcod</span><span class="o">.</span><span class="n">console_flush</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="module-death_functions">
-<span id="other-random-functions"></span><h2>Other Random Functions<a class="headerlink" href="#module-death_functions" title="Permalink to this headline">¶</a></h2>
+<span id="death-functions"></span><h2>Death Functions<a class="headerlink" href="#module-death_functions" title="Permalink to this headline">¶</a></h2>
+<p>Here we keep the functions necessary for killing various entities. For example, when player hp reaches zero, they die.</p>
 <dl class="function">
 <dt id="death_functions.kill_monster">
-<code class="sig-prename descclassname">death_functions.</code><code class="sig-name descname">kill_monster</code><span class="sig-paren">(</span><em class="sig-param">monster</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_monster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_monster" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">death_functions.</code><code class="descname">kill_monster</code><span class="sig-paren">(</span><em>monster</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_monster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_monster" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes all the actions required to kill a monster</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>monster</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Monster Entity object</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Message associated with the death of a monster.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>monster</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Monster Entity object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Message associated with the death of a monster.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="death_functions.kill_player">
-<code class="sig-prename descclassname">death_functions.</code><code class="sig-name descname">kill_player</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_player" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">death_functions.</code><code class="descname">kill_player</code><span class="sig-paren">(</span><em>player</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/death_functions.html#kill_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#death_functions.kill_player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes all the actions required to kill the player.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>player</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Player object</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Message associated with killing the player</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>player</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Player object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Message associated with killing the player</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">player</span><span class="o">.</span><span class="n">fighter</span><span class="o">.</span><span class="n">take_damage</span><span class="p">()</span>
+
+<span class="n">dead_entity</span> <span class="o">=</span> <span class="n">enemy_turn_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dead&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">dead_entity</span> <span class="o">==</span> <span class="n">player</span>
+    <span class="n">kill_player</span><span class="p">(</span><span class="n">dead_entity</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="item-functions">
+<h2>Item Functions<a class="headerlink" href="#item-functions" title="Permalink to this headline">¶</a></h2>
+<p>Here we keep the functions our items have upon being used. Currently this consists only of a healing function.</p>
 <span class="target" id="module-item_functions"></span><dl class="function">
 <dt id="item_functions.item_heal">
-<code class="sig-prename descclassname">item_functions.</code><code class="sig-name descname">item_heal</code><span class="sig-paren">(</span><em class="sig-param">entity</em>, <em class="sig-param">amount</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/item_functions.html#item_heal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#item_functions.item_heal" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">item_functions.</code><code class="descname">item_heal</code><span class="sig-paren">(</span><em>entity</em>, <em>amount</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/item_functions.html#item_heal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#item_functions.item_heal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Executes the actions associated with healing items</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>entity</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Entity to heal</p></li>
-<li><p><strong>amount</strong> (<em>int</em>) – Amount to heal the entity</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>entity</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">Entity</span></code>) – Entity to heal</li>
+<li><strong>amount</strong> (<em>int</em>) – Amount to heal the entity</li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List containing the dict entry to add to
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List containing the dict entry to add to
 player_results in engine.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list</p>
-</dd>
-</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -284,11 +350,12 @@ player_results in engine.</p>
 <li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">User Interface</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Auxiliary Functions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-inputHandlers">Input Handling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-fov_functions">Rendering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-death_functions">Other Random Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-death_functions">Death Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#item-functions">Item Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -297,16 +364,18 @@ player_results in engine.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="player_interaction.html" title="previous chapter">Player Interaction</a></li>
+      <li>Previous: <a href="player_interaction.html" title="previous chapter">User Interface</a></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -327,7 +396,7 @@ player_results in engine.</p>
       &copy;2019, Pim te Rietmole and Mitchell Faas.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

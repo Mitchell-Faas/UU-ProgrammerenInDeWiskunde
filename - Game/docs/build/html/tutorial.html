@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Tutorial &#8212; ExsanguinatorRL 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -34,7 +36,21 @@
             
   <div class="section" id="tutorial">
 <span id="id1"></span><h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>…</p>
+<div class="section" id="controls">
+<h2>Controls<a class="headerlink" href="#controls" title="Permalink to this headline">¶</a></h2>
+<p>Use the numpad keys to move. Make sure numlock is on. Alternatively use VI keys (k, j, h, l, y, u, b, n).
+Bump into enemies to attack them.
+Use numpad 5 or “.” to wait a turn.
+When standing on an item, use ‘g’ to pick it up.
+Press ‘i’ to show the inventory. When in the inventory, press the letter next to an item to use it.
+Press ‘d’ to show the drop menu. When in the drop menu, press the letter next to an item to drop it.
+When in a menu, press escape to exit. Pressing escape outside of a menu will close the game.</p>
+</div>
+<div class="section" id="gameplay">
+<h2>Gameplay<a class="headerlink" href="#gameplay" title="Permalink to this headline">¶</a></h2>
+<p>You spawn in a dungeon. Move around until you find enemies. They will often appear in groups, so it might be wise to lure them into a hallway to fight them one by one. An enemy, once defeated, will drop a blood crystal. Make sure to pick these up. Using them gives you some health, so use them before you die!
+In the current version of the game, the goal is to destroy all enemies on the floor. There is no win-screen. You have eternity to reflect on your deeds. Or alternatively, until you close the game.</p>
+</div>
 </div>
 
 
@@ -56,11 +72,15 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#controls">Controls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gameplay">Gameplay</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="engine.html">Engine Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="components.html">Components</a></li>
 <li class="toctree-l1"><a class="reference internal" href="map_objects.html">Map Objects</a></li>
-<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">Player Interaction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="player_interaction.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_functions.html">Auxiliary Functions</a></li>
 </ul>
 
@@ -74,11 +94,13 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -99,7 +121,7 @@
       &copy;2019, Pim te Rietmole and Mitchell Faas.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

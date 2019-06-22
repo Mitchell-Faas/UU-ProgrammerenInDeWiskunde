@@ -18,6 +18,8 @@ print('added the following path tot sys.path:', os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
+master_doc = 'index'
+
 project = 'ExsanguinatorRL'
 copyright = '2019, Pim te Rietmole and Mitchell Faas'
 author = 'Pim te Rietmole and Mitchell Faas'
