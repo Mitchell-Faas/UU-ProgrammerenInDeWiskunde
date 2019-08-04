@@ -177,27 +177,27 @@ def main():
             elif wait:
                 game_state = GameStates.ENEMIES_TURN
 
-        # Take necessary steps to display inventory
-        elif show_inventory:
-            # Sets what state to go back to after exiting the inventory
-            if game_state != GameStates.SHOW_INVENTORY:  # Exit state can't also be inventory
-                previous_game_state = game_state
-            game_state = GameStates.SHOW_INVENTORY
+            # Take necessary steps to display inventory
+            elif show_inventory:
+                # Sets what state to go back to after exiting the inventory
+                if game_state != GameStates.SHOW_INVENTORY:  # Exit state can't also be inventory
+                    previous_game_state = game_state
+                game_state = GameStates.SHOW_INVENTORY
 
-        # Take necessary steps to select item from inventory
-        elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
-                and inventory_index < len(player.inventory.items):
-            item = player.inventory.items[inventory_index]
-            if game_state == GameStates.SHOW_INVENTORY:
-                player_turn_results.extend(player.inventory.use(item))
-            elif game_state == GameStates.DROP_INVENTORY:
-                player_turn_results.extend(player.inventory.drop(item))
+            # Take necessary steps to select item from inventory
+            elif inventory_index is not None and previous_game_state != GameStates.PLAYER_DEAD \
+                    and inventory_index < len(player.inventory.items):
+                item = player.inventory.items[inventory_index]
+                if game_state == GameStates.SHOW_INVENTORY:
+                    player_turn_results.extend(player.inventory.use(item))
+                elif game_state == GameStates.DROP_INVENTORY:
+                    player_turn_results.extend(player.inventory.drop(item))
 
-        # Take necessary steps to allow the player to drop items
-        elif drop_inventory:
-            if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
-                previous_game_state = game_state
-            game_state = GameStates.DROP_INVENTORY
+            # Take necessary steps to allow the player to drop items
+            elif drop_inventory:
+                if game_state != GameStates.DROP_INVENTORY:  # Exit state can't also be drop menu
+                    previous_game_state = game_state
+                game_state = GameStates.DROP_INVENTORY
         # On pressing escape, exits the current menu. If not in a menu, exits the game
         if exit:
             if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
